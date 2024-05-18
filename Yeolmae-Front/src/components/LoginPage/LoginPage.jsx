@@ -66,7 +66,6 @@ function Login() {
   };
 
   const API = 'https://879df4a7-14ca-442b-a753-788449ea4109.mock.pstmn.io/api/v1/login';
-  // const API = '';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,10 +83,10 @@ function Login() {
     axios
       .post(API, body)
       .then((res) => {
-        // const { accessToken } = res.data;
-        // if (accessToken) {
-        //   localStorage.setItem('accessToken', accessToken);
-        // }
+        const { accessToken } = res.data;
+        if (accessToken) {
+          localStorage.setItem('accessToken', accessToken);
+        }
         console.log(input);
         console.log(res.data);
         // console.log(res);
@@ -100,7 +99,7 @@ function Login() {
         console.log(input);
         console.error(err.response);
         if (err.response.status === 400) {
-          alert('로그인에 실패하였습니다.');
+          alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
         }
       });
   };
