@@ -38,12 +38,13 @@ const InputWrapper = styled.form`
 const LinkWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  margin: 10px 0px;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: rgba(108, 108, 108, 1);
   font-size: 13px;
-  margin: 10px 3px;
+  margin: 3px 3px;
 
   &: hover {
     font-family: NotoSans SemiBold;
@@ -132,6 +133,9 @@ function Login() {
         <LinkWrapper>
           <StyledLink to="/">아이디 찾기</StyledLink>
           <StyledLink to="/">비밀번호 찾기</StyledLink>
+        </LinkWrapper>
+        <LinkWrapper>
+          <StyledLink to="/signupPage">회원가입하기</StyledLink>
         </LinkWrapper>
       </InputWrapper>
       <Button onClick={handleSubmit} text="로그인하기" />
