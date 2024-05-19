@@ -66,7 +66,7 @@ function Login() {
     });
   };
 
-  const API = 'https://879df4a7-14ca-442b-a753-788449ea4109.mock.pstmn.io/api/v1/login';
+  const API = '/api/v1/login';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ function Login() {
         }
         console.log(input);
         console.log(res.data);
-        // console.log(res);
+        console.log(res);
         if (res.status === 200) {
           console.log('로그인 성공');
           navigate('/');
@@ -99,7 +99,7 @@ function Login() {
       .catch((err) => {
         console.log(input);
         console.error(err.response);
-        if (err.response.status === 400) {
+        if (err.response.status === 403) {
           alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
         }
       });
