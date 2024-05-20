@@ -12,8 +12,9 @@ export const logout = () => ({
   type: 'LOGOUT'
 });
 
+// 초기상태
 const initialState = {
-  status: false
+  user: {}
 };
 
 // 리듀서
