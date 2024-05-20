@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Tag from './Tag';
+// import Tag from './Tag';
 
 const Card = styled.div`
   background-color: white;
@@ -32,13 +32,14 @@ const PostAuthor = styled.div`
 // PostAuthor 컴포넌트 상속하여 스타일 적용하기
 const PostDate = styled(PostAuthor)``;
 
-const TagWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 10px 0 10px;
-  overflow: hidden;
-  align-items: center;
-`;
+// [240520] 태그 기능 보류
+// const TagWrapper = styled.div`
+//   display: flex;
+//   justify-content: flex-start;
+//   margin: 0 10px 0 10px;
+//   overflow: hidden;
+//   align-items: center;
+// `;
 
 function PostCard() {
   return (
@@ -48,11 +49,6 @@ function PostCard() {
         <PostTitle>게시글제목</PostTitle>
         <PostAuthor>작성자</PostAuthor>
         <PostDate>2024.05.16</PostDate>
-        <TagWrapper>
-          <Tag text="태그1fsdfdsffdsafdsfaf" />
-          <Tag text="태그2" />
-          <Tag text="태그3" />
-        </TagWrapper>
       </CardContents>
     </Card>
   );
