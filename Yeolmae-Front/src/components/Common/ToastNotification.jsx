@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-const ToastAl = styled.div`
+const Toast = styled.div`
   bottom: 25px;
-  left: center;
+  left: 50%;
   height: 30px;
-  width: auto;
+  width: 300px;
+  margin-left: -165px;
   padding: 5px 15px;
-  position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,12 +24,21 @@ const ToastAl = styled.div`
   }
 `;
 
-function ToastAlert({ text }) {
+function ToastNotification({ text, props }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      props.setToast(false);
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
-    <ToastAl>
+    <Toast>
       <p>{text}</p>
-    </ToastAl>
+    </Toast>
   );
 }
 
-export default ToastAlert;
+export default ToastNotification;

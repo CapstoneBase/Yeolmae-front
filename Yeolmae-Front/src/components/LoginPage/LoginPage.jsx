@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
+import ToastNotification from '../Common/ToastNotification';
 
 const Title = styled.h2`
   display: flex;
@@ -58,6 +59,8 @@ function Login() {
     password: ''
   });
 
+  const [toast, setToast] = useState(false);
+
   const navigate = useNavigate();
   const onChange = (e) => {
     setInput({
@@ -65,6 +68,12 @@ function Login() {
       [e.target.name]: e.target.value
     });
   };
+
+  // const resetInput = (e) => {
+  //   setInput({
+  //     [e.target.name]: e.target.value
+  //   });
+  // };
 
   const API = '/api/v1/login';
 
@@ -81,65 +90,81 @@ function Login() {
       password: input.password
     };
 
-    axios
-      .post(API, body)
-      .then((res) => {
-        const { accessToken } = res.data;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
-        console.log(input);
-        console.log(res.data);
-        console.log(res);
-        if (res.status === 200) {
-          console.log('로그인 성공');
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.log(input);
-        console.error(err.response);
-        if (err.response.status === 403) {
-          alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-        }
-      });
+    //   axios
+    //     .post(API, body)
+    //     .then((res) => {
+    //       const { accessToken } = res.data;
+    //       if (accessToken) {
+    //         localStorage.setItem('accessToken', accessToken);
+    //       }
+    //       console.log(input);
+    //       console.log(res.data);
+    //       console.log(res);
+    //       if (res.status === 200) {
+    //         console.log('로그인 성공');
+    //         // resetInput();
+    //         navigate('/');
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(input);
+    //       console.error(err.response);
+    //       if (err.response.status === 403) {
+    //         // alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+    //         // setError('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+    //         setError(false);
+    //         console.log(error);
+    //         // resetInput();
+    //       }
+    //     });
+
+    console.log(body);
+    setToast(true);
   };
 
   return (
-    <Wrapper>
-      <Title>로그인</Title>
-      <InputWrapper>
-        {/* <label>아이디</label> */}
-        <Input
-          id="id"
-          name="id"
-          type="text"
-          // value={id}
-          placeholder="아이디를 입력해주세요"
-          autoComplete="off"
-          onChange={onChange}
-          required
-        />
-        {/* <label>비밀번호</label> */}
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          // value={password}
-          placeholder="비밀번호를 입력해주세요"
-          onChange={onChange}
-          required
-        />
-        <LinkWrapper>
+    <>
+      <Wrapper>
+        <Title>로그인</Title>
+        <InputWrapper>
+          {/* <label>아이디</label> */}
+          <Input
+            id="id"
+            name="id"
+            type="text"
+            placeholder="아이디를 입력해주세요"
+            autoComplete="off"
+            onChange={onChange}
+            // onClick={resetInput}
+            required
+          />
+          {/* <label>비밀번호</label> */}
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            onChange={onChange}
+            // onClick={resetInput}
+            required
+          />
+          {/* <LinkWrapper>
           <StyledLink to="/">아이디 찾기</StyledLink>
           <StyledLink to="/">비밀번호 찾기</StyledLink>
-        </LinkWrapper>
-        <LinkWrapper>
-          <StyledLink to="/signupPage">회원가입하기</StyledLink>
-        </LinkWrapper>
-      </InputWrapper>
-      <Button onClick={handleSubmit} text="로그인하기" />
-    </Wrapper>
+        </LinkWrapper> */}
+          <LinkWrapper>
+            <StyledLink to="/signupPage">회원가입하기</StyledLink>
+          </LinkWrapper>
+        </InputWrapper>
+        <Button onClick={handleSubmit} text="로그인하기" />
+      </Wrapper>
+      {toast === true ? (
+        <ToastNotification
+          text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
+          props={setToast}
+        />
+      ) : null}
+    </>
   );
 }
 
