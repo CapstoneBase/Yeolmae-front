@@ -1,3 +1,6 @@
+열매 백엔드 레포
+https://github.com/CapstoneBase/Yeolmae-back
+
 # 🍎Yeolmae
 
 
