@@ -1,3 +1,6 @@
+열매 백엔드 레포(dev 브랜치)
+https://github.com/CapstoneBase/Yeolmae-back/tree/dev
+
 # 🍎Yeolmae
 
 
