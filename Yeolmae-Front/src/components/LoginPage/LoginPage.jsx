@@ -90,36 +90,33 @@ function Login() {
       password: input.password
     };
 
-    //   axios
-    //     .post(API, body)
-    //     .then((res) => {
-    //       const { accessToken } = res.data;
-    //       if (accessToken) {
-    //         localStorage.setItem('accessToken', accessToken);
-    //       }
-    //       console.log(input);
-    //       console.log(res.data);
-    //       console.log(res);
-    //       if (res.status === 200) {
-    //         console.log('로그인 성공');
-    //         // resetInput();
-    //         navigate('/');
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(input);
-    //       console.error(err.response);
-    //       if (err.response.status === 403) {
-    //         // alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-    //         // setError('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-    //         setError(false);
-    //         console.log(error);
-    //         // resetInput();
-    //       }
-    //     });
-
-    console.log(body);
-    setToast(true);
+    axios
+      .post(API, body)
+      .then((res) => {
+        const { accessToken } = res.data;
+        if (accessToken) {
+          localStorage.setItem('accessToken', accessToken);
+        }
+        console.log(input);
+        console.log(res.data);
+        console.log(res);
+        if (res.status === 200) {
+          console.log('로그인 성공');
+          // resetInput();
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(input);
+        console.error(err.response);
+        if (err.response.status === 403) {
+          // alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+          // setError('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+          console.log(body);
+          setToast(true);
+          // resetInput();
+        }
+      });
   };
 
   return (
