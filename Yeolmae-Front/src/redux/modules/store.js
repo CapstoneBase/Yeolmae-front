@@ -1,6 +1,10 @@
-import { legacy_createStore as createStore } from 'redux';
-import rootReducer from '.';
+import { configureStore } from '@reduxjs/toolkit';
+import usersSlice from './usersSlice';
 
-const store = createStore(rootReducer);
+const store = configureStore({
+  reducer: {
+    user: usersSlice
+  }
+});
 
 export default store;

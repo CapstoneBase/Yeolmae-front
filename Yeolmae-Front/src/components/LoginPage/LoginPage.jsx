@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
 import ToastNotification from '../Common/ToastNotification';
+import userLogin from '../../redux/modules/userLogin';
 
 const Title = styled.h2`
   display: flex;
@@ -103,6 +104,7 @@ function Login() {
         if (res.status === 200) {
           console.log('로그인 성공');
           // resetInput();
+          dispatch(userLogin(body));
           navigate('/');
         }
       })
