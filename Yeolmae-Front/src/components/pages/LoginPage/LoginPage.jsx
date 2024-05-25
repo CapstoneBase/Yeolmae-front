@@ -65,8 +65,7 @@ function Login() {
     });
   };
 
-  const API = 'https://879df4a7-14ca-442b-a753-788449ea4109.mock.pstmn.io/api/v1/login';
-  // const API = '';
+  const API = '/api/v1/login';
 
   const handleSubmit = (e) => {
     e.preventDefault();

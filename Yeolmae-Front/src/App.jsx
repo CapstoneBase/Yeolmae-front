@@ -1,14 +1,16 @@
 import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
-import Main from './components/MainPage/MainPage';
-import Signup from './components/SignupPage/SignupPage';
-import Login from './components/LoginPage/LoginPage';
-import Notfound from './components/NotFound/NotFound';
+import { ThemeProvider } from 'styled-components';
+import theme from './style/theme';
+import Main from './components/pages/MainPage/MainPage';
+import Signup from './components/pages/SignupPage/SignupPage';
+import Login from './components/pages/LoginPage/LoginPage';
+import Notfound from './components/pages/NotFound/NotFound';
 import Header from './components/Common/Header';
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Header />
       <div>
         {/* 페이지 경로 표시 */}
@@ -22,7 +24,7 @@ function App() {
         <Route path="/loginPage" element={<Login />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }
 
