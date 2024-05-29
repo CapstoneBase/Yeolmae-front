@@ -6,12 +6,14 @@ import { useDispatch } from 'react-redux';
 import Button from '../Common/Button';
 import PostCard from '../Common/PostCard';
 import PageGrid from '../Common/PageGrid';
+import CategoryDropdown from '../Common/CategoryDropdown';
 
 function PostList() {
   return (
-    // <>
-    <PageGrid />
-    // </>
+    <>
+      <CategoryDropdown />
+      <PageGrid />
+    </>
   );
 }
 
