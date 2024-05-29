@@ -17,8 +17,8 @@ const App = memo(() => {
       <ThemeProvider theme={theme}>
         <Header />
         <div>
-          <Link to="/">메인 홈</Link>
-          <Link to="/signupPage">회원가입페이지</Link>
+          <Link to="/">메인 홈 | </Link>
+          <Link to="/signupPage">회원가입페이지 | </Link>
           <Link to="/loginPage">로그인페이지</Link>
         </div>
         <Suspense>

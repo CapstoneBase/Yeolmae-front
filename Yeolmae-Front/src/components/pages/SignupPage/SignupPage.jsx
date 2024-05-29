@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // import axios from '../hooks/useAxios';
-import Wrapper from '../Common/Wrapper';
-import Title from '../Common/Title';
-import InputWrapper from '../Common/InputWrapper';
-import AuthInputField from '../Common/AuthInputField';
-import Button from '../Common/Button';
+import Wrapper from '../../Common/Wrapper';
+import Title from '../../Common/Title';
+import InputWrapper from '../../Common/InputWrapper';
+import AuthInputField from '../../Common/AuthInputField';
+import Button from '../../Common/Button';
 
 const InputContainer = styled.div`
   display: flex;
