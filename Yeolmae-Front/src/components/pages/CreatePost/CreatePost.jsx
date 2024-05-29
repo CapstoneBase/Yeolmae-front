@@ -14,12 +14,6 @@ const BoardWrapper = styled.div`
   min-height: 40vh;
   margin: 10px 0px 10px 0px;
 `;
-const BoardContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-flow: row wrap;
-  background-color: white;
-`;
 
 function CreatePost() {
   const [input, setInput] = useState({
@@ -76,33 +70,27 @@ function CreatePost() {
   return (
     <Wrapper>
       <BoardWrapper>
-        <BoardContainer>
-          <div className="CreateBoardTitleBox">
-            <input
-              className="InputBoardTitle"
-              id="title"
-              name="title"
-              type="text"
-              placeholder="제목"
-              onChange={onChange}
-            />
-          </div>
-        </BoardContainer>
-        <BoardContainer>
-          <div className="CreateBoardContentBox">
-            <textarea
-              className="InputBoardTitle"
-              id="title"
-              name="title"
-              type="text"
-              placeholder="제목"
-              onChange={onChange}
-            />
-          </div>
-        </BoardContainer>
-        <BoardContainer>
-          <input type="file" />
-        </BoardContainer>
+        <div className="CreateBoardTitleBox">
+          <input
+            className="InputBoardTitle"
+            id="title"
+            name="title"
+            type="text"
+            placeholder="제목"
+            onChange={onChange}
+          />
+        </div>
+        <div className="CreateBoardContentBox">
+          <textarea
+            className="InputBoardTextarea"
+            id="title"
+            name="title"
+            type="content"
+            placeholder="내용"
+            onChange={onChange}
+          />
+        </div>
+        <input type="file" text="파일 첨부" />
       </BoardWrapper>
       <Button onClick={submitPost} text="작성완료" />
     </Wrapper>
