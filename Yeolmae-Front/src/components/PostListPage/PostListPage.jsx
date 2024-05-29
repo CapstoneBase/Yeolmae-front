@@ -5,12 +5,13 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import Button from '../Common/Button';
 import PostCard from '../Common/PostCard';
+import PageGrid from '../Common/PageGrid';
 
 function PostList() {
   return (
-    <>
-      <PostCard />
-    </>
+    // <>
+    <PageGrid />
+    // </>
   );
 }
 
