@@ -3,7 +3,8 @@ import PostCard from './PostCard';
 
 const GridContainer = styled.div`
   display: grid;
-  margin: 0px 50px;
+
+  margin: 0px 30px;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   place-items: center;

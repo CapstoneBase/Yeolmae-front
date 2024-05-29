@@ -46,7 +46,7 @@ function PostCard() {
     <Card>
       <CardThumbnail src="\IMG_4276.PNG" />
       <CardContents>
-        <PostTitle>게시글제목</PostTitle>
+        <PostTitle>게시글제목게시글제목게시글제...</PostTitle>
         <PostAuthor>작성자</PostAuthor>
         <PostDate>2024.05.16</PostDate>
       </CardContents>
