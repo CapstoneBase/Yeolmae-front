@@ -4,8 +4,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import Button from '../Common/Button';
-import Wrapper from '../Common/Wrapper';
+import Button from '../../Common/Button';
+import Wrapper from '../../Common/Wrapper';
 
 const Title = styled.h2`
   display: flex;
