@@ -7,11 +7,13 @@ import Button from '../Common/Button';
 import PostCard from '../Common/PostCard';
 import PageGrid from '../Common/PageGrid';
 import CategoryDropdown from '../Common/CategoryDropdown';
+import SelectBox from '../Common/SelectBox';
 
 function PostList() {
   return (
     <>
       <CategoryDropdown />
+      <SelectBox />
       <PageGrid />
     </>
   );
