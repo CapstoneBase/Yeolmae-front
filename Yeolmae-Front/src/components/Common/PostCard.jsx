@@ -41,7 +41,7 @@ const PostDate = styled(PostAuthor)``;
 //   align-items: center;
 // `;
 
-function PostCard() {
+function PostCard({info}) {
   return (
     <Card>
       <CardThumbnail src="\IMG_4276.PNG" />

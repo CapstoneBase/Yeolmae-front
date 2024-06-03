@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
 
@@ -12,9 +13,11 @@ const GridContainer = styled.div`
 `;
 
 function PageGrid() {
+  const [contentInfo, setContentInfo] = useState([]);
+
   return (
     <GridContainer>
-      <PostCard />
+      <PostCard info={contentInfo} />
       <PostCard />
       <PostCard />
       <PostCard />
