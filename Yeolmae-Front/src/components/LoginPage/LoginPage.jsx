@@ -8,6 +8,7 @@ import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
 import ToastNotification from '../Common/ToastNotification';
 import userLogin from '../../redux/modules/userLogin';
+import { loginUser } from '../../api/loginUsers';
 
 const Title = styled.h2`
   display: flex;
@@ -91,6 +92,10 @@ function Login() {
       password: input.password
     };
 
+    // 로그인 후 비밀번호 입력값 제거
+    setInput(input.password, '');
+
+    loginUser(body);
     axios
       .post(API, body)
       .then((res) => {
