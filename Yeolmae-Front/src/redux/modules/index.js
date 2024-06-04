@@ -1,8 +1,9 @@
-import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import userLogin from './userLogin';
+import tokenReducer from './authSlice';
 
-const rootReducer = combineReducers({
-  userLogin
+export default configureStore({
+  reducer: {
+    authToken: tokenReducer
+  }
 });
-
-export default rootReducer;
