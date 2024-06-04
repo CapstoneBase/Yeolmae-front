@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 // import axios from '../hooks/useAxios';
-import Wrapper from '../../Common/Wrapper';
+// import Wrapper from '../../Common/Wrapper';
 import Button from '../../Common/Button';
 import './createPostStyle.css';
 
-const BoardWrapper = styled.div`
+const BoardWrapper = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,19 +24,31 @@ function CreatePost() {
     content: '',
     imageUrl: ''
   });
+
   const onChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
   };
-  const { resetBoard } = useState();
+
+  /* const { resetBoard } = useState();
   // effect : 마운트 시 실행할 함수
   useEffect(() => {
     resetBoard();
-  }, []);
+  }, []); */
+
+  const navigate = useNavigate();
 
   const submitPost = (e) => {
+    e.preventDefault();
+    if (!input.title) {
+      return alert('제목을 입력해주세요.');
+    }
+    if (!input.content) {
+      return alert('내용을 입력해주세요.');
+    }
+
     const body = {
       category: input.category,
       parentCategory: input.parentCategory,
@@ -43,18 +56,16 @@ function CreatePost() {
       content: input.content,
       imageUrl: input.imageUrl
     };
+
     axios
       .post('/api/v1/posts', body)
       .then((res) => {
-        const { accessToken } = res.data;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
         console.log(input);
         console.log(res.data);
         // console.log(res);
         if (res.status === 200) {
           console.log('게시글 작성 성공');
+          navigate('/{postsid}');
         }
       })
       .catch((err) => {
@@ -68,7 +79,7 @@ function CreatePost() {
   };
 
   return (
-    <Wrapper>
+    <div className="Wrapper">
       <BoardWrapper>
         <div className="CreateBoardTitleBox">
           <input
@@ -90,10 +101,10 @@ function CreatePost() {
             onChange={onChange}
           />
         </div>
-        <input type="file" text="파일 첨부" />
+        <input className="UploadFile" type="file" text="파일 첨부" />
       </BoardWrapper>
       <Button onClick={submitPost} text="작성완료" />
-    </Wrapper>
+    </div>
   );
 }
 export default CreatePost;
