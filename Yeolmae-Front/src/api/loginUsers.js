@@ -9,7 +9,10 @@ export const loginUser = async (id, password) => {
     console.log(response);
     return response.data;
   } catch (error) {
-    console.log(error);
-    return error.data;
+    console.log('error : ', error.response);
+    const { status, statusText } = error.response;
+    const message = error.response.data.message[0];
+    console.log(`${status} - ${statusText} - ${message}`);
+    throw error;
   }
 };
