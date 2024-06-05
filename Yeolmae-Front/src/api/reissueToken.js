@@ -1,50 +1,22 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 
-const API = 'login';
+const API = '/api/v1/login';
 
 export const reissueToken = async (refreshToken) => {
   try {
-    const response = await axios.post(`${API}/reissue`, { refresh_token: refreshToken });
+    const response = await axios.post(
+      `${API}/reissue`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${refreshToken}` }
+      }
+    );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error : ', error.response);
-    const { status, statusText } = error.response;
-    const message = error.response.data.message[0];
-    console.log(`${status} - ${statusText} - ${message}`);
+    const { status, statusText, data } = error.response;
+    console.log(`${status} - ${statusText} - ${data.message}`);
     throw error;
   }
-
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //     const refresh = axios.create(
-  //         '${API}/reissue',
-  //     )
-  // });
-
-  // const interceptor = axios.interceptors.response.use(
-  //     response => {
-  //         return response;
-  //     },
-  //     async error => {
-  //         if (error.reponse.status === 401) {
-  //             console.log('토큰 재발급');
-  //             await axios.post(`${API}/reissue`, {
-  //                 headers: {
-  //                     refreshToken: localStorage.getItem('refreshToken'),
-
-  //                 }
-  //             })
-  //         }
-  //     }
-  // )
-  // try {
-  //     const response = await axios.post(`${API}/reissue`, {
-  //         headers: {
-  //             refreshToken: localStorage.getItem('refreshToken')
-  //         }
-  //     })
-  // } catch (error) {
-  //     throw error;
-  // };
 };
