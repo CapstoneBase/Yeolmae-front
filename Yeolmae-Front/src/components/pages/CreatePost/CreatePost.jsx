@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 // import axios from '../hooks/useAxios';
-// import Wrapper from '../../Common/Wrapper';
+// import Categories from '../../Common/Categories';
+import SelectBox from '../../Common/SelectBox';
 import Button from '../../Common/Button';
 import './createPostStyle.css';
 
@@ -57,6 +58,10 @@ function CreatePost() {
       imageUrl: input.imageUrl
     };
 
+    // 현재 페이지 url의 파라미터 가져와 postID 저장하기
+    const postId = document.location.href.split('?');
+    body.append('postId', postId);
+
     axios
       .post('/api/v1/posts', body)
       .then((res) => {
@@ -81,6 +86,8 @@ function CreatePost() {
   return (
     <div className="Wrapper">
       <BoardWrapper>
+        <SelectBox />
+        <SelectBox />
         <div className="CreateBoardTitleBox">
           <input
             className="InputBoardTitle"
@@ -94,16 +101,20 @@ function CreatePost() {
         <div className="CreateBoardContentBox">
           <textarea
             className="InputBoardTextarea"
-            id="title"
-            name="title"
-            type="content"
+            cols="50"
+            rows="20"
+            id="content"
+            name="content"
+            type="text"
             placeholder="내용"
             onChange={onChange}
           />
         </div>
-        <input className="UploadFile" type="file" text="파일 첨부" />
+        <div className="UploadFile">
+          <input type="file" text="파일 첨부" />
+        </div>
+        <Button onClick={submitPost} text="작성완료" />
       </BoardWrapper>
-      <Button onClick={submitPost} text="작성완료" />
     </div>
   );
 }
