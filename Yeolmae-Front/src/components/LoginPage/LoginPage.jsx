@@ -1,14 +1,13 @@
 /* eslint-disable no-alert */
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
 import ToastNotification from '../Common/ToastNotification';
-import userLogin from '../../redux/modules/userLogin';
 import { loginUser } from '../../api/loginUsers';
+import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
 
 const Title = styled.h2`
   display: flex;
@@ -64,6 +63,8 @@ function Login() {
   const [toast, setToast] = useState(false);
 
   const navigate = useNavigate();
+  const error = useSelector((state) => state.auth.error);
+
   const onChange = (e) => {
     setInput({
       ...input,
@@ -77,9 +78,9 @@ function Login() {
   //   });
   // };
 
-  const API = '/api/v1/login';
+  // const API = '/api/v1/login';
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.id) {
       return window.alert('ID를 입력해주세요.');
@@ -93,37 +94,29 @@ function Login() {
     };
 
     // 로그인 후 비밀번호 입력값 제거
-    setInput(input.password, '');
+    // setInput(input.password, '');
 
-    loginUser(body);
-    axios
-      .post(API, body)
-      .then((res) => {
-        const { accessToken } = res.data;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
-        console.log(input);
-        console.log(res.data);
-        console.log(res);
-        if (res.status === 200) {
-          console.log('로그인 성공');
-          // resetInput();
-          dispatch(userLogin(body));
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.log(input);
-        console.error(err.response);
-        if (err.response.status === 403) {
-          // alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-          // setError('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-          console.log(body);
-          setToast(true);
-          // resetInput();
-        }
-      });
+    dispatch(loginThunk(input.id, input.password));
+    console.log('로그인');
+    dispatch(reissueTokenThunk());
+    console.log('토큰 재발급');
+
+    // try {
+    //   const { accessToken, refreshToken } = await loginUser(input.id, input.password);
+    //   if (accessToken && refreshToken) {
+    //     localStorage.setItem('accessToken', accessToken);
+    //     localStorage.setItem('refreshToken', refreshToken);
+    //     dispatch(SET_TOKEN({ accessToken, refreshToken }));
+    //     console.log('로그인 성공');
+    //     navigate('/');
+    //   }
+    // } catch (error) {
+    //   console.error(error.response);
+    //   if (error.response && error.response.status === 403) {
+    //     console.log('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+    //     setToast(true);
+    //   }
+    // }
   };
 
   return (
@@ -168,6 +161,12 @@ function Login() {
           props={setToast}
         />
       ) : null}
+      {/* {error && (
+        <ToastNotification
+          text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
+          props={setToast}
+        />
+      )} */}
     </>
   );
 }
