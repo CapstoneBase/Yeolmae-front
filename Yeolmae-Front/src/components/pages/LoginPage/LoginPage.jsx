@@ -4,8 +4,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import Button from '../Common/Button';
-import Wrapper from '../Common/Wrapper';
+import Button from '../../Common/Button';
+import Wrapper from '../../Common/Wrapper';
 
 const Title = styled.h2`
   display: flex;
@@ -65,7 +65,7 @@ function Login() {
     });
   };
 
-  const API = 'https://879df4a7-14ca-442b-a753-788449ea4109.mock.pstmn.io/api/v1/login';
+  const API = '/api/v1/login';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,10 +83,10 @@ function Login() {
     axios
       .post(API, body)
       .then((res) => {
-        const { accessToken } = res.data;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
+        // const { accessToken } = res.data;
+        // if (accessToken) {
+        //   localStorage.setItem('accessToken', accessToken);
+        // }
         console.log(input);
         console.log(res.data);
         // console.log(res);
@@ -99,7 +99,7 @@ function Login() {
         console.log(input);
         console.error(err.response);
         if (err.response.status === 400) {
-          alert('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
+          alert('로그인에 실패하였습니다.');
         }
       });
   };

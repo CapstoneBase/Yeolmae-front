@@ -1,32 +1,37 @@
-import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
-import Main from './components/MainPage/MainPage';
-import Signup from './components/SignupPage/SignupPage';
-import Login from './components/LoginPage/LoginPage';
-import Notfound from './components/NotFound/NotFound';
+import { ThemeProvider } from 'styled-components';
+import { Suspense, lazy, memo } from 'react';
+import GlobalStyle from './style/globalStyles';
+import theme from './style/theme';
 import Header from './components/Common/Header';
-import PostList from './components/PostListPage/PostListPage';
 
-function App() {
+const Main = lazy(() => import('./components/pages/MainPage/MainPage'));
+const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
+const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
+const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
+
+const App = memo(() => {
   return (
     <>
-      <Header />
-      <div>
-        {/* 페이지 경로 표시 */}
-        <Link to="/">메인 홈</Link>
-        <Link to="/signupPage">회원가입페이지</Link>
-        <Link to="/loginPage">로그인페이지</Link>
-        <Link to="/postlistPage">게시글 목록</Link>
-      </div>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/signupPage" element={<Signup />} />
-        <Route path="/loginPage" element={<Login />} />
-        <Route path="/postlistPage" element={<PostList />} />
-        <Route path="*" element={<Notfound />} />
-      </Routes>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <Header />
+        <div>
+          <Link to="/">메인 홈</Link>
+          <Link to="/signupPage">회원가입페이지</Link>
+          <Link to="/loginPage">로그인페이지</Link>
+        </div>
+        <Suspense>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/signupPage" element={<Signup />} />
+            <Route path="/loginPage" element={<Login />} />
+            <Route path="*" element={<Notfound />} />
+          </Routes>
+        </Suspense>
+      </ThemeProvider>
     </>
   );
-}
+});
 
 export default App;
