@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
 import ToastNotification from '../Common/ToastNotification';
-import { loginUser } from '../../api/loginUsers';
-import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
+// import { loginUser } from '../../api/loginUser';
+// import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
+import { loginThunk } from '../../redux/modules/loginThunk';
 
 const Title = styled.h2`
   display: flex;
@@ -98,8 +99,8 @@ function Login() {
 
     dispatch(loginThunk(input.id, input.password));
     console.log('로그인');
-    dispatch(reissueTokenThunk());
-    console.log('토큰 재발급');
+    // dispatch(reissueTokenThunk());
+    // console.log('토큰 재발급');
 
     // try {
     //   const { accessToken, refreshToken } = await loginUser(input.id, input.password);
