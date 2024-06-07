@@ -78,22 +78,23 @@ function Signup() {
     axios
       .post('/api/v1/users/check', { id: input.id })
       .then((res) => {
-        console.log(input);
+        console.log(input.id);
         // console.log(res);
         if (res.status === 200) {
-          console.log('사용가능한 아이디입니다.');
-          navigate('/');
+          console.log('사용 가능한 아이디입니다.');
+          alert('사용 가능한 아이디입니다.');
         }
       })
       .catch((err) => {
-        console.log(input);
+        console.log(input.id);
         console.error(err.response);
-        if (err.response.status === 403) {
-          alert('중복된 아이디입니다.');
+        if (err.response.status === 400) {
+          alert('이미 존재하는 아이디입니다.');
         }
       });
     return null;
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.id) {
@@ -115,16 +116,12 @@ function Signup() {
     axios
       .post('/api/v1/users', body)
       .then((res) => {
-        const { accessToken } = res.data;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
         console.log(input);
         console.log(res.data);
         // console.log(res);
         if (res.status === 200) {
           console.log('회원가입 성공');
-          navigate('/');
+          navigate('/api/v1/login');
         }
       })
       .catch((err) => {
@@ -144,17 +141,25 @@ function Signup() {
         <InputContainer>
           <TitleLabel>아이디</TitleLabel>
           <ContentLabel>
-            <AuthInputField id="id" name="id" type="form" onChange={HandlerID} />
+            <AuthInputField id="id" name="id" type="form" value={input.id} onChange={HandlerID} />
           </ContentLabel>
           <SubmitButtonLabel>
             <Button onClick={checkRedundantID} text="중복확인" />
           </SubmitButtonLabel>
+          {idValid && <p>사용 불가능한 아이디입니다.</p>}
         </InputContainer>
         <InputContainer>
           <TitleLabel>비밀번호</TitleLabel>
           <ContentLabel>
-            <AuthInputField id="password" name="password" type="form" onChange={HandlerPassword} />
+            <AuthInputField
+              id="password"
+              name="password"
+              type="password"
+              value={input.password}
+              onChange={HandlerPassword}
+            />
           </ContentLabel>
+          {passwordValid && <p>사용 불가능한 비밀번호입니다.</p>}
         </InputContainer>
         <InputContainer>
           <TitleLabel>이름</TitleLabel>
@@ -162,7 +167,8 @@ function Signup() {
             <AuthInputField
               id="name"
               name="name"
-              type="form"
+              type="text"
+              value={input.name}
               onChange={(e) => setInput(e.target.value)}
             />
           </ContentLabel>
