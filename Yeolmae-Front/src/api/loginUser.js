@@ -1,14 +1,13 @@
-import axios from 'axios';
-// import axiosAuthInstance from './axiosInstance';
+import axiosAuthInstance from './axiosAuthInstance';
 
 export const loginUser = async (id, password) => {
-  const API = '/api/v1/login';
+  const API = '/login';
   const body = { id, password };
 
   console.log('request body: ', body);
   try {
     console.log('loginUsers try');
-    const response = await axios.post(`${API}`, body);
+    const response = await axiosAuthInstance.post(`${API}`, body);
     console.log(response);
     return response.data.data;
   } catch (error) {
