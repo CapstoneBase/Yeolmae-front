@@ -40,14 +40,12 @@ export const loginThunk = (id, password) => async (dispatch) => {
   try {
     const data = await loginUser(id, password);
     // dispatch(SET_USER(data.user));
-    dispatch(
-      SET_TOKEN({ accessToken: data.data.accessToken, refreshToken: data.data.refreshToken })
-    );
+    dispatch(SET_TOKEN({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
     console.log('SET_TOKEN dispatch');
-    localStorage.setItem('accessToken', data.data.accessToken);
-    localStorage.setItem('refreshToken', data.data.refreshToken);
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
     console.log('토큰 저장');
-    console.log(data.data.refreshToken);
+    console.log(data.refreshToken);
   } catch (error) {
     dispatch(SET_ERROR(error.message));
   }
@@ -68,10 +66,10 @@ export const reissueTokenThunk = () => async (dispatch, getState) => {
     );
     // 토큰 재발급 성공 후 새로운 토큰 로컬에 저장
     console.log('SET_TOKEN dispatch');
-    localStorage.setItem('accessToken', data.data.accessToken);
-    localStorage.setItem('refreshToken', data.data.refreshToken);
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
     console.log('토큰 저장');
-    console.log('새 refreshToken: ', data.data.refreshToken);
+    console.log('새 refreshToken: ', data.refreshToken);
   } catch (error) {
     // 토큰 재발급 실패
     console.error('토큰 재발급 실패', error);

@@ -10,7 +10,7 @@ export const loginUser = async (id, password) => {
     console.log('loginUsers try');
     const response = await axios.post(`${API}`, body);
     console.log(response);
-    return response.data;
+    return response.data.data;
   } catch (error) {
     if (error.response) {
       console.log('error : ', error.response);
