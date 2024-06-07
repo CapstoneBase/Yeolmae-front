@@ -53,7 +53,7 @@ function Signup() {
       ...input,
       [e.target.name]: e.target.value
     });
-    const IDRegex = /^[a-z0-9A-Z_.]{2,16}$/;
+    const IDRegex = /^[A-Za-z0-9]{2,16}$/;
     if (IDRegex.test('id')) {
       setIDValid(true);
     } else {
@@ -65,7 +65,7 @@ function Signup() {
       ...input,
       [e.target.name]: e.target.value
     });
-    const PasswordRegex = /^[A-Za-z0-9]{6,}$/;
+    const PasswordRegex = /^[A-Za-z0-9]{10,}$/;
     if (PasswordRegex.test('password')) {
       setPasswordValid(true);
     } else {
@@ -127,7 +127,7 @@ function Signup() {
       .catch((err) => {
         console.log(input);
         console.error(err.response);
-        if (err.response.status === 403) {
+        if (err.response.status === 400) {
           alert('회원가입에 실패하였습니다.');
         }
       });
