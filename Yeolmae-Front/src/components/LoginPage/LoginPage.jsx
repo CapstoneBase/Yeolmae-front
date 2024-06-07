@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '../Common/Button';
 import Wrapper from '../Common/Wrapper';
 import ToastNotification from '../Common/ToastNotification';
@@ -64,7 +64,6 @@ function Login() {
   const [toast, setToast] = useState(false);
 
   const navigate = useNavigate();
-  const error = useSelector((state) => state.auth.error);
 
   const onChange = (e) => {
     setInput({
@@ -99,25 +98,7 @@ function Login() {
 
     dispatch(loginThunk(input.id, input.password));
     console.log('로그인');
-    // dispatch(reissueTokenThunk());
-    // console.log('토큰 재발급');
-
-    // try {
-    //   const { accessToken, refreshToken } = await loginUser(input.id, input.password);
-    //   if (accessToken && refreshToken) {
-    //     localStorage.setItem('accessToken', accessToken);
-    //     localStorage.setItem('refreshToken', refreshToken);
-    //     dispatch(SET_TOKEN({ accessToken, refreshToken }));
-    //     console.log('로그인 성공');
-    //     navigate('/');
-    //   }
-    // } catch (error) {
-    //   console.error(error.response);
-    //   if (error.response && error.response.status === 403) {
-    //     console.log('존재하지 않는 아이디이거나 잘못된 비밀번호입니다.');
-    //     setToast(true);
-    //   }
-    // }
+    navigate('/');
   };
 
   return (
@@ -162,12 +143,6 @@ function Login() {
           props={setToast}
         />
       ) : null}
-      {/* {error && (
-        <ToastNotification
-          text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
-          props={setToast}
-        />
-      )} */}
     </>
   );
 }
