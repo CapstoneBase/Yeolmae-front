@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+// import Categories from '../Categories';
 
 const OPTIONS = [
   { value: 'cat1', name: '카테고리1' },
@@ -7,6 +8,11 @@ const OPTIONS = [
 ];
 
 const Select = styled.select`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
   border: none;
   outline: none;
   color: black;
