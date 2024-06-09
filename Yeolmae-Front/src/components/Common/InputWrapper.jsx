@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
-const InputWrapper = styled.form`
+const InputWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: left;
   align-items: center;
-  min-height: 40vh;
 `;
 
 export default InputWrapper;

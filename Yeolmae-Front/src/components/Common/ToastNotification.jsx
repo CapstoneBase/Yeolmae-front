@@ -32,7 +32,7 @@ function ToastNotification({ text, props }) {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [props]);
 
   return (
     <Toast>
