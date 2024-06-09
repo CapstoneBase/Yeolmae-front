@@ -84,7 +84,6 @@ function SignupPage() {
   const onChange = (e) => {
     if(e.target.name === 'id'){
       setChkDup(false);
-      console.log(e.target.value);
     }
     setInput({
       ...input,
@@ -99,7 +98,6 @@ function SignupPage() {
   // };
 
   // const API = '/api/v1/login';
-  console.log(`chkDup >> ${chkDup}`)
   // #####################################################################
   // 중복체크 
   // #####################################################################
@@ -112,14 +110,12 @@ function SignupPage() {
     // setInput(input.password, '');
 
     dispatch(idDupCheck(input.id));
-    console.log('중복체크');
   };
 
   const idDupCheck = (id) => async (dispatch) => {
     try {
       const data = await actDupCheck(id);
       // dispatch(SET_USER(data.user));
-      console.log(data);
       if(data){
         alert(`[${id}]은(는) 중복된 아이디입니다.`);
       }else{
@@ -139,13 +135,10 @@ function SignupPage() {
     try {
       console.log('id duplicate check try');
       const response = await axiosAuthInstance.post(`${API}`, body);
-      console.log(response);
       return response.data.data;
     } catch (error) {
       if (error.response) {
-        console.log('error : ', error.response);
         const { status, statusText, data } = error.response;
-        console.log(`${status} - ${statusText} - ${data.message}`);
       } else if (error.request) {
         console.log('No response received: ', error.request);
       } else {
@@ -160,7 +153,6 @@ function SignupPage() {
   // #####################################################################
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(chkDup);
 
     const validId = condId.test(input.id);        // id 유효성 검사
     const validPw = condPw.test(input.password);  // password 유효성 검사
@@ -190,14 +182,12 @@ function SignupPage() {
     // setInput(input.password, '');
 
     dispatch(doSighup(body));
-    console.log('가입하기');
   };
 
   const doSighup = param => async (dispatch) => {
     try {
       const data = await actSighup(param);
       // dispatch(SET_USER(data.user));
-      console.log(data);
       if(data){
         alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
         navigate('/loginpage');
@@ -214,9 +204,7 @@ function SignupPage() {
   
     //console.log('request body: ', body);
     try {
-      console.log('sign up try');
       const response = await axiosAuthInstance.post(`${API}`, body);
-      console.log(response);
       return response.data.data;
     } catch (error) {
       if (error.response) {
