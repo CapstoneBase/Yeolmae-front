@@ -1,9 +1,9 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Routers, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Main from './components/MainPage/MainPage';
-import Signup from './components/SignupPage/SignupPage';
-import Login from './components/LoginPage/LoginPage';
-import Notfound from './components/NotFound/NotFound';
+import Main from './components/pages/MainPage/MainPage';
+import Signup from './components/pages/SignupPage/SignupPage';
+import Login from './components/pages/LoginPage/LoginPage';
+import Notfound from './components/pages/NotFound/NotFound';
 import Header from './components/Common/Header';
 import PostList from './components/PostListPage/PostListPage';
 
@@ -11,13 +11,6 @@ function App() {
   return (
     <>
       <Header />
-      <Routers>
-        {/* 페이지 경로 표시 */}
-        <Link to="/">메인 홈</Link>
-        <Link to="/signupPage">회원가입페이지</Link>
-        <Link to="/loginPage">로그인페이지</Link>
-        <Link to="/postlistPage">게시글 목록</Link>
-      </Routers>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/signupPage" element={<Signup />} />
@@ -27,6 +20,6 @@ function App() {
       </Routes>
     </>
   );
-});
+};
 
 export default App;
