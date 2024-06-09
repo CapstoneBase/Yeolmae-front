@@ -113,8 +113,10 @@ function CreatePost() {
   return (
     <div className="Wrapper">
       <BoardWrapper>
-        <SelectBox />
-        <SelectBox />
+        <div className="SelectboxContainer">
+          <SelectBox />
+          <SelectBox />
+        </div>
         <div className="CreateBoardTitleBox">
           <input
             className="InputBoardTitle"
@@ -126,19 +128,15 @@ function CreatePost() {
           />
         </div>
         <div className="CreateBoardContentBox">
-          <textarea
-            className="InputBoardTextarea"
-            cols="50"
-            rows="20"
+          <QuillEditor
+            quillRef={quillRef}
+            className="InputBoardQuill"
             id="content"
             name="content"
             type="text"
             placeholder="내용"
             onChange={onChange}
           />
-        </div>
-        <div>
-          <QuillEditor quillRef={quillRef} />
         </div>
         <div className="UploadFile">
           <input type="file" text="파일 첨부" />
