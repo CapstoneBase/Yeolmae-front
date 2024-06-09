@@ -1,11 +1,13 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Main from './components/MainPage/MainPage';
-import Signup from './components/SignupPage/SignupPage';
-import Login from './components/LoginPage/LoginPage';
-import Notfound from './components/NotFound/NotFound';
+import Main from './components/pages/MainPage/MainPage';
+import Signup from './components/pages/SignupPage/SignupPage';
+import Login from './components/pages/LoginPage/LoginPage';
+import Notfound from './components/pages/NotFound/NotFound';
 import Header from './components/Common/Header';
-import PostList from './components/PostListPage/PostListPage';
+import PostList from './components/pages/PostListPage/PostListPage';
+
+const Routers = styled.div``;
 
 function App() {
   return (
@@ -27,6 +29,6 @@ function App() {
       </Routes>
     </>
   );
-});
+};
 
 export default App;
