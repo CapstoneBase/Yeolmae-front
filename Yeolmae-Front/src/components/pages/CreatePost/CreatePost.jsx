@@ -1,12 +1,32 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { ReactChild, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import QuillEditor from './QuillEditor';
 // import axios from '../hooks/useAxios';
 // import Categories from '../../Common/Categories';
 import SelectBox from '../../Common/SelectBox';
 import Button from '../../Common/Button';
 import './createPostStyle.css';
+
+const formats = [
+  'font',
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'align',
+  'color',
+  'background',
+  'size',
+  'h1'
+];
 
 const BoardWrapper = styled.form`
   display: flex;
@@ -18,6 +38,13 @@ const BoardWrapper = styled.form`
 `;
 
 function CreatePost() {
+  const [range, setRange] = useState();
+  const [lastChange, setLastChange] = useState();
+  const [readOnly, setReadOnly] = useState(false);
+
+  // Use a ref to access the quill instance directly
+  const quillRef = useRef();
+
   const [input, setInput] = useState({
     category: '',
     parentCategory: '',
@@ -109,6 +136,9 @@ function CreatePost() {
             placeholder="내용"
             onChange={onChange}
           />
+        </div>
+        <div>
+          <QuillEditor quillRef={quillRef} />
         </div>
         <div className="UploadFile">
           <input type="file" text="파일 첨부" />
