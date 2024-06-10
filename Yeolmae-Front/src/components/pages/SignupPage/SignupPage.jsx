@@ -71,6 +71,7 @@ function SignupPage() {
     // setInput(input.password, '');
 
     dispatch(idDupCheck(input.id));
+    return null;
   };
 
   const idDupCheck = (id) => async () => {
@@ -86,6 +87,7 @@ function SignupPage() {
     } catch (error) {
       console.log(error);
     }
+    return null;
   };
 
   const actDupCheck = async (id) => {
@@ -146,6 +148,7 @@ function SignupPage() {
     // setInput(input.password, '');
 
     dispatch(doSighup(body));
+    return null;
   };
 
   const doSighup = (param) => async () => {
@@ -161,6 +164,7 @@ function SignupPage() {
     } catch (error) {
       console.log(error);
     }
+    return null;
   };
 
   const actSighup = async (body) => {
