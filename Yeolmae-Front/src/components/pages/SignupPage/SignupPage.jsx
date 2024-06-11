@@ -59,37 +59,6 @@ function SignupPage() {
   // };
 
   // const API = '/api/v1/login';
-  // #####################################################################
-  // 중복체크
-  // #####################################################################
-  const handleDuplicate = async (e) => {
-    e.preventDefault();
-    if (!input.id) {
-      return alert('ID를 입력해주세요.');
-    }
-    // 로그인 후 비밀번호 입력값 제거
-    // setInput(input.password, '');
-
-    dispatch(idDupCheck(input.id));
-    return null;
-  };
-
-  const idDupCheck = (id) => async () => {
-    try {
-      const data = await actDupCheck(id);
-      // dispatch(SET_USER(data.user));
-      if (data) {
-        alert(`[${id}]은(는) 중복된 아이디입니다.`);
-      } else {
-        alert(`[${id}]은(는) 중복되지 않은 아이디입니다.`);
-        setChkDup(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return null;
-  };
-
   const actDupCheck = async (id) => {
     const API = '/users/check';
     const body = { id };
@@ -111,14 +80,88 @@ function SignupPage() {
     }
   };
 
+  const idDupCheck = (id) => async () => {
+    try {
+      const data = await actDupCheck(id);
+      // dispatch(SET_USER(data.user));
+      if (data) {
+        alert(`[${id}]은(는) 중복된 아이디입니다.`);
+      } else {
+        alert(`[${id}]은(는) 중복되지 않은 아이디입니다.`);
+        setChkDup(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return null;
+  };
+
+  // #####################################################################
+  // 중복체크
+  // #####################################################################
+  const handleDuplicate = async (e) => {
+    e.preventDefault();
+    if (!input.id) {
+      return alert('ID를 입력해주세요.');
+    }
+    // 로그인 후 비밀번호 입력값 제거
+    // setInput(input.password, '');
+
+    dispatch(idDupCheck(input.id));
+    return null;
+  };
+
+  const actSighup = async (body) => {
+    const API = '/users';
+
+    // console.log('request body: ', body);
+    try {
+      const response = await axiosAuthInstance.post(`${API}`, body);
+      return response.data.data;
+    } catch (error) {
+      if (error.response) {
+        console.log('error : ', error.response);
+        const { status, statusText, data } = error.response;
+        console.log(`${status} - ${statusText} - ${data.message}`);
+      } else if (error.request) {
+        console.log('No response received: ', error.request);
+      } else {
+        console.log('Error setting up request: ', error.message);
+      }
+      throw error;
+    }
+  };
+
+  const doSighup = (param) => async () => {
+    try {
+      const data = await actSighup(param);
+      // dispatch(SET_USER(data.user));
+      if (data) {
+        alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
+        navigate('/loginpage');
+      } else {
+        alert(`회원 가입 중 오류가 발생하였습니다. ${data}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return null;
+  };
+
+  // #####################################################################
+  // 아이디 유효성 검사
+  // #####################################################################
+  const condId = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{2,16}$/;
+  const condPw = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{10,99}$/;
+  const validId = condId.test(input.id); // id 유효성 검사
+  const validPw = condPw.test(input.password); // password 유효성 검사
+
   // #####################################################################
   // 가입하기
   // #####################################################################
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validId = condId.test(input.id); // id 유효성 검사
-    const validPw = condPw.test(input.password); // password 유효성 검사
     if (!input.id) {
       return alert('ID를 입력해주세요.');
     }
@@ -150,51 +193,6 @@ function SignupPage() {
     dispatch(doSighup(body));
     return null;
   };
-
-  const doSighup = (param) => async () => {
-    try {
-      const data = await actSighup(param);
-      // dispatch(SET_USER(data.user));
-      if (data) {
-        alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
-        navigate('/loginpage');
-      } else {
-        alert(`회원 가입 중 오류가 발생하였습니다. ${data}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return null;
-  };
-
-  const actSighup = async (body) => {
-    const API = '/users';
-
-    // console.log('request body: ', body);
-    try {
-      const response = await axiosAuthInstance.post(`${API}`, body);
-      return response.data.data;
-    } catch (error) {
-      if (error.response) {
-        console.log('error : ', error.response);
-        const { status, statusText, data } = error.response;
-        console.log(`${status} - ${statusText} - ${data.message}`);
-      } else if (error.request) {
-        console.log('No response received: ', error.request);
-      } else {
-        console.log('Error setting up request: ', error.message);
-      }
-      throw error;
-    }
-  };
-
-  // #####################################################################
-  // 아이디 유효성 검사
-  // #####################################################################
-  const condId = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{2,16}$/;
-  const condPw = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{10,99}$/;
-  const validId = condId.test(input.id); // id 유효성 검사
-  const validPw = condPw.test(input.password); // password 유효성 검사
 
   // #####################################################################
   // 출력
