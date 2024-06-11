@@ -113,13 +113,13 @@ function SignupPage() {
 
   const actSighup = async (body) => {
     const API = '/users';
-
     // console.log('request body: ', body);
     try {
       const response = await axiosAuthInstance.post(`${API}`, body);
       return response.data.data;
     } catch (error) {
       if (error.response) {
+        console.log('request body: ', body);
         console.log('error : ', error.response);
         const { status, statusText, data } = error.response;
         console.log(`${status} - ${statusText} - ${data.message}`);
