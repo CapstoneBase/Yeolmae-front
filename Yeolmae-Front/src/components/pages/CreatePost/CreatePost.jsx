@@ -1,11 +1,10 @@
-import React, { ReactChild, useRef, useState } from 'react';
+import React, { ReactChild, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import QuillEditor from './QuillEditor';
 // import axios from '../hooks/useAxios';
 // import Categories from '../../Common/Categories';
-import SelectBox from '../../Common/SelectBox';
 import Button from '../../Common/Button';
 import './createPostStyle.css';
 
@@ -37,20 +36,137 @@ const BoardWrapper = styled.form`
   margin: 10px 0px 10px 0px;
 `;
 
+const Select = styled.select`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  border: none;
+  outline: none;
+  color: black;
+  font-size: 15px;
+  background-color: inherit;
+  padding: 14px 16px;
+  margin: 0;
+
+  option {
+    // background-color: white;
+    // padding: 10px;
+    // margin: 10px;
+  }
+  .select-selected:after {
+    position: absolute;
+    content: '';
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+  }
+`;
+
+const categories = [
+    { "cateId": "0001", "cateName": "인문학", "parntCateId": "00" }
+  , { "cateId": "0002", "cateName": "사회과학", "parntCateId": "00" }
+  , { "cateId": "0003", "cateName": "자연과학", "parntCateId": "00" }
+  , { "cateId": "0004", "cateName": "공학", "parntCateId": "00" }
+  , { "cateId": "0005", "cateName": "예술체육학", "parntCateId": "00" }
+  , { "cateId": "0006", "cateName": "기타", "parntCateId": "00" }
+  , { "cateId": "000101", "cateName": "인문학일반", "parntCateId": "0001" }
+  , { "cateId": "000102", "cateName": "역사학", "parntCateId": "0001" }
+  , { "cateId": "000103", "cateName": "철학", "parntCateId": "0001" }
+  , { "cateId": "000104", "cateName": "종교학/신학", "parntCateId": "0001" }
+  , { "cateId": "000105", "cateName": "언어학", "parntCateId": "0001" }
+  , { "cateId": "000106", "cateName": "문학", "parntCateId": "0001" }
+  , { "cateId": "000107", "cateName": "한국어문학", "parntCateId": "0001" }
+  , { "cateId": "000108", "cateName": "중국어문학", "parntCateId": "0001" }
+  , { "cateId": "000109", "cateName": "일본어문학", "parntCateId": "0001" }
+  , { "cateId": "000110", "cateName": "영어문학", "parntCateId": "0001" }
+  , { "cateId": "000111", "cateName": "프랑스어문학", "parntCateId": "0001" }
+  , { "cateId": "000112", "cateName": "독일어문학", "parntCateId": "0001" }
+  , { "cateId": "000113", "cateName": "러시아어문학", "parntCateId": "0001" }
+  , { "cateId": "000201", "cateName": "사회과학일반", "parntCateId": "0002" }
+  , { "cateId": "000202", "cateName": "정치외교학", "parntCateId": "0002" }
+  , { "cateId": "000203", "cateName": "경제학", "parntCateId": "0002" }
+  , { "cateId": "000204", "cateName": "경영학", "parntCateId": "0002" }
+  , { "cateId": "000205", "cateName": "무역학", "parntCateId": "0002" }
+  , { "cateId": "000206", "cateName": "사회학", "parntCateId": "0002" }
+  , { "cateId": "000207", "cateName": "사회복지학", "parntCateId": "0002" }
+  , { "cateId": "000208", "cateName": "지역학", "parntCateId": "0002" }
+  , { "cateId": "000209", "cateName": "교육학", "parntCateId": "0002" }
+  , { "cateId": "000210", "cateName": "법학", "parntCateId": "0002" }
+  , { "cateId": "000211", "cateName": "행정학", "parntCateId": "0002" }
+  , { "cateId": "000212", "cateName": "지리/지역개발학", "parntCateId": "0002" }
+  , { "cateId": "000213", "cateName": "관광학", "parntCateId": "0002" }
+  , { "cateId": "000214", "cateName": "신문방송학", "parntCateId": "0002" }
+  , { "cateId": "000215", "cateName": "군사학", "parntCateId": "0002" }
+  , { "cateId": "000216", "cateName": "심리과학", "parntCateId": "0002" }
+  , { "cateId": "000217", "cateName": "문헌정보학", "parntCateId": "0002" }
+  , { "cateId": "000301", "cateName": "자연과학일반", "parntCateId": "0003" }
+  , { "cateId": "000302", "cateName": "수학/통계학", "parntCateId": "0003" }
+  , { "cateId": "000303", "cateName": "물리학", "parntCateId": "0003" }
+  , { "cateId": "000304", "cateName": "생물학", "parntCateId": "0003" }
+  , { "cateId": "000305", "cateName": "천문/지구과학", "parntCateId": "0003" }
+  , { "cateId": "000306", "cateName": "생활과학", "parntCateId": "0003" }
+  , { "cateId": "000401", "cateName": "공학일반", "parntCateId": "0004" }
+  , { "cateId": "000402", "cateName": "기계공학", "parntCateId": "0004" }
+  , { "cateId": "000403", "cateName": "항공우주공학", "parntCateId": "0004" }
+  , { "cateId": "000404", "cateName": "컴퓨터학", "parntCateId": "0004" }
+  , { "cateId": "000405", "cateName": "화학/생물공학", "parntCateId": "0004" }
+  , { "cateId": "000406", "cateName": "전기/제어계측공학", "parntCateId": "0004" }
+  , { "cateId": "000407", "cateName": "토목/환경공학", "parntCateId": "0004" }
+  , { "cateId": "000408", "cateName": "전자/정보통신공학", "parntCateId": "0004" }
+  , { "cateId": "000409", "cateName": "건축공학", "parntCateId": "0004" }
+  , { "cateId": "000410", "cateName": "산업공학", "parntCateId": "0004" }
+  , { "cateId": "000411", "cateName": "조선/해양공학", "parntCateId": "0004" }
+  , { "cateId": "000412", "cateName": "자원/재료공학", "parntCateId": "0004" }
+  , { "cateId": "000501", "cateName": "예술체육학일반", "parntCateId": "0005" }
+  , { "cateId": "000502", "cateName": "음악", "parntCateId": "0005" }
+  , { "cateId": "000503", "cateName": "미술", "parntCateId": "0005" }
+  , { "cateId": "000504", "cateName": "디자인", "parntCateId": "0005" }
+  , { "cateId": "000505", "cateName": "의상", "parntCateId": "0005" }
+  , { "cateId": "000506", "cateName": "사진", "parntCateId": "0005" }
+  , { "cateId": "000507", "cateName": "미용", "parntCateId": "0005" }
+  , { "cateId": "000508", "cateName": "연극", "parntCateId": "0005" }
+  , { "cateId": "000509", "cateName": "영화", "parntCateId": "0005" }
+  , { "cateId": "000510", "cateName": "체육", "parntCateId": "0005" }
+  , { "cateId": "000511", "cateName": "무용", "parntCateId": "0005" }
+  , { "cateId": "000601", "cateName": "의약학", "parntCateId": "0006" }
+  , { "cateId": "000602", "cateName": "농수해양학", "parntCateId": "0006" }
+  , { "cateId": "000603", "cateName": "교육", "parntCateId": "0006" }
+  , { "cateId": "000604", "cateName": "과학기술학/기술정책", "parntCateId": "0006" }
+  , { "cateId": "000605", "cateName": "여성학", "parntCateId": "0006" }
+  , { "cateId": "000606", "cateName": "뇌/인지과학", "parntCateId": "0006" }
+  , { "cateId": "000607", "cateName": "학제간연구", "parntCateId": "0006" }  
+]
+
+
 function CreatePost() {
+  const refreshToken = localStorage.getItem('refreshToken');
   const [range, setRange] = useState();
   const [lastChange, setLastChange] = useState();
   const [readOnly, setReadOnly] = useState(false);
+
+  const categroies = {
+    "인문학"    : ["인문학일반", "역사학", "철학", "종교학/신학", "언어학", "문학", "한국어문학", "중국어문학", "일본어문학", "영어문학", "프랑스어문학", "독일어문학", "러시아어문학"]
+   , "사회과학" : ["사회과학일반", "정치외교학", "경제학", "경영학", "무역학", "사회학", "사회복지학", "지역학", "교육학", "법학", "행정학", "지리/지역개발학", "관광학", "신문방송학", "군사학", "심리과학", "문헌정보학"]
+   , "자연과학" : ["자연과학일반", "수학/통계학", "물리학", "생물학", "천문/지구과학", "생활과학"]
+   , "공학"     : ["공학일반", "기계공학", "항공우주공학", "컴퓨터학", "화학/생물공학", "전기/제어계측공학", "토목/환경공학", "전자/정보통신공학", "건축공학", "산업공학", "조선/해양공학", "자원/재료공학"]
+   , "예술체육학" : ["예술체육학일반", "음악", "미술", "디자인", "의상", "사진", "미용", "연극", "영화", "체육", "무용"]
+   , "기타"     : ["의약학", "농수해양학", "교육", "과학기술학/기술정책", "여성학", "뇌/인지과학", "학제간연구"]
+  }
 
   // Use a ref to access the quill instance directly
   const quillRef = useRef();
 
   const [input, setInput] = useState({
-    category: '',
-    parentCategory: '',
-    title: '',
-    content: '',
-    imageUrl: ''
+      category      : '000101'  // Default. 인문학일반(000101)
+    , parentCategory: '0001'    // Default. 인문학(0001)
+    , title         : ''
+    , content       : ''
+    , imageUrl      : ''
   });
 
   const onChange = (e) => {
@@ -70,9 +186,12 @@ function CreatePost() {
 
   const submitPost = (e) => {
     e.preventDefault();
+
     if (!input.title) {
       return alert('제목을 입력해주세요.');
     }
+
+    input.content = quillRef.current.getEditor().getText(); //태그를 제외한 순수 text만을 받아온다. 검색기능을 구현하지 않을 거라면 굳이 text만 따로 저장할 필요는 없다.
     if (!input.content) {
       return alert('내용을 입력해주세요.');
     }
@@ -86,24 +205,26 @@ function CreatePost() {
     };
 
     // 현재 페이지 url의 파라미터 가져와 postID 저장하기
-    const postId = document.location.href.split('?');
-    body.append('postId', postId);
+    // const postId = document.location.href.split('?');
+    // body.append('postId', postId);
 
     axios
-      .post('/api/v1/posts', body)
+      .post('/api/v1/posts', body, { headers: { Authorization   : `Bearer ${refreshToken}` } })
       .then((res) => {
         console.log(input);
         console.log(res.data);
         // console.log(res);
         if (res.status === 200) {
           console.log('게시글 작성 성공');
-          navigate('/{postsid}');
+
+          const postsid = res.data.data;
+          navigate(`/postlistPage`);
         }
       })
       .catch((err) => {
         console.log(input);
-        console.error(err.response);
-        if (err.response.status === 403) {
+        console.error(err);
+        if (!err.response || err.response.status === 403) {
           alert('게시글 업로드에 실패하였습니다.');
         }
       });
@@ -114,8 +235,16 @@ function CreatePost() {
     <div className="Wrapper">
       <BoardWrapper>
         <div className="SelectboxContainer">
-          <SelectBox />
-          <SelectBox />
+          <Select key={`selParentCategory`} name="parentCategory" onChange={onChange} value={input.parentCategory}>
+            {categories.map(item => (
+              (item.parntCateId === '00') ? <option key={`selParentCategory${item.cateId}`} value={item.cateId}>{item.cateName}</option> : null
+            ))}
+          </Select>
+          <Select key={`selCategory`} name="category" onChange={onChange} value={input.category}>
+            {categories.map(item => (
+              (item.parntCateId === input.parentCategory) ? <option key={`selCategory${item.cateId}`} value={item.cateId}>{item.cateName}</option> : null
+            ))}
+          </Select>
         </div>
         <div className="CreateBoardTitleBox">
           <input
@@ -137,9 +266,6 @@ function CreatePost() {
             placeholder="내용"
             onChange={onChange}
           />
-        </div>
-        <div className="UploadFile">
-          <input type="file" text="파일 첨부" />
         </div>
         <Button onClick={submitPost} text="작성완료" />
       </BoardWrapper>
