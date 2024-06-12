@@ -55,7 +55,15 @@ function PostCard({ post }) {
   const date = new Date(post.createdAt);
   const createdDate = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
   console.log(createdDate);
+
+  const postId = post.id;
+  console.log(postId);
+
+  // 게시글 호출 API, 게시글 카드 컴포넌트마다 매핑
+  const API = `api/v1/posts/${postId}?includeDeleted=false`;
   return (
+    // 온클릭으로 페이지 이동 구현 후 Card 태그 교체
+    // <Card onClick="{/* 게시글 본문 호출 API */}">
     <Card>
       <ThumbnailBox>
         {!post.imageUrl ? (
