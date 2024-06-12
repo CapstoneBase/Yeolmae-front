@@ -11,13 +11,23 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const ThumbnailBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10%;
+  width: 80%;
+  height: 150px;
+`;
 
 const CardThumbnail = styled.img`
   width: 80%;
+  overflow: clip;
 `;
 
 const CardContents = styled.div`
   padding: 7px;
+  background-color: white;
 `;
 
 const PostTitle = styled.h4`
@@ -41,14 +51,23 @@ const PostDate = styled(PostAuthor)``;
 //   align-items: center;
 // `;
 
-function PostCard({info}) {
+function PostCard({ post }) {
+  const date = new Date(post.createdAt);
+  const createdDate = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
+  console.log(createdDate);
   return (
     <Card>
-      <CardThumbnail src="\IMG_4276.PNG" />
+      <ThumbnailBox>
+        {!post.imageUrl ? (
+          <CardThumbnail src="..\main_logo.PNG" />
+        ) : (
+          <CardThumbnail src={post.imageUrl} />
+        )}
+      </ThumbnailBox>
       <CardContents>
-        <PostTitle>게시글제목게시글제목게시글제...</PostTitle>
-        <PostAuthor>작성자</PostAuthor>
-        <PostDate>2024.05.16</PostDate>
+        <PostTitle>{post.title}</PostTitle>
+        <PostAuthor>{post.writerName}</PostAuthor>
+        <PostDate>{createdDate}</PostDate>
       </CardContents>
     </Card>
   );
