@@ -37,10 +37,34 @@ const BoardWrapper = styled.form`
   margin: 10px 0px 10px 0px;
 `;
 
+const ThumbnailWrap = styled.div`
+  display:flex;
+  flex-direction:column;
+  width:85%;
+  border:1px solid #dadada;
+  padding:10px;
+  margin-bottom:5px;
+`;
+const ThumbnailLabel = styled.strong`
+  line-height:1.5em;
+  margin-bottom:10px;
+`;
 const Thumbnail = styled.img`
   max-width:128px;
   max-height:128px;
 `;
+const AttachWrap = styled.div`
+  display:flex;
+  flex-direction:column;
+  width:85%;
+  border:1px solid #dadada;
+  padding:10px;
+  margin-bottom:5px;
+`;
+const AttachLabel = styled.strong`
+  line-height:1.5em;
+  margin-bottom:10px;
+`
 
 const Select = styled.select`
   display: flex;
@@ -165,6 +189,7 @@ function CreatePost() {
     , title         : ''
     , content       : ''
     , imageUrl      : ''
+    , fileUrlList   : []
   });
 
   const onChange = (e) => {
@@ -198,8 +223,33 @@ function CreatePost() {
     const imageUrl   = `${imageServer}${res[0].fileUrl}`;
     setInput({
       ...input,
+      content:quillRef.current.editor.root.innerHTML,
       imageUrl
     })
+  };
+
+  const hndlAttach = async (e) => {
+    const file = e.target.files[0];
+
+    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
+    formData.append('multipartFile', file);
+
+    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
+    const res = await uploadImage(formData);
+    if (res.length == 0 || !res[0].fileUrl ) {
+      alert('파일 업로드에 실패하였습니다.');
+    }
+
+    const fileUrl   = `${res[0].fileUrl}`;
+    setInput({
+      ...input,
+      content:quillRef.current.editor.root.innerHTML,
+      fileUrlList : [
+        ...input.fileUrlList
+        , fileUrl
+      ]
+    })
+    e.target.value = '';
   };
 
   const submitPost = (e) => {
@@ -286,8 +336,16 @@ function CreatePost() {
             htmlContent={input.content}
           />
         </div>
-        <Thumbnail src={input.imageUrl}/>
-        <input type="file" accept="image/*" onChange={hndlImage}/>
+        <ThumbnailWrap>
+          <ThumbnailLabel>Thumbnail</ThumbnailLabel>
+          <Thumbnail src={input.imageUrl}/>
+          <input type="file" accept="image/*" onChange={hndlImage}/>
+        </ThumbnailWrap>
+        <AttachWrap>
+          <ThumbnailLabel>Attach</ThumbnailLabel>
+          <input type="file" onChange={hndlAttach}/>
+          {input.fileUrlList.map((item, index) => <a key={`attach${index}`}>{item}</a>)}
+        </AttachWrap>
         <Button onClick={submitPost} text="작성완료" />
       </BoardWrapper>
     </div>
