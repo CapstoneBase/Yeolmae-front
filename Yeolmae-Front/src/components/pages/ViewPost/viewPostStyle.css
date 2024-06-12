@@ -28,6 +28,10 @@
     line-height: 150%;
 }
 
+.ReadBoardDetails {
+    width: 85%;
+}
+
 .ReadBoardContent {
     width: 85%;
     gap: 16px;
@@ -48,7 +52,7 @@
     line-height: 150%;
 }
 
-.ReadFile {
+.ReadFiles {
     width: 85%;
     display: flex;
     flex-direction: row;
@@ -56,6 +60,6 @@
     padding: 10px 0px 10px 0px;
 }
 
-.editingButtonsBox {
+.editingButtonsContainer {
     justify-content: flex-end;
 }

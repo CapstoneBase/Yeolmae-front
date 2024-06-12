@@ -10,6 +10,7 @@ const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
+const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
 const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
 
 const App = memo(() => {
@@ -31,6 +32,7 @@ const App = memo(() => {
             <Route path="/signupPage" element={<Signup />} />
             <Route path="/loginPage" element={<Login />} />
             <Route path="/postlistPage" element={<PostList />} />
+            <Route path="/posts/:id" element={<ViewPost />} />
             <Route path="/createPost" element={<CreatePost />} />
             <Route path="*" element={<Notfound />} />
           </Routes>

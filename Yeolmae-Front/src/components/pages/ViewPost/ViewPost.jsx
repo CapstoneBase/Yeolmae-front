@@ -8,11 +8,11 @@ import PostDetail from './PostDetail';
 import './viewPostStyle.css';
 
 function ViewPost() {
-  const { idx } = useParams(); // /board/:idx와 동일한 변수명으로 데이터를 꺼낼 수 있습니다.
+  const { id } = useParams(); // /board/:id와 동일한 변수명으로 데이터를 꺼낼 수 있습니다.
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const getBoard = async () => {
-    const resp = await (await axios.get(`//localhost:8080/board/${idx}`)).data;
+    const resp = await (await axios.get(`//13.124.45.191:8080/api/v1/posts/${id}`)).data;
     setBoard(resp.data);
     setLoading(false);
   };
@@ -56,10 +56,16 @@ function ViewPost() {
         <h2>loading...</h2>
       ) : (
         <PostDetail
-          idx={board.idx}
+          id={board.id}
+          writerName={board.writerName}
+          category={board.category}
+          parentCategory={board.parentCategory}
           title={board.title}
-          contents={board.contents}
-          createdBy={board.createdBy}
+          content={board.content}
+          imageUrl={board.imageUrl}
+          files={board.files}
+          comments={board.comments}
+          createdAt={board.createdAt}
         />
       )}
     </div>
