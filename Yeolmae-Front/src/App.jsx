@@ -24,6 +24,7 @@ const App = memo(() => {
           <Link to="/signupPage">회원가입페이지</Link>
           <Link to="/loginPage">로그인페이지</Link>
           <Link to="/postlistPage">게시글 목록</Link>
+          <Link to="/posts/:id">게시글 본문</Link>
           <Link to="/createPost">게시글 작성</Link>
         </div>
         <Suspense>

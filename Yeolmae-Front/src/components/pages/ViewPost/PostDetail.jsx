@@ -46,9 +46,6 @@ function PostDetail({
       <h5 className="ReadBoardDetails">{createdAt}</h5>
       <hr />
       <div className="ReadBoardContent">{content}</div>
-      <div className="ReadFiles">
-        <div type="file" text="파일 보기" />
-      </div>
       <Button onClick={movetoPostList} text="목록으로 돌아가기" />
       <div className="editingButtonsContainer">
         <Button onClick={updatePost} text="수정하기" />
