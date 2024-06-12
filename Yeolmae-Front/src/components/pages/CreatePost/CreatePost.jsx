@@ -7,6 +7,7 @@ import QuillEditor from './QuillEditor';
 // import Categories from '../../Common/Categories';
 import Button from '../../Common/Button';
 import './createPostStyle.css';
+import { uploadImage } from '../../../api/uploadImage';
 
 const formats = [
   'font',
@@ -34,6 +35,11 @@ const BoardWrapper = styled.form`
   align-items: center;
   min-height: 40vh;
   margin: 10px 0px 10px 0px;
+`;
+
+const Thumbnail = styled.img`
+  max-width:128px;
+  max-height:128px;
 `;
 
 const Select = styled.select`
@@ -142,21 +148,13 @@ const categories = [
   , { "cateId": "000607", "cateName": "학제간연구", "parntCateId": "0006" }  
 ]
 
+const imageServer = "http://13.124.45.191:8080";  // 이미지 서버 URL
 
 function CreatePost() {
   const refreshToken = localStorage.getItem('refreshToken');
   const [range, setRange] = useState();
   const [lastChange, setLastChange] = useState();
   const [readOnly, setReadOnly] = useState(false);
-
-  const categroies = {
-    "인문학"    : ["인문학일반", "역사학", "철학", "종교학/신학", "언어학", "문학", "한국어문학", "중국어문학", "일본어문학", "영어문학", "프랑스어문학", "독일어문학", "러시아어문학"]
-   , "사회과학" : ["사회과학일반", "정치외교학", "경제학", "경영학", "무역학", "사회학", "사회복지학", "지역학", "교육학", "법학", "행정학", "지리/지역개발학", "관광학", "신문방송학", "군사학", "심리과학", "문헌정보학"]
-   , "자연과학" : ["자연과학일반", "수학/통계학", "물리학", "생물학", "천문/지구과학", "생활과학"]
-   , "공학"     : ["공학일반", "기계공학", "항공우주공학", "컴퓨터학", "화학/생물공학", "전기/제어계측공학", "토목/환경공학", "전자/정보통신공학", "건축공학", "산업공학", "조선/해양공학", "자원/재료공학"]
-   , "예술체육학" : ["예술체육학일반", "음악", "미술", "디자인", "의상", "사진", "미용", "연극", "영화", "체육", "무용"]
-   , "기타"     : ["의약학", "농수해양학", "교육", "과학기술학/기술정책", "여성학", "뇌/인지과학", "학제간연구"]
-  }
 
   // Use a ref to access the quill instance directly
   const quillRef = useRef();
@@ -172,6 +170,7 @@ function CreatePost() {
   const onChange = (e) => {
     setInput({
       ...input,
+      content:quillRef.current.editor.root.innerHTML,
       [e.target.name]: e.target.value
     });
   };
@@ -183,6 +182,25 @@ function CreatePost() {
   }, []); */
 
   const navigate = useNavigate();
+
+  const hndlImage = async (e) => {
+    const file = e.target.files[0];
+
+    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
+    formData.append('multipartFile', file);
+
+    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
+    const res = await uploadImage(formData);
+    if (res.length == 0 || !res[0].fileUrl ) {
+      alert('이미지 업로드에 실패하였습니다.');
+    }
+
+    const imageUrl   = `${imageServer}${res[0].fileUrl}`;
+    setInput({
+      ...input,
+      imageUrl
+    })
+  };
 
   const submitPost = (e) => {
     e.preventDefault();
@@ -265,8 +283,11 @@ function CreatePost() {
             type="text"
             placeholder="내용"
             onChange={onChange}
+            htmlContent={input.content}
           />
         </div>
+        <Thumbnail src={input.imageUrl}/>
+        <input type="file" accept="image/*" onChange={hndlImage}/>
         <Button onClick={submitPost} text="작성완료" />
       </BoardWrapper>
     </div>

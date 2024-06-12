@@ -11,8 +11,9 @@ export const uploadImage = async (formData) => {
         {
             headers:
             {
-                Authorization   : `Bearer ${refreshToken}`
-            , "Content-Type"  : "multipart/form-data"
+              "Authorization"   : `Bearer ${refreshToken}`
+            , "Content-Type"    : "multipart/form-data"
+            , "accept"          : "application/json"
             }
         }
         );
