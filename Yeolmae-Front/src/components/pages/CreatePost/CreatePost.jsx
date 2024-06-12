@@ -43,7 +43,8 @@ function CreatePost() {
     parentCategory: '0001', // Default. 인문학(0001)
     title: '',
     content: '',
-    imageUrl: ''
+    imageUrl: '',
+    fileUrlList: []
   });
 
   const onChange = (e) => {
@@ -78,7 +79,8 @@ function CreatePost() {
       parentCategory: input.parentCategory,
       title: input.title,
       content: input.content,
-      imageUrl: input.imageUrl
+      imageUrl: input.imageUrl,
+      fileUrlList: input.fileUrlList
     };
 
     // 현재 페이지 url의 파라미터 가져와 postID 저장하기
@@ -155,7 +157,7 @@ function CreatePost() {
           onChange={onChange}
         />
       </div>
-      <div className="UploadFile">
+      <div className="Upload">
         <input type="file" text="파일 첨부" />
       </div>
       <Button onClick={submitPost} text="작성완료" />
