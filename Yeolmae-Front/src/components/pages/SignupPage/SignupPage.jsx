@@ -3,16 +3,12 @@ import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import Wrapper from '../../Common/Wrapper';
 import Title from '../../Common/Title';
 import InputWrapper from '../../Common/InputWrapper';
-import AuthInputField from '../../Common/AuthInputField.jsx';
+import AuthInputField from '../../Common/AuthInputField';
 import Button from '../../Common/Button';
-import ToastNotification from '../../Common/ToastNotification';
-// import { loginUser } from '../../api/loginUser';
-// import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
-// import { loginThunk } from '../../../redux/modules/loginThunk';
-import axiosAuthInstance from '../../../api/axiosAuthInstance';
 
 const Label = styled.label`
   text-align: left;
@@ -27,7 +23,13 @@ const Hint = styled.span`
   font-size: 15px;
   color: red;
   margin-bottom: 10px;
-`;
+`
+const baseAPI = axios.create({
+  baseURL: 'api/v1',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
 function SignupPage() {
   const dispatch = useDispatch();
@@ -51,14 +53,7 @@ function SignupPage() {
       [e.target.name]: e.target.value
     });
   };
-
-  // const resetInput = (e) => {
-  //   setInput({
-  //     [e.target.name]: e.target.value
-  //   });
-  // };
-
-  // const API = '/api/v1/login';
+  
   const actDupCheck = async (id) => {
     const API = '/users/check';
     const body = { id };
@@ -66,7 +61,7 @@ function SignupPage() {
     // console.log('request body: ', body);
     try {
       console.log('id duplicate check try');
-      const response = await axiosAuthInstance.post(`${API}`, body);
+      const response = await baseAPI.post(`${API}`, body);
       return response.data.data;
     } catch (error) {
       if (error.response) {
@@ -115,7 +110,8 @@ function SignupPage() {
     const API = '/users';
     // console.log('request body: ', body);
     try {
-      const response = await axiosAuthInstance.post(`${API}`, body);
+      console.log('actsignup try');
+      const response = await baseAPI.post(`${API}`, body);
       return response.data.data;
     } catch (error) {
       if (error.response) {
@@ -134,11 +130,11 @@ function SignupPage() {
 
   const doSighup = (param) => async () => {
     try {
+      console.log('dosignup try');
       const data = await actSighup(param);
-      // dispatch(SET_USER(data.user));
       if (data) {
         alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
-        navigate('/loginpage');
+        navigate('/loginPage');
       } else {
         alert(`회원 가입 중 오류가 발생하였습니다. ${data}`);
       }
@@ -198,60 +194,52 @@ function SignupPage() {
   // 출력
   // #####################################################################
   return (
-    <>
-      <Wrapper>
-        <Title>회원가입하기</Title>
-        <InputWrapper>
-          <Label>아이디</Label>
-          <AuthInputField
-            id="id"
-            name="id"
-            type="text"
-            placeholder="아이디를 입력해주세요"
-            autoComplete="off"
-            onChange={onChange}
-            // onClick={resetInput}
-            required
-          />
-          <Button onClick={handleDuplicate} text="중복확인" />
-        </InputWrapper>
-        {input.id !== '' && !validId && <Hint>아이디는 2~16자 이내의 영문,숫자만 가능합니다.</Hint>}
-        <InputWrapper>
-          <Label>비밀번호</Label>
-          <AuthInputField
-            id="password"
-            name="password"
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            onChange={onChange}
-            // onClick={resetInput}
-            required
-          />
-        </InputWrapper>
-        {input.password !== '' && !validPw && (
-          <Hint>비밀번호는 10자 이상의 영문(대소문자), 숫자만 가능합니다.</Hint>
-        )}
-        <InputWrapper>
-          <Label>이름</Label>
-          <AuthInputField
-            id="name"
-            name="name"
-            type="text"
-            placeholder="이름을 입력해주세요"
-            onChange={onChange}
-            // onClick={resetInput}
-            required
-          />
-        </InputWrapper>
-        <Button onClick={handleSubmit} text="가입하기" />
-      </Wrapper>
-      {toast === true ? (
-        <ToastNotification
-          text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
-          props={setToast}
+    <Wrapper>
+      <Title>회원가입하기</Title>
+      <InputWrapper>
+        <Label>아이디</Label>
+        <AuthInputField
+          id="id"
+          name="id"
+          type="text"
+          placeholder="아이디를 입력해주세요"
+          autoComplete="off"
+          onChange={onChange}
+          // onClick={resetInput}
+          required
         />
-      ) : null}
-    </>
+        <Button onClick={handleDuplicate} text="중복확인" />
+      </InputWrapper>
+      {input.id !== '' && !validId && <Hint>아이디는 2~16자 이내의 영문,숫자만 가능합니다.</Hint>}
+      <InputWrapper>
+        <Label>비밀번호</Label>
+        <AuthInputField
+          id="password"
+          name="password"
+          type="password"
+          placeholder="비밀번호를 입력해주세요"
+          onChange={onChange}
+          // onClick={resetInput}
+          required
+        />
+      </InputWrapper>
+      {input.password !== '' && !validPw && (
+        <Hint>비밀번호는 10자 이상의 영문(대소문자), 숫자만 가능합니다.</Hint>
+      )}
+      <InputWrapper>
+        <Label>이름</Label>
+        <AuthInputField
+          id="name"
+          name="name"
+          type="text"
+          placeholder="이름을 입력해주세요"
+          onChange={onChange}
+          // onClick={resetInput}
+          required
+        />
+      </InputWrapper>
+      <Button onClick={handleSubmit} text="가입하기" />
+    </Wrapper>
   );
 }
 
