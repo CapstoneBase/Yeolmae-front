@@ -23,7 +23,7 @@ const Hint = styled.span`
   font-size: 15px;
   color: red;
   margin-bottom: 10px;
-`;
+`
 const baseAPI = axios.create({
   baseURL: 'api/v1',
   headers: {
@@ -53,13 +53,7 @@ function SignupPage() {
       [e.target.name]: e.target.value
     });
   };
-
-  // const resetInput = (e) => {
-  //   setInput({
-  //     [e.target.name]: e.target.value
-  //   });
-  // };
-
+  
   const actDupCheck = async (id) => {
     const API = '/users/check';
     const body = { id };

@@ -99,6 +99,7 @@ function Login() {
     dispatch(loginThunk(input.id, input.password));
     console.log('로그인');
     navigate('/');
+    return null;
   };
 
   return (
