@@ -1,34 +1,45 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Main from './components/pages/MainPage/MainPage';
-import Signup from './components/pages/SignupPage/SignupPage';
-import Login from './components/pages/LoginPage/LoginPage';
-import Notfound from './components/pages/NotFound/NotFound';
+import { ThemeProvider } from 'styled-components';
+import { Suspense, lazy, memo } from 'react';
+import GlobalStyle from './style/globalStyles';
+import theme from './style/theme';
 import Header from './components/Common/Header';
-import PostList from './components/pages/PostListPage/PostListPage';
 
-const Routers = styled.div``;
+const Main = lazy(() => import('./components/pages/MainPage/MainPage'));
+const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
+const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
+const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
+const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
+// const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
+// const PostPage = lazy(() => import('./components/pages/PostPage/PostPage'));
 
-function App() {
+const App = memo(() => {
   return (
     <>
-      <Header />
-      <Routers>
-        {/* 페이지 경로 표시 */}
-        <Link to="/">메인 홈</Link>
-        <Link to="/signupPage">회원가입페이지</Link>
-        <Link to="/loginPage">로그인페이지</Link>
-        <Link to="/postlistPage">게시글 목록</Link>
-      </Routers>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/signupPage" element={<Signup />} />
-        <Route path="/loginPage" element={<Login />} />
-        <Route path="/postlistPage" element={<PostList />} />
-        <Route path="*" element={<Notfound />} />
-      </Routes>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <Header />
+        <div>
+          <Link to="/">메인 홈</Link>
+          <Link to="/signupPage">회원가입페이지</Link>
+          <Link to="/loginPage">로그인페이지</Link>
+          <Link to="/postlistPage">게시글 목록</Link>
+          <Link to="/createPost">게시글 작성</Link>
+        </div>
+        <Suspense>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/signupPage" element={<Signup />} />
+            <Route path="/loginPage" element={<Login />} />
+            <Route path="/postlistPage" element={<PostList />} />
+            {/* <Route path="/createPost" element={<CreatePost />} /> */}
+            {/* <Route path='/postPage'>{<Post />}</Route> */}
+            <Route path="*" element={<Notfound />} />
+          </Routes>
+        </Suspense>
+      </ThemeProvider>
     </>
   );
-};
+});
 
 export default App;
