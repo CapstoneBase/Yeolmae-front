@@ -14,6 +14,7 @@ const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost')
 
 const App = memo(() => {
   return (
+    <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Header />
@@ -35,6 +36,7 @@ const App = memo(() => {
           </Routes>
         </Suspense>
       </ThemeProvider>
+    </>
   );
 });
 
