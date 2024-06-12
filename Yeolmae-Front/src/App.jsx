@@ -10,8 +10,9 @@ const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
+const Post = lazy(() => import('./components/pages/PostPage/PostPage'));
+// const Post = lazy(() => import('./components/pages/PostPage/PostPage'));
 // const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
-// const PostPage = lazy(() => import('./components/pages/PostPage/PostPage'));
 
 const App = memo(() => {
   return (
@@ -25,6 +26,7 @@ const App = memo(() => {
           <Link to="/loginPage">로그인페이지</Link>
           <Link to="/postlistPage">게시글 목록</Link>
           <Link to="/createPost">게시글 작성</Link>
+          <Link to="./postPage">게시글 본문</Link>
         </div>
         <Suspense>
           <Routes>
@@ -33,7 +35,7 @@ const App = memo(() => {
             <Route path="/loginPage" element={<Login />} />
             <Route path="/postlistPage" element={<PostList />} />
             {/* <Route path="/createPost" element={<CreatePost />} /> */}
-            {/* <Route path='/postPage'>{<Post />}</Route> */}
+            <Route path="/postPage" element={<Post />} />
             <Route path="*" element={<Notfound />} />
           </Routes>
         </Suspense>
