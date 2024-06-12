@@ -1,33 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
+import { getPostList } from '../../api/getPostList';
 
 const GridContainer = styled.div`
   display: grid;
 
-  margin: 0px 30px;
+  margin: 0px 40px;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   place-items: center;
   place-content: space-evenly space-around;
 `;
 
-function PageGrid() {
-  const [contentInfo, setContentInfo] = useState([]);
+function PageGrid({ parCategory, category, page, size }) {
+  const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getPostList(1, 1, 0, 6);
+        setPosts(data.items);
+        // return data;
+        console.log('Data:', data);
+      } catch (error) {
+        console.log('Error:', error);
+        // throw error;
+      }
+    };
+    getData();
+  }, [parCategory, category, page, size]);
+
+  console.log(posts);
   return (
     <GridContainer>
-      <PostCard info={contentInfo} />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+      {/* <PostCard data={postItems.items} /> */}
     </GridContainer>
   );
 }
