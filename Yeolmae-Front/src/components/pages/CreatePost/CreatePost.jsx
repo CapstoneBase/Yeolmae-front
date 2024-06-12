@@ -1,10 +1,13 @@
 import React, { ReactChild, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import axios from 'axios';
+import styled from 'styled-components';
 import QuillEditor from './QuillEditor';
+import { uploadImage } from '../../../api/uploadImage';
 // import axios from '../hooks/useAxios';
 // import SelectBox from '../../Common/SelectBox';
+import Thumbnail from '../../Common/Thumbnail';
+import FilesLabel from '../../Common/FilesLabel';
 import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import Button from '../../Common/Button';
@@ -29,6 +32,8 @@ const formats = [
   'h1'
 ];
 
+const imageServer = 'http://13.124.45.191:8080'; // 이미지 서버 URL
+
 function CreatePost() {
   const refreshToken = localStorage.getItem('refreshToken');
   const [range, setRange] = useState();
@@ -50,6 +55,7 @@ function CreatePost() {
   const onChange = (e) => {
     setInput({
       ...input,
+      content: quillRef.current.editor.root.innerHTML,
       [e.target.name]: e.target.value
     });
   };
@@ -61,6 +67,47 @@ function CreatePost() {
   }, []); */
 
   const navigate = useNavigate();
+
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+
+    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
+    formData.append('multipartFile', file);
+
+    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
+    const res = await uploadImage(formData);
+    if (res.length === 0 || !res[0].fileUrl) {
+      alert('이미지 업로드에 실패하였습니다.');
+    }
+
+    const imageUrl = `${imageServer}${res[0].fileUrl}`;
+    setInput({
+      ...input,
+      content: quillRef.current.editor.root.innerHTML,
+      imageUrl
+    });
+  };
+
+  const handleAttach = async (e) => {
+    const file = e.target.files[0];
+
+    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
+    formData.append('multipartFile', file);
+
+    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
+    const res = await uploadImage(formData);
+    if (res.length === 0 || !res[0].fileUrl) {
+      alert('파일 업로드에 실패하였습니다.');
+    }
+
+    const fileUrl = `${res[0].fileUrl}`;
+    setInput({
+      ...input,
+      content: quillRef.current.editor.root.innerHTML,
+      fileUrlList: [...input.fileUrlList, fileUrl]
+    });
+    e.target.value = '';
+  };
 
   const submitPost = (e) => {
     e.preventDefault();
@@ -155,10 +202,20 @@ function CreatePost() {
           type="text"
           placeholder="내용"
           onChange={onChange}
+          htmlContent={input.content}
         />
       </div>
-      <div className="Upload">
-        <input type="file" text="파일 첨부" />
+      <div className="FilesWrap">
+        <FilesLabel>Thumbnail</FilesLabel>
+        <Thumbnail src={input.imageUrl} />
+        <input type="file" accept="image/*" onChange={handleImage} />
+      </div>
+      <div className="FilesWrap">
+        <FilesLabel>Attach</FilesLabel>
+        <input type="file" onChange={handleAttach} />
+        {input.fileUrlList.map((item) => (
+          <a href={`attach${item.index}`}>{item}</a> // eslint 문법에 맞게 수정 필요
+        ))}
       </div>
       <Button onClick={submitPost} text="작성완료" />
     </form>

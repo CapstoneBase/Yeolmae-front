@@ -8,7 +8,8 @@ export const uploadImage = async (formData) => {
     const response = await axios.post(`${API}`, formData, {
       headers: {
         Authorization: `Bearer ${refreshToken}`,
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        accept: 'application/json'
       }
     });
     return response.data.data;
