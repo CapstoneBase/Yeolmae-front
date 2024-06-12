@@ -1,29 +1,33 @@
 import React, { useMemo, memo, useCallback } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { uploadImage } from '../../../api/uploadImage';
+
+const imageServer = 'http://13.124.45.191:8080'; // 이미지 서버 URL
 
 // QuillEditor is an uncontrolled React component
 const QuillEditor = memo(({ quillRef, api, htmlContent, setHtmlContent }) => {
-  const imageHandler = useCallback(() => {
+  const imageHandler = useCallback(async () => {
     const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
 
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*'); // 이미지 파일만 선택가능하도록 제한
     input.setAttribute('name', 'image');
+    input.style.display = 'none';
     input.click();
 
     // 파일 선택창에서 이미지를 선택하면 실행될 콜백 함수 등록
     input.onchange = async () => {
       const file = input.files[0];
-      formData.append('image', file);
+      formData.append('multipartFile', file);
 
       // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
-      const res = await api.uploadImage(formData);
-      if (!res.success) {
+      const res = await uploadImage(formData);
+      if (res.length === 0 || !res[0].fileUrl) {
         alert('이미지 업로드에 실패하였습니다.');
       }
-      const { url } = res.payload;
+      const url = `${imageServer}${res[0].fileUrl}`;
       const quill = quillRef.current.getEditor();
       const range = quill.getSelection()?.index;
 
