@@ -3,6 +3,9 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
 # 🍎Yeolmae
 
+![main_logo](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/cac2e33a-46c4-442a-b2b7-c45f99745c14)
+
+
 
 ## 프로젝트 설명
 졸업 작품 공유 및 아카이빙 서비스
