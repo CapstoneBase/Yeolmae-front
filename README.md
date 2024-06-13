@@ -13,7 +13,7 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 - 프로필을 통해 작품 제작자의 연락처를 확인할 수 있습니다.
 
 ## 프로젝트 기간
-2024.03.10 ~ 2024.06.
+2024.03.10 ~ 2024.06.13(이후 계속 진행 예정)
 
 ## 팀원 소개
 <table>
@@ -49,6 +49,7 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
             <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
             <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=black"> 
             <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=black">
+              styled-components
         </td>
     </tr>
     <tr>
@@ -71,6 +72,8 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
         <td>서버환경</td>
         <td>
             <!--<img src="https://img.shields.io/badge/Apache Tomcat-D22128?style=for-the-badge&logo=Apache Tomcat&logoColor=white"/>-->
+            aws ec2
+            Ngnix
         </td>
     </tr>
     <tr>
@@ -89,13 +92,35 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
            <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white"/>
             <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/>
             <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
+            discord
         </td>
     </tr>
 </table>
 
 
 ## ERD
-_수정 후 업데이트_
+
+
+
+
+## API
+| 회원 |
+|-----|
+| 이미지 |
+
+
+| 로그인 |
+|-----|
+| 이미지 |
+
+| 게시글 |
+|-----|
+| 이미지 |
+
+| 댓글 |
+|-----|
+| 이미지 |
+
 
 
 ## 서비스 플로우 차트
