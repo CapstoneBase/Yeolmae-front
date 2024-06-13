@@ -1,3 +1,4 @@
+[백엔드 개발을 진행했던 백엔드 레포지토리에 Merge 오류가 생겨서 백엔드 레포지토리 'dev' branch에 코드가 있습니다]
 열매 백엔드 레포(dev 브랜치)
 https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
