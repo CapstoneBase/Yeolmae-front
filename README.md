@@ -22,14 +22,7 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 | 임수연 | 전지후 | 정윤호 |
 | ----- | ----- | -----|
 | Frontend | Frontend | Backend |
-| - 회의,일정 관리  - 회원가입 페이지 구현  - 게시글 작성 페이지 구현  - 게시글 본문 페이지 구현  - 발표자료 제작 및 프레젠테이션 | - 프론트엔드 레포지토리,
-깃허브 관리  - 디스코드 협업 도구 관리  - 공통 컴포넌트 구현  - 토큰 관리 기법  - 로그인 페이지 구현  - 게시글 목록 페이지 구현 |   |
-백엔드 코드 및
-레포지토리 관리
-•API 설계 및 개발
-•ERD 설계
-•클라우드 서버 관리 및 구축
-•발표자료 초안 제작
+| - 회의,일정 관리<br>   - 회원가입 페이지 구현<br>  - 게시글 작성 페이지 구현<br>  - 게시글 본문 페이지 구현<br>  - 발표자료 제작 및 프레젠테이션<br> | - 프론트엔드 레포지토리, 깃허브 관리<br>  - 디스코드 협업 도구 관리<br>  - 공통 컴포넌트 구현<br>  - 토큰 관리 기법  - 로그인 페이지 구현<br>  - 게시글 목록 페이지 구현<br> |  - 백엔드 코드 및 레포지토리 관리<br>    - API 설계 및 개발<br>  - ERD 설계<br>  - 클라우드 서버 관리 및 구축<br>  - 발표자료 초안 제작<br> |
 
 
 ## 기술 스택
@@ -47,6 +40,7 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
             <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
             <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=black"> 
             <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=black">
+<!--             <img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=black"> -->
               styled-components
         </td>
     </tr>
@@ -130,5 +124,19 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
 
 ## 페이지별 기능
+메인 화면
 
 
+회원가입
+
+
+로그인
+
+
+게시글 목록
+
+
+게시글 작성
+
+
+게시글 본문
