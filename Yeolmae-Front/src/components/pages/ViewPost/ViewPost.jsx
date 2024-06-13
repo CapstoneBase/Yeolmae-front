@@ -12,8 +12,8 @@ function ViewPost() {
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const getBoard = async () => {
-    const resp = await (await axios.get(`//13.124.45.191:8080/api/v1/posts/${id}`)).data;
-    setBoard(resp.data);
+    const response = await (await axios.get(`//13.124.45.191:8080/api/v1/posts/${id}`)).data;
+    setBoard(response.data);
     setLoading(false);
   };
 
