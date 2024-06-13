@@ -4,6 +4,7 @@ import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
 import AuthButton from './AuthButton';
 import Select from '../../Common/Select';
+import Paginate from './Pagination';
 
 const SelectBoxCol = styled.div`
   display: flex;
@@ -19,6 +20,10 @@ function PostList() {
     imageUrl: '',
     fileUrlList: []
   });
+
+  const [curPage, setCurPage] = useState(0);
+  const [pageSize] = useState(6);
+  const totalItems = 60;
 
   const onChange = (e) => {
     setInput({
@@ -56,8 +61,18 @@ function PostList() {
           )}
         </Select>
       </SelectBoxCol>
-      <PageGrid parCategory={input.parentCategory} category={input.category} page={0} size={6} />
+      <PageGrid
+        parCategory={input.parentCategory}
+        category={input.category}
+        page={curPage}
+        size={pageSize}
+      />
       <AuthButton />
+      <Paginate
+        pageCount={Math.ceil(totalItems / pageSize)}
+        onPageChange={pageSize}
+        currentPage={curPage}
+      />
     </>
   );
 }

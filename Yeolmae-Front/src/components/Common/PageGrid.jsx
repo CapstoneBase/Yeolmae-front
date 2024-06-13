@@ -6,10 +6,12 @@ import { getPostList } from '../../api/getPostList';
 const GridContainer = styled.div`
   display: grid;
 
+  min-height: 400px;
+  max-height: 1000px;
   margin: 0px 40px;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  place-items: center;
+  place-items: top;
   place-content: space-evenly space-around;
 `;
 
