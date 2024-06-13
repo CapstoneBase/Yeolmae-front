@@ -1,6 +1,7 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { Suspense, lazy, memo } from 'react';
+import { useSelector } from 'react-redux';
 import GlobalStyle from './style/globalStyles';
 import theme from './style/theme';
 import Header from './components/Common/Header';
@@ -10,11 +11,12 @@ const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
+const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
 const Post = lazy(() => import('./components/pages/PostPage/PostPage'));
-// const Post = lazy(() => import('./components/pages/PostPage/PostPage'));
-// const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
 
 const App = memo(() => {
+  const authenticated = useSelector((state) => state.auth.authenticated);
+
   return (
     <>
       <GlobalStyle />
@@ -34,7 +36,10 @@ const App = memo(() => {
             <Route path="/signupPage" element={<Signup />} />
             <Route path="/loginPage" element={<Login />} />
             <Route path="/postlistPage" element={<PostList />} />
-            {/* <Route path="/createPost" element={<CreatePost />} /> */}
+            <Route
+              path="/createPost"
+              element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
+            />
             <Route path="/postPage" element={<Post />} />
             <Route path="*" element={<Notfound />} />
           </Routes>

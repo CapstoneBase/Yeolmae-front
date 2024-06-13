@@ -8,6 +8,7 @@ import PostCard from '../../Common/PostCard';
 import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/DropdownItem';
 import category from '../../Common/category.json';
+import AuthButton from './AuthButton';
 // import CategoryDropdown from '../../Common/DropdownItem';
 // import Categories, { SubCategory } from '../../Common/DropdownItem';
 
@@ -18,6 +19,7 @@ function PostList() {
       <Categories data={category} />
       {/* <SubCategory data={category} /> */}
       <PageGrid />
+      <AuthButton />
     </>
   );
 }
