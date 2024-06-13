@@ -6,21 +6,25 @@ import { getPostList } from '../../api/getPostList';
 const GridContainer = styled.div`
   display: grid;
 
+  min-height: 400px;
+  max-height: 1000px;
   margin: 0px 40px;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  place-items: center;
+  place-items: top;
   place-content: space-evenly space-around;
 `;
 
 function PageGrid({ parCategory, category, page, size }) {
   const [posts, setPosts] = useState([]);
+  const [totItems, setTotItems] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await getPostList({ parCategory, category, page, size });
         setPosts(data.items);
+        setTotItems(data.totalItems);
         // return data;
         console.log('Data:', data);
       } catch (error) {
@@ -37,7 +41,6 @@ function PageGrid({ parCategory, category, page, size }) {
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
-      {/* <PostCard data={postItems.items} /> */}
     </GridContainer>
   );
 }

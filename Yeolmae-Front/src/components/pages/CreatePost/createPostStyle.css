@@ -2,6 +2,7 @@
     width: 95%;
     justify-content: center;
     align-items: center;
+    margin: 10px 0px 10px 0px;
 }
 
 .SelectboxContainer {
@@ -72,10 +73,11 @@
     text-transform: uppercase;
 }
 
-.UploadFile {
-    width: 85%;
+.FilesWrap {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 10px 0px 10px 0px;
+    flex-direction: column;
+    width: 85%;
+    border: 1px solid #dadada;
+    padding: 10px;
+    margin-bottom: 5px;
 }

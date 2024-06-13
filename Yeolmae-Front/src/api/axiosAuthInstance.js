@@ -18,7 +18,6 @@ axiosAuthInstance.interceptors.request.use(
     if (config.url === '/api/v1/login/reissue') {
       config.headers.Authorization = `Bearer ${refreshToken}`;
       console.log('refresh token 요청 : ', config.headers.Authorization);
-    // 토큰 재발급이 필요하지 않은 경우
     } else {
       config.headers.Authorization = `Bearer ${accessToken}`;
       console.log('access token 요청 : ', config.headers.Authorization);

@@ -4,6 +4,7 @@ import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
 import AuthButton from './AuthButton';
 import Select from '../../Common/Select';
+import Paginate from './Pagination';
 
 const SelectBoxCol = styled.div`
   display: flex;
@@ -20,11 +21,21 @@ function PostList() {
     fileUrlList: []
   });
 
+  const [curPage, setCurPage] = useState(0);
+  const [pageSize] = useState(6);
+  // 변경 필요
+  const totalItems = 30;
+  console.log(input);
+
   const onChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handlePageClick = ({ selected }) => {
+    setCurPage(selected);
   };
 
   console.log('소분류: ', input.category);
@@ -56,7 +67,17 @@ function PostList() {
           )}
         </Select>
       </SelectBoxCol>
-      <PageGrid parCategory={input.parentCategory} category={input.category} page={0} size={6} />
+      <PageGrid
+        parCategory={input.parentCategory}
+        category={input.category}
+        page={curPage}
+        size={pageSize}
+      />
+      <Paginate
+        pageCount={Math.ceil(totalItems / pageSize)}
+        onPageChange={handlePageClick}
+        currentPage={curPage}
+      />
       <AuthButton />
     </>
   );
