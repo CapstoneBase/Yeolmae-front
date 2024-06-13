@@ -19,7 +19,7 @@ function PageGrid({ parCategory, category, page, size }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const data = await getPostList(1, 1, 0, 6);
+        const data = await getPostList({ parCategory, category, page, size });
         setPosts(data.items);
         // return data;
         console.log('Data:', data);

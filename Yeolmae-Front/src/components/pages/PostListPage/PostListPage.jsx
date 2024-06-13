@@ -27,6 +27,8 @@ function PostList() {
     });
   };
 
+  console.log('소분류: ', input.category);
+  console.log('대분류: ', input.parentCategory);
   return (
     <>
       <SelectBoxCol>
@@ -54,7 +56,7 @@ function PostList() {
           )}
         </Select>
       </SelectBoxCol>
-      <PageGrid />
+      <PageGrid parCategory={input.parentCategory} category={input.category} page={0} size={6} />
       <AuthButton />
     </>
   );
