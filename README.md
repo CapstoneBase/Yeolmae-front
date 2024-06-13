@@ -13,26 +13,13 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 - 프로필을 통해 작품 제작자의 연락처를 확인할 수 있습니다.
 
 ## 프로젝트 기간
-2024.03.10 ~ 2024.06.13(이후 계속 진행 예정)
+2024.03.10 ~ 2024.06.13  (이후 계속 진행 예정)
 
 ## 팀원 소개
-<table>
-  <tr>
-    <th>임수연</th>
-    <th>전지후</th>
-    <th>정윤호</th>
-  </tr>
-  <tr>
-      <td>Frontend</td>
-      <td>Frontend</td>
-      <td>Backend</td>
-  </tr>
-  <tr>
-      <td> - </td>
-      <td> - </td>
-      <td> - </td>
-  </tr>
-</table>
+| 임수연 | 전지후 | 정윤호 |
+| ----- | ----- | -----|
+| Frontend | Frontend | Backend |
+| - 일정 관리 | - 깃허브 관리 | - API |
 
 ## 기술 스택
 <table>
@@ -100,26 +87,30 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
 ## ERD
 
-
+![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/b87203c0-a6d4-4b32-91d3-ff766dfe8871)
 
 
 ## API
+
 | 회원 |
 |-----|
-| 이미지 |
+| ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/30eb8cfc-9276-4c8b-ab2b-057c282885ed)|
 
 
 | 로그인 |
 |-----|
-| 이미지 |
+| ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/d56e9e84-a509-4619-8324-7715210e6550)|
 
 | 게시글 |
 |-----|
-| 이미지 |
+| ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/b075a7ba-453f-4683-b02c-dc1bd63caf67)   ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/050bac4a-80cf-42ef-b734-89cd11c21a38) |
 
 | 댓글 |
 |-----|
-| 이미지 |
+| ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/7670bd33-f1ae-4b82-8d0b-4963839845ce)|
+
+
+## 아키텍처
 
 
 
