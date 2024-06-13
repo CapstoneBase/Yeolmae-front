@@ -23,13 +23,19 @@ function PostList() {
 
   const [curPage, setCurPage] = useState(0);
   const [pageSize] = useState(6);
-  const totalItems = 60;
+  // 변경 필요
+  const totalItems = 30;
+  console.log(input);
 
   const onChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handlePageClick = ({ selected }) => {
+    setCurPage(selected);
   };
 
   console.log('소분류: ', input.category);
@@ -67,12 +73,12 @@ function PostList() {
         page={curPage}
         size={pageSize}
       />
-      <AuthButton />
       <Paginate
         pageCount={Math.ceil(totalItems / pageSize)}
-        onPageChange={pageSize}
+        onPageChange={handlePageClick}
         currentPage={curPage}
       />
+      <AuthButton />
     </>
   );
 }

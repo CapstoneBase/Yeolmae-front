@@ -17,12 +17,14 @@ const GridContainer = styled.div`
 
 function PageGrid({ parCategory, category, page, size }) {
   const [posts, setPosts] = useState([]);
+  const [totItems, setTotItems] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await getPostList({ parCategory, category, page, size });
         setPosts(data.items);
+        setTotItems(data.totalItems);
         // return data;
         console.log('Data:', data);
       } catch (error) {
@@ -39,7 +41,6 @@ function PageGrid({ parCategory, category, page, size }) {
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
-      {/* <PostCard data={postItems.items} /> */}
     </GridContainer>
   );
 }
