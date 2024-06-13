@@ -8,7 +8,7 @@ import PostDetail from './PostDetail';
 import './viewPostStyle.css';
 
 function ViewPost() {
-  const { id } = useParams(); // /board/:id와 동일한 변수명으로 데이터를 꺼낼 수 있습니다.
+  const { id } = useParams(); // /board/:id와 동일한 변수명으로 데이터를 꺼낼 수 있다
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const getBoard = async () => {

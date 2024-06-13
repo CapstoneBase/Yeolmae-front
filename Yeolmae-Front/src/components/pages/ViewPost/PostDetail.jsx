@@ -39,6 +39,7 @@ function PostDetail({
     <div className="Wrapper">
       <div className="CategoryLinkContainer">
         <Link to="/posts/parentCategory">{parentCategory}</Link>
+        <p>{'>'}</p>
         <Link to="/posts/parentCategory/category">{category}</Link>
       </div>
       <h2 className="ReadBoardTitle">{title}</h2>
@@ -46,6 +47,7 @@ function PostDetail({
       <h5 className="ReadBoardDetails">{createdAt}</h5>
       <hr />
       <div className="ReadBoardContent">{content}</div>
+      <div className="ReadBoardThumbnail">{imageUrl}</div>
       <Button onClick={movetoPostList} text="목록으로 돌아가기" />
       <div className="editingButtonsContainer">
         <Button onClick={updatePost} text="수정하기" />
