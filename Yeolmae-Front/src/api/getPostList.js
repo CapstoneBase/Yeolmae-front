@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 export const getPostList = async (parCategory, category, page, size) => {
-  //   const API = 'parentCategory={parCategory}&category={catergory}&page={page}&size={size}';
-  const API = 'api/v1/posts?&page=0&size=12';
+  const API = `api/v1/posts?&parentCategory=${parCategory}&category=${catergory}&page=${page}&size=${size}`;
+  // const API = 'api/v1/posts?&page=0&size=12';
   const body = { parCategory, category, page, size };
   console.log('request body: ', body);
   try {
