@@ -23,11 +23,7 @@ function AuthButton() {
   };
   return (
     <ButtonBox>
-      <Button
-        type="button"
-        text={authenticated ? '글 작성하기' : '로그인하기'}
-        onClick={handleClick}
-      />
+      <Button type="button" text="글 작성하기" onClick={handleClick} />
     </ButtonBox>
   );
 }
