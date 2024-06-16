@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 // import Tag from './Tag';
 
@@ -58,13 +59,18 @@ function PostCard({ post }) {
 
   const postId = post.id;
   console.log(postId);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/postPage');
+  };
 
   // 게시글 호출 API, 게시글 카드 컴포넌트마다 매핑
   const API = `api/v1/posts/${postId}?includeDeleted=false`;
   return (
     // 온클릭으로 페이지 이동 구현 후 Card 태그 교체
     // <Card onClick="{/* 게시글 본문 호출 API */}">
-    <Card>
+    <Card onClick={handleClick}>
       <ThumbnailBox>
         {!post.imageUrl ? (
           <CardThumbnail src="..\main_logo.PNG" />
