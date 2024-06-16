@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -34,6 +35,17 @@ const StyledHeaderRight = styled.div`
 `;
 
 function Header() {
+  const authenticated = useSelector((state) => state.auth.authenticated);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    console.log(authenticated);
+    if (authenticated) {
+      navigate('/createPost');
+    } else {
+      navigate('/loginPage');
+    }
+  };
   return (
     <StyledHeader className="Header">
       <StyledHeaderLeft>
@@ -43,7 +55,9 @@ function Header() {
       </StyledHeaderLeft>
       <StyledHeaderCenter />
       <StyledHeaderRight>
-        <StyledLink to="/loginpage">로그인</StyledLink>
+        <StyledLink to="/loginpage" onClick={handleClick}>
+          {authenticated ? '로그아웃' : '로그인'}
+        </StyledLink>
       </StyledHeaderRight>
     </StyledHeader>
   );
