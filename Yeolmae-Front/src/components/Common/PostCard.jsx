@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Thumbnail from './Thumbnail';
 // import Tag from './Tag';
 
 const Card = styled.div`
@@ -19,11 +20,6 @@ const ThumbnailBox = styled.div`
   padding: 0 10%;
   width: 80%;
   height: 150px;
-`;
-
-const CardThumbnail = styled.img`
-  width: 80%;
-  overflow: clip;
 `;
 
 const CardContents = styled.div`
@@ -72,11 +68,7 @@ function PostCard({ post }) {
     // <Card onClick="{/* 게시글 본문 호출 API */}">
     <Card onClick={handleClick}>
       <ThumbnailBox>
-        {!post.imageUrl ? (
-          <CardThumbnail src="..\main_logo.PNG" />
-        ) : (
-          <CardThumbnail src={post.imageUrl} />
-        )}
+        {!post.imageUrl ? <Thumbnail src="..\main_logo.PNG" /> : <Thumbnail src={post.imageUrl} />}
       </ThumbnailBox>
       <CardContents>
         <PostTitle>{post.title}</PostTitle>
