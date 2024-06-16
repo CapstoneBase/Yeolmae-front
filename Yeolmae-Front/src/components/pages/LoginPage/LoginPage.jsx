@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Button from '../Common/Button';
-import Wrapper from '../Common/Wrapper';
-import ToastNotification from '../Common/ToastNotification';
+import Button from '../../Common/Button';
+import Wrapper from '../../Common/Wrapper';
+import ToastNotification from '../../Common/ToastNotification';
 // import { loginUser } from '../../api/loginUser';
 // import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
-import { loginThunk } from '../../redux/modules/loginThunk';
+import { loginThunk } from '../../../redux/modules/loginThunk';
 
 const Title = styled.h2`
   display: flex;
@@ -99,6 +99,7 @@ function Login() {
     dispatch(loginThunk(input.id, input.password));
     console.log('로그인');
     navigate('/');
+    return null;
   };
 
   return (
