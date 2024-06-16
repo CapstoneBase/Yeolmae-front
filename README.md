@@ -154,7 +154,7 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
 ## 서비스 플로우 차트
 
-![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/20593b1e-fcb7-406e-8c6b-71cc22856e6e)
+![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/ef919d28-7279-4c2e-8879-359d89aa2188)
 
 
 ## 페이지별 기능
@@ -179,13 +179,14 @@ https://github.com/CapstoneBase/Yeolmae-back/tree/dev
 
 게시글 목록
 
-![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/fb48eeea-bf09-4a91-b761-db378f08db5a)
 ![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/ce67d4e5-87c3-40b2-8cf9-a7f1ed078c78)
+![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/b6e1bf9c-81ee-496b-bcb6-7b1444ecb744)
+![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/a86e50b0-59ef-4e61-affc-67b57f3043c8)
 
 
 게시글 작성
 
-![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/bad4ca3b-d0d3-48df-8dcf-e8306d725aa6)
+![image](https://github.com/CapstoneBase/Yeolmae-front/assets/118517380/ac13cda9-11a2-4aea-abbb-cc2273790078)
 
 
 게시글 본문
