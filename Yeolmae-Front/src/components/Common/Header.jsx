@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { DELETE_TOKEN } from '../../redux/modules/authSlice';
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -38,10 +39,19 @@ function Header() {
   const authenticated = useSelector((state) => state.auth.authenticated);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  // const loginStatus = useSelector((state) => state.auth.SET_TOKEN);
+
+  // const handleLogout = () => {
+  //   dispatch(DELETE_TOKEN());
+  // };
+
   const handleClick = () => {
     console.log(authenticated);
     if (authenticated) {
-      navigate('/createPost');
+      dispatch(DELETE_TOKEN());
+      navigate('/');
+      console.log(authenticated);
     } else {
       navigate('/loginPage');
     }
@@ -55,9 +65,15 @@ function Header() {
       </StyledHeaderLeft>
       <StyledHeaderCenter />
       <StyledHeaderRight>
-        <StyledLink to="/loginpage" onClick={handleClick}>
-          {authenticated ? '로그아웃' : '로그인'}
-        </StyledLink>
+        {authenticated ? (
+          <StyledLink to="/" onClick={handleClick}>
+            로그아웃
+          </StyledLink>
+        ) : (
+          <StyledLink to="/loginpage" onClick={handleClick}>
+            로그인
+          </StyledLink>
+        )}
       </StyledHeaderRight>
     </StyledHeader>
   );
