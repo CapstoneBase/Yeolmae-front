@@ -16,7 +16,7 @@ function AuthButton() {
   const handleClick = () => {
     console.log(authenticated);
     if (authenticated) {
-      navigate('/createPost');
+      navigate('/posts/create');
     } else {
       navigate('/loginPage');
     }

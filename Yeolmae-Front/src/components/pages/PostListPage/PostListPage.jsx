@@ -22,8 +22,8 @@ function PostList() {
   });
 
   const [curPage, setCurPage] = useState(0);
-  const [pageSize] = useState(6);
-  // 변경 필요
+  const [pageSize] = useState(8);
+  // totalItems 실제 데이터에 따라 변경 필요
   const totalItems = 30;
   console.log(input);
 

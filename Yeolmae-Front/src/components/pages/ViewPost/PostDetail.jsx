@@ -47,7 +47,9 @@ function PostDetail({
       <h5 className="ReadBoardDetails">{createdAt}</h5>
       <hr />
       <div className="ReadBoardContent">{content}</div>
-      <div className="ReadBoardThumbnail">{imageUrl}</div>
+      <div className="ReadBoardThumbnail">
+        <img src={imageUrl} alt="썸네일" />
+      </div>
       <Button onClick={movetoPostList} text="목록으로 돌아가기" />
       <div className="editingButtonsContainer">
         <Button onClick={updatePost} text="수정하기" />
