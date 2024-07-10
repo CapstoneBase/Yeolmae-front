@@ -17,14 +17,16 @@ const PaginationCol = styled.div`
   li {
     padding: 6px 12px;
     list-style: none;
-    align-items: center;
+    align-self: center;
   }
 
   // 각 페이지 이동
   a {
+    display: flex;
     padding: 6px 12px;
     cursor: pointer;
     border-radius: 3px;
+    align-items: center;
 
     &:hover {
       background-color: #ddd;
