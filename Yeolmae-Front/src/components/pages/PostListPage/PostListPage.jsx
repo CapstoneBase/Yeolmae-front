@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
 import AuthButton from './AuthButton';
@@ -27,11 +27,18 @@ function PostList() {
   const totalItems = 30;
   console.log(input);
 
-  const onChange = (e) => {
+  // 페이지 이동 시 스크롤 위치 초기화
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [curPage]);
+
+  const onCatChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
+    // 카테고리 변경시 첫번째 페이지로 이동
+    setCurPage(0);
   };
 
   const handlePageClick = ({ selected }) => {
@@ -46,7 +53,7 @@ function PostList() {
         <Select
           key="selParentCategory"
           name="parentCategory"
-          onChange={onChange}
+          onChange={onCatChange}
           value={input.parentCategory}
         >
           {Categories.map((item) =>
@@ -57,7 +64,7 @@ function PostList() {
             ) : null
           )}
         </Select>
-        <Select key="selCategory" name="category" onChange={onChange} value={input.category}>
+        <Select key="selCategory" name="category" onChange={onCatChange} value={input.category}>
           {Categories.map((item) =>
             item.parntCateId === input.parentCategory ? (
               <option key={`selCategory${item.cateId}`} value={item.cateId}>
