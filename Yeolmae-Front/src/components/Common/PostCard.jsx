@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Thumbnail from './Thumbnail';
 // import Tag from './Tag';
 
 const Card = styled.div`
@@ -11,13 +13,18 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-const CardThumbnail = styled.img`
+const ThumbnailBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10%;
   width: 80%;
+  height: 150px;
 `;
 
 const CardContents = styled.div`
   padding: 7px;
+  background-color: white;
 `;
 
 const PostTitle = styled.h4`
@@ -41,14 +48,32 @@ const PostDate = styled(PostAuthor)``;
 //   align-items: center;
 // `;
 
-function PostCard({info}) {
+function PostCard({ post }) {
+  const date = new Date(post.createdAt);
+  const createdDate = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
+  console.log(createdDate);
+
+  const postId = post.id;
+  console.log(postId);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/postPage');
+  };
+
+  // 게시글 호출 API, 게시글 카드 컴포넌트마다 매핑
+  const API = `api/v1/posts/${postId}?includeDeleted=false`;
   return (
-    <Card>
-      <CardThumbnail src="\IMG_4276.PNG" />
+    // 온클릭으로 페이지 이동 구현 후 Card 태그 교체
+    // <Card onClick="{/* 게시글 본문 호출 API */}">
+    <Card onClick={handleClick}>
+      <ThumbnailBox>
+        {!post.imageUrl ? <Thumbnail src="..\main_logo.PNG" /> : <Thumbnail src={post.imageUrl} />}
+      </ThumbnailBox>
       <CardContents>
-        <PostTitle>게시글제목게시글제목게시글제...</PostTitle>
-        <PostAuthor>작성자</PostAuthor>
-        <PostDate>2024.05.16</PostDate>
+        <PostTitle>{post.title}</PostTitle>
+        <PostAuthor>{post.writerName}</PostAuthor>
+        <PostDate>{createdDate}</PostDate>
       </CardContents>
     </Card>
   );
