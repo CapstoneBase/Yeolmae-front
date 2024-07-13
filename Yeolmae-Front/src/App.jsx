@@ -25,13 +25,14 @@ const App = memo(() => {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Header />
-        <div>
+        {/* <div>
           <Link to="/">메인 홈</Link>
           <Link to="/signupPage">회원가입페이지</Link>
           <Link to="/loginPage">로그인페이지</Link>
-          <Link to="/postlistPage">게시글 목록</Link><Link to="/posts/:id">게시글 본문</Link>
+          <Link to="/postlistPage">게시글 목록</Link>
+          <Link to="/posts/:id">게시글 본문</Link>
           <Link to="/posts/create">게시글 작성</Link>
-        </div>
+        </div> */}
         <Suspense>
           <Routes>
             <Route path="/" element={<Main />} />
