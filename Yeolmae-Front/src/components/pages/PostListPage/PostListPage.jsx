@@ -25,14 +25,14 @@ function PostList() {
   const [pageSize] = useState(8);
   // totalItems 실제 데이터에 따라 변경 필요
   const totalItems = 30;
-  console.log(input);
+  // console.log(input);
 
   // 페이지 이동 시 스크롤 위치 초기화
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [curPage]);
 
-  const onCatChange = (e) => {
+  const handleCatChange = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
@@ -45,15 +45,22 @@ function PostList() {
     setCurPage(selected);
   };
 
-  console.log('소분류: ', input.category);
-  console.log('대분류: ', input.parentCategory);
+  console.log(
+    '소분류: ',
+    input.category,
+    '대분류: ',
+    input.parentCategory,
+    '현재 페이지: ',
+    curPage
+  );
+
   return (
     <>
       <SelectBoxCol>
         <Select
           key="selParentCategory"
           name="parentCategory"
-          onChange={onCatChange}
+          onChange={handleCatChange}
           value={input.parentCategory}
         >
           {Categories.map((item) =>
@@ -64,7 +71,7 @@ function PostList() {
             ) : null
           )}
         </Select>
-        <Select key="selCategory" name="category" onChange={onCatChange} value={input.category}>
+        <Select key="selCategory" name="category" onChange={handleCatChange} value={input.category}>
           {Categories.map((item) =>
             item.parntCateId === input.parentCategory ? (
               <option key={`selCategory${item.cateId}`} value={item.cateId}>
