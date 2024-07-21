@@ -33,7 +33,7 @@ const PaginationCol = styled.div`
     }
   }
 
-  .selected a {
+  .active a {
     background-color: #6558f5;
     border-radius: 3px;
     color: white;
@@ -67,8 +67,9 @@ function Paginate({ pageCount, onPageChange, currentPage }) {
         nextLabel={<FaArrowRight />}
         pageCount={pageCount}
         onPageChange={onPageChange}
+        forcePage={currentPage}
         pageLinkClassName="pagination"
-        activeClassName="selected"
+        activeClassName="active"
       />
     </PaginationCol>
   );
