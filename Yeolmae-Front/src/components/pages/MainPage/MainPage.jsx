@@ -36,8 +36,8 @@ function Main() {
       <ImageBox>
         <img src="/main_logo.PNG" alt="로고이미지" height="300" />
         {/* <ButtonBox> */}
-          {/* <Button text="회원가입 하러 가기" onClick={navigate('/signupPage')} /> */}
-          {/* <Button text="게시글 둘러보러 가기" onClick={handleClick} /> */}
+        {/* <Button text="회원가입 하러 가기" onClick={navigate('/signupPage')} /> */}
+        {/* <Button text="게시글 둘러보러 가기" onClick={handleClick} /> */}
         {/* </ButtonBox> */}
         <CategoryBox />
       </ImageBox>

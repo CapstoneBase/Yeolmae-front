@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Categories from '../../Common/Categories';
 
 const ParCatBox = styled.div`
@@ -58,6 +59,20 @@ const CatBtn = styled.div`
 `;
 
 function CategoryBox() {
+  const navigate = useNavigate();
+
+  // 선택한 카테고리로 이동
+  const onClickCategory = ({ children }) => {
+    navigate('/postListPage', {
+      state: {
+        cateId: `${children.cateId}`,
+        cateName: `${children.cateName}`,
+        parntCateId: `${children.parntCateId}`
+      }
+    });
+    console.log('children: ', children);
+  };
+
   return (
     <ParCatBox>
       {Categories.map((parent) =>
@@ -69,7 +84,11 @@ function CategoryBox() {
             <CatBox>
               {Categories.map((children) =>
                 children.parntCateId === parent.cateId ? (
-                  <CatBtn key={`category${children.cateId}`} value={children.cateId}>
+                  <CatBtn
+                    key={`category${children.cateId}`}
+                    value={children.cateId}
+                    onClick={() => onClickCategory({ children })}
+                  >
                     {children.cateName}
                   </CatBtn>
                 ) : null
