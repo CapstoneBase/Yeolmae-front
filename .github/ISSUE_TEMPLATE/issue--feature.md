@@ -1,5 +1,5 @@
 ---
-name: 'Issue: Feature'
+name: 'Feature'
 about: 작업한 기능에 대해 설명해주세요
 title: ''
 labels: ''
