@@ -49,13 +49,11 @@ const PostDate = styled(PostAuthor)``;
 // `;
 
 function PostCard({ post }) {
-  const date = new Date(post.createdAt);
-  const createdDate = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
-  console.log(createdDate);
-
-  const postId = post.id;
-  console.log(postId);
   const navigate = useNavigate();
+
+  const createdDate = new Date(post.createdAt).toLocaleDateString('ko-KR');
+  const postId = post.id;
+  console.log('post id: ', postId);
 
   const handleClick = () => {
     navigate('/postPage');
