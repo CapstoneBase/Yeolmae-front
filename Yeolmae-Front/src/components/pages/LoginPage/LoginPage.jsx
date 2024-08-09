@@ -2,13 +2,13 @@
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import Button from '../Common/Button';
-import Wrapper from '../Common/Wrapper';
-import ToastNotification from '../Common/ToastNotification';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from '../../Common/Button';
+import Wrapper from '../../Common/Wrapper';
+import ToastNotification from '../../Common/ToastNotification';
 // import { loginUser } from '../../api/loginUser';
 // import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
-import { loginThunk } from '../../redux/modules/loginThunk';
+import { loginThunk } from '../../../redux/modules/loginThunk';
 
 const Title = styled.h2`
   display: flex;
@@ -61,6 +61,8 @@ function Login() {
     password: ''
   });
 
+  const authenticated = useSelector((state) => state.auth.authenticated);
+
   const [toast, setToast] = useState(false);
 
   const navigate = useNavigate();
@@ -97,8 +99,17 @@ function Login() {
     // setInput(input.password, '');
 
     dispatch(loginThunk(input.id, input.password));
-    console.log('로그인');
-    navigate('/');
+    console.log('로그인 시도');
+
+    console.log(authenticated);
+    if (authenticated) {
+      navigate('/');
+    } else {
+      // navigate('/loginPage');
+      setToast(true);
+      console.log(toast);
+    }
+    return null;
   };
 
   return (
@@ -137,12 +148,12 @@ function Login() {
         </InputWrapper>
         <Button onClick={handleSubmit} text="로그인하기" />
       </Wrapper>
-      {toast === true ? (
+      {/* {toast === true ? (
         <ToastNotification
           text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
           props={setToast}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 }

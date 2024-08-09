@@ -11,7 +11,10 @@ export const loginUser = async (id, password) => {
     console.log(response);
     return response.data.data;
   } catch (error) {
-    if (error.response) {
+    if (error.response.status === 401) {
+      window.alert('아이디 혹은 비밀번호 오류');
+      console.log('Login Infor Error: ', error.message);
+    } else if (error.response) {
       console.log('error : ', error.response);
       const { status, statusText, data } = error.response;
       console.log(`${status} - ${statusText} - ${data.message}`);
