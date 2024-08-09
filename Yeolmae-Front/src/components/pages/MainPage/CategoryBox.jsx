@@ -27,7 +27,8 @@ const ParentCatBtn = styled.button`
 
   &:hover + div {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(200px, 300px));
+    justify-content: center;
   }
 `;
 
@@ -42,13 +43,14 @@ const CatBox = styled.div`
 
   &:hover {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(200px, 300px));
+    justify-content: center;
   }
 `;
 
 const CatBtn = styled.div`
   display: block;
-  padding: 8px 16px;
+  padding: 8px 30px;
   // background-color: white;
   border: none;
   cursor: pointer;
@@ -85,6 +87,7 @@ function CategoryBox() {
               {Categories.map((children) =>
                 children.parntCateId === parent.cateId ? (
                   <CatBtn
+                    className="category-button"
                     key={`category${children.cateId}`}
                     value={children.cateId}
                     onClick={() => onClickCategory({ children })}
