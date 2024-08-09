@@ -1,29 +1,5 @@
-@font-face {
-  font-family: 'NotoSans Regular';
-  src: url('./fonts/NotoSansKR-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'NotoSans Light';
-  src: url('./fonts/NotoSansKR-Light.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'NotoSans SemiBold';
-  src: url('./fonts/NotoSansKR-SemiBold.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'NotoSans ExtraBold';
-  src: url('./fonts/NotoSansKR-ExtraBold.woff') format('woff');
-}
-
 body {
-  font-family: 'NotoSans Regular';
-}
-
-body {
-  margin: 0px;
-  width: 100%;
-  background-color: rgba(245, 245, 245, 1);
-}
+    margin: 0px;
+    width: 100%;
+    background-color: rgba(245, 245, 245, 1);
+  }

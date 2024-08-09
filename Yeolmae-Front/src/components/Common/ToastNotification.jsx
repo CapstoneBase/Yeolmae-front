@@ -28,11 +28,11 @@ function ToastNotification({ text, props }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       props.setToast(false);
-    }, 1000);
+    }, 2000);
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [props]);
 
   return (
     <Toast>
