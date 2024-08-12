@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../Common/Button';
 
@@ -12,11 +12,19 @@ const ButtonBox = styled.div`
 function AuthButton() {
   const authenticated = useSelector((state) => state.auth.authenticated);
   const navigate = useNavigate();
+  const location = useLocation();
+  const cateInit = { ...location.state };
 
   const handleClick = () => {
     console.log(authenticated);
     if (authenticated) {
-      navigate('/posts/create');
+      navigate('/posts/create', {
+        state: {
+          cateId: `${cateInit.cateId}`,
+          cateName: `${cateInit.cateName}`,
+          parntCateId: `${cateInit.parntCateId}`
+        }
+      });
     } else {
       navigate('/loginPage');
     }
