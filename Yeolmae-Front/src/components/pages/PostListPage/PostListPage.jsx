@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
@@ -12,13 +13,14 @@ const SelectBoxCol = styled.div`
 `;
 
 function PostList() {
+  // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
+  const location = useLocation();
+  const cateInit = { ...location.state };
+
+  // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [input, setInput] = useState({
-    category: '000101',
-    parentCategory: '0001',
-    title: '',
-    content: '',
-    imageUrl: '',
-    fileUrlList: []
+    category: `${cateInit.cateId}`,
+    parentCategory: `${cateInit.parntCateId}`
   });
 
   const [curPage, setCurPage] = useState(0);
