@@ -16,6 +16,7 @@ const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
 // <Link to="/posts/update/:id">게시글 수정</Link>
 // <Route path="/posts/update/:id" element={<UpdatePost />} />
 const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
+const My = lazy(() => import('./components/pages/MyPage/MyPage'));
 
 const App = memo(() => {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -43,6 +44,8 @@ const App = memo(() => {
               element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
             />
             <Route path="/posts/:id" element={<ViewPost />} />
+            {/* 유저 아이디에 맞게 동적 경로로 수정 필요 */}
+            <Route path="/my" element={<My />} />
             <Route path="*" element={<Notfound />} />
           </Routes>
         </Suspense>
