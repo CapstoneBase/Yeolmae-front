@@ -18,6 +18,7 @@ function PostList() {
   const cateInit = { ...location.state };
 
   // 카테고리 초기 상태를 받아온 상태로 설정한다
+  // 변경한 상태를 세션 스토리지에 저장한다
   const [input, setInput] = useState({
     category: `${cateInit.cateId}`,
     parentCategory: `${cateInit.parntCateId}`
@@ -35,10 +36,21 @@ function PostList() {
   }, [curPage]);
 
   const handleCatChange = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-    });
+    if (e.target.name === 'category') {
+      console.log('소분류 변경');
+      setInput({
+        ...input,
+        category: e.target.value
+      });
+    }
+    if (e.target.name === 'parentCategory') {
+      console.log('대분류 변경');
+      setInput({
+        ...input,
+        parentCategory: e.target.value,
+        category: `${e.target.value}01`
+      });
+    }
     // 카테고리 변경시 첫번째 페이지로 이동
     setCurPage(0);
   };
