@@ -5,7 +5,7 @@ export const getPostList = async ({ parCategory, category, page, size }) => {
   const API = `api/v1/posts?&parentCategory=${parCategory}&category=${category}&page=${page}&size=${size}`;
   // const API = 'api/v1/posts?&page=0&size=12';
   const body = { parCategory, category, page, size };
-  console.log('request body: ', body);
+  // console.log('request body: ', body);
   try {
     const postList = await axios.get(API);
     // console.log(postList.data.data.items);

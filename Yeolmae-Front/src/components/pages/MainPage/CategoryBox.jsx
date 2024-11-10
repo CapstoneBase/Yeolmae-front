@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Categories from '../../Common/Categories';
+import useCategoryUpdate from '../../hooks/useCategoryUpdate';
 
 const ParCatBox = styled.div`
   display: flex;
@@ -64,12 +65,25 @@ function CategoryBox() {
   const navigate = useNavigate();
 
   // 선택한 카테고리로 이동
-  const onClickCategory = ({ children }) => {
+  const onClickCategory = ({ parent, children }) => {
+    console.log(`${children.cateId}`);
+    sessionStorage.setItem(
+      'selectedCategory',
+      JSON.stringify({
+        parntCateId: `${parent.cateId}`,
+        // parntCateName: `${parent.cateName}`,
+        childCateId: `${children.cateId}`,
+        childCateName: `${children.cateName}`
+      })
+    );
+    // console.log('세션: ', sessionStorage.getItem('category'));
+
     navigate('/postListPage', {
       state: {
-        cateId: `${children.cateId}`,
-        cateName: `${children.cateName}`,
-        parntCateId: `${children.parntCateId}`
+        parntCateId: `${parent.cateId}`,
+        // parntCateName: `${parent.cateName}`,
+        childCateId: `${children.cateId}`,
+        childCateName: `${children.cateName}`
       }
     });
     console.log('children: ', children);
@@ -87,10 +101,10 @@ function CategoryBox() {
               {Categories.map((children) =>
                 children.parntCateId === parent.cateId ? (
                   <CatBtn
-                    className="category-button"
+                    className={`category-button-${children.cateId}`}
                     key={`category${children.cateId}`}
                     value={children.cateId}
-                    onClick={() => onClickCategory({ children })}
+                    onClick={() => onClickCategory({ parent, children })}
                   >
                     {children.cateName}
                   </CatBtn>

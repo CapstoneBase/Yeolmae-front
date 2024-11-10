@@ -27,7 +27,7 @@ function PageGrid({ parCategory, category, page, size }) {
         setPosts(data.items);
         setTotItems(data.totalItems);
         // return data;
-        console.log('Data:', data);
+        // console.log('Data:', data);
       } catch (error) {
         console.log('Error:', error);
         // throw error;
@@ -36,7 +36,7 @@ function PageGrid({ parCategory, category, page, size }) {
     getData();
   }, [parCategory, category, page, size]);
 
-  console.log(posts);
+  // console.log(posts);
   return (
     <GridContainer>
       {posts.map((post) => (

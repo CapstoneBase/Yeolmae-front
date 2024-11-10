@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
 import AuthButton from './AuthButton';
@@ -15,26 +15,33 @@ const SelectBoxCol = styled.div`
 function PostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
   const location = useLocation();
-  const sessionData = sessionStorage.getItem('category');
+  const sessionData = sessionStorage.getItem('selectedCategory');
   const cateData = JSON.parse(sessionData);
+  // console.log(cateData, curCategory);
   // const cateInit = { ...location.state };
 
   // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [curCategory, setCurCategory] = useState({
-    category: `${cateData.cateId}`,
-    parentCategory: `${cateData.parntCateId}`
+    parntCateId: `${cateData.parntCateId}`,
+    // parntCateName: `${cateData.parntCateName}`,
+    childCateId: `${cateData.childCateId}`
+    // childCateName: `${cateData.childCateName}`
   });
-  console.log('초기 카테고리: ', curCategory);
+  console.log('초기 카테고리 세션: ', cateData);
+  console.log('카테고리 상태: ', curCategory);
 
   useEffect(() => {
     sessionStorage.setItem(
-      'category',
+      'selectedCategory',
       JSON.stringify({
-        cateId: `${curCategory.cateId}`,
-        cateName: `${curCategory.cateName}`,
-        parntCateId: `${curCategory.parntCateId}`
+        parntCateId: `${curCategory.parntCateId}`,
+        // parntCateName: `${curCategory.parntCateName}`,
+        childCateId: `${curCategory.childCateId}`,
+        childCateName: `${curCategory.childCateName}`
       })
     );
+    console.log('변경된 카테고리: ', JSON.stringify(curCategory));
+    // console.log(sessionData);
   }, [curCategory]);
 
   const [curPage, setCurPage] = useState(0);
@@ -49,29 +56,22 @@ function PostList() {
   }, [curPage]);
 
   const handleCatChange = (e) => {
-    // const { name, value } = e.target;
-    //
-    // setCurCategory((prevCategory) => {
-    //   // category 변경시 parentCategory를 parntCateId로 변경
-    //   if (name === 'category') {
-    //     return {
-    //       ...prevCategory,
-    //       parentCategory: parntCateId,
-    //     };
-    //   }
-    //   return {
-    //     ...prevCategory,
-    //     [name]: value
-    //   };
-    // });
-
-    setCurCategory({
-      ...curCategory,
-      [e.target.name]: e.target.value
-    });
-    // parentCategory 변경 시 parntCateId와 parentCategory가 일치하는지 확인하는 기능 필요
-    // category 변경 시 parentCategory가 parntCateId로 변경되도록 하는 기능 필요
-    console.log(e.target.name, e.target.value);
+    if (e.target.name === 'parentCategory') {
+      console.log('대분류 변경');
+      setCurCategory({
+        ...curCategory,
+        parntCateId: e.target.value,
+        childCateId: `${e.target.value}01`
+      });
+    }
+    if (e.target.name === 'category') {
+      console.log('소분류 변경');
+      setCurCategory({
+        ...curCategory,
+        childCateId: e.target.value
+      });
+    }
+    console.log(curCategory);
     // 카테고리 변경시 첫번째 페이지로 이동
     setCurPage(0);
   };
@@ -82,9 +82,9 @@ function PostList() {
 
   console.log(
     '소분류: ',
-    curCategory.category,
+    curCategory.childCateId,
     '대분류: ',
-    curCategory.parentCategory,
+    curCategory.parntCateId,
     '현재 페이지: ',
     curPage
   );
@@ -108,12 +108,12 @@ function PostList() {
         </Select>
         <Select
           key="selCategory"
-          name="category"
+          name="childCategory"
           onChange={handleCatChange}
           value={curCategory.category}
         >
           {Categories.map((item) =>
-            item.parntCateId === curCategory.parentCategory ? (
+            item.parntCateId === curCategory.parntCateId ? (
               <option key={`selCategory${item.cateId}`} value={item.cateId}>
                 {item.cateName}
               </option>
@@ -122,8 +122,8 @@ function PostList() {
         </Select>
       </SelectBoxCol>
       <PageGrid
-        parCategory={curCategory.parentCategory}
-        category={curCategory.category}
+        parCategory={curCategory.parntCateId}
+        category={curCategory.childCateId}
         page={curPage}
         size={pageSize}
       />

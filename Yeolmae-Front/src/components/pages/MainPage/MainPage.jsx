@@ -26,6 +26,7 @@ const DropdownBox = styled.div`
   align-items: center;
   // algin-content: center;
 `;
+
 function Main() {
   const navigate = useNavigate();
   const handleClick = () => {
