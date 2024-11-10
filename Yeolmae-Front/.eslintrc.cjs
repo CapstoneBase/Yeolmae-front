@@ -32,5 +32,6 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', {devDependencies: true }],
     'import/prefer-default-export': 'off',
 		'import/extensions': ['off'],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   },
 }

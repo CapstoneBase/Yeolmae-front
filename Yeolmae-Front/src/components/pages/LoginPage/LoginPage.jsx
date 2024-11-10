@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../Common/Button';
 import Wrapper from '../../Common/Wrapper';
@@ -9,6 +9,7 @@ import ToastNotification from '../../Common/ToastNotification';
 // import { loginUser } from '../../api/loginUser';
 // import { SET_TOKEN, loginThunk, reissueTokenThunk } from '../../redux/modules/authSlice';
 import { loginThunk } from '../../../redux/modules/loginThunk';
+import usePageTitle from '../../../hooks/usePageTitle';
 
 const Title = styled.h2`
   display: flex;
@@ -56,22 +57,29 @@ const StyledLink = styled(Link)`
 
 function Login() {
   const dispatch = useDispatch();
-  const [input, setInput] = useState({
-    id: '',
-    password: ''
-  });
+  const navigate = useNavigate();
+  usePageTitle('로그인');
+  const [toast, setToast] = useState(false);
+
+  const idRef = useRef('');
+  const pwdRef = useRef('');
+
+  // const [input, setInput] = useState({
+  //   id: '',
+  //   password: ''
+  // });
 
   const authenticated = useSelector((state) => state.auth.authenticated);
 
-  const [toast, setToast] = useState(false);
-
-  const navigate = useNavigate();
+  // const [toast, setToast] = useState(false);
 
   const onChange = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-    });
+    console.log(idRef.current.value);
+    console.log(pwdRef.current.value);
+    // setInput({
+    //   ...input,
+    //   [e.target.name]: e.target.value
+    // });
   };
 
   // const resetInput = (e) => {
@@ -84,21 +92,21 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!input.id) {
+    if (!idRef.current.value) {
       return window.alert('ID를 입력해주세요.');
     }
-    if (!input.password) {
+    if (!pwdRef.current.value) {
       return alert('비밀번호를 입력해주세요.');
     }
     const body = {
-      id: input.id,
-      password: input.password
+      id: idRef.current.value,
+      password: pwdRef.current.value
     };
 
     // 로그인 후 비밀번호 입력값 제거
     // setInput(input.password, '');
 
-    dispatch(loginThunk(input.id, input.password));
+    dispatch(loginThunk(idRef.current.value, pwdRef.current.value));
     console.log('로그인 시도');
 
     console.log(authenticated);
@@ -119,6 +127,7 @@ function Login() {
         <InputWrapper>
           {/* <label>아이디</label> */}
           <Input
+            ref={idRef}
             id="id"
             name="id"
             type="text"
@@ -130,6 +139,7 @@ function Login() {
           />
           {/* <label>비밀번호</label> */}
           <Input
+            ref={pwdRef}
             id="password"
             name="password"
             type="password"
