@@ -59,67 +59,60 @@ function Header() {
     }
   };
   return (
-    <header className="p-3 bg-white">
+    <header className="p-3 bg-light bg-gradient border-bottom">
       <div className="container">
         <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a
             href="/"
             className="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
           >
-            <svg className="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-              <use xlinkHref="#bootstrap" />
-            </svg>
+            <img src="/main_logo.PNG" alt="Logo" width="60" height="32" />
           </a>
 
           <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             <li>
-              <a href="#" className="nav-link px-2 text-dark">
+              <a href="/postlistPage" className="nav-link px-2 text-dark">
                 졸업 작품
               </a>
             </li>
             <li>
-              <a href="#" className="nav-link px-2 text-dark">
+              <a href="/postlistPage" className="nav-link px-2 text-dark">
                 개인 프로젝트
               </a>
             </li>
             <li>
-              <a href="#" className="nav-link px-2 text-dark">
+              <a href="/postlistPage" className="nav-link px-2 text-dark">
                 대회 및 공모전
               </a>
             </li>
             <li>
-              <a href="#" className="nav-link px-2 text-dark">
+              <a href="/portfolioPage" className="nav-link px-2 text-dark">
                 포트폴리오
               </a>
             </li>
           </ul>
 
-          <div class="text-end">
-            <button type="button" class="btn btn-outline-dark me-2">Login</button>
-            <button type="button" class="btn btn-warning">Sign-up</button>
-          </div>
+          <ul className="nav">
+            <li>
+              <a href="/myPage" className="nav-link px-2 text-dark">
+                마이페이지
+              </a>
+            </li>
+            <li>
+              {authenticated ? (
+                <a href="/" className="nav-link px-2 text-dark" onClick={handleClick}>
+                  로그아웃
+                </a>
+              ) : (
+                <a href="/loginPage" className="nav-link px-2 text-dark" onClick={handleClick}>
+                  로그인
+                </a>
+              )}
+            </li>
+          </ul>
         </div>
       </div>
     </header>
-    // <StyledHeader className="Header">
-    //   <StyledHeaderLeft>
-    //     <StyledLink to="/">
-    //       <img src="/IMG_4276.PNG" width={60} alt="로고이미지" />
-    //     </StyledLink>
-    //   </StyledHeaderLeft>
-    //   <StyledHeaderCenter />
-    //   <StyledHeaderRight>
-    //     {authenticated ? (
-    //       <StyledLink to="/" onClick={handleClick}>
-    //         로그아웃
-    //       </StyledLink>
-    //     ) : (
-    //       <StyledLink to="/loginpage" onClick={handleClick}>
-    //         로그인
-    //       </StyledLink>
-    //     )}
-    //   </StyledHeaderRight>
-    // </StyledHeader>
   );
 }
 
