@@ -1,41 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_TOKEN } from '../../redux/modules/authSlice';
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledHeader = styled.header`
-  display: flex;
-  // 240728 헤더 높이 수정
-  height: 40px;
-  align-items: center;
-  padding: 5px 15px;
-  background-color: rgba(108, 108, 108, 1);
-  font-family: NotoSans Regular;
-  color: white;
-`;
-
-const StyledHeaderCenter = styled.div`
-  width: 80%;
-`;
-
-const StyledHeaderLeft = styled.div`
-  display: flex;
-  width: 10%;
-  justify-content: left;
-`;
-
-const StyledHeaderRight = styled.div`
-  display: flex;
-  width: 10%;
-  justify-content: right;
-`;
 
 function Header() {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -59,9 +24,10 @@ function Header() {
     }
   };
   return (
-    <header className="p-3 bg-light bg-gradient border-bottom">
+    // 클래스이름 수정 필요
+    <header className="p-3 bg-light bg-opacity-75 border-bottom">
       <div className="container">
-        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div className="d-flex align-items-center justify-content-center justify-content-lg-start">
           <a
             href="/"
             className="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
@@ -92,7 +58,8 @@ function Header() {
             </li>
           </ul>
 
-          <ul className="nav">
+          <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          {/* <ul className="nav"> */}
             <li>
               <a href="/myPage" className="nav-link px-2 text-dark">
                 마이페이지
