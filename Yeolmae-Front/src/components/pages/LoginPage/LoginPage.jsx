@@ -122,6 +122,9 @@ function Login() {
 
   return (
     <>
+      <form>
+        <h1 className="h2 mb-3 fw-500">로그인</h1>
+      </form>
       <Wrapper>
         <Title>로그인</Title>
         <InputWrapper>
