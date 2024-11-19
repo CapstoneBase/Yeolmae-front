@@ -121,53 +121,79 @@ function Login() {
   };
 
   return (
-    <>
-      <form>
+    <container className="container g-3 align-items-center">
+      {/* 고정 크기로 설정하기 */}
+      <form className="form-signin w-50 p-3 m-auto">
         <h1 className="h2 mb-3 fw-500">로그인</h1>
-      </form>
-      <Wrapper>
-        <Title>로그인</Title>
-        <InputWrapper>
-          {/* <label>아이디</label> */}
-          <Input
-            ref={idRef}
-            id="id"
-            name="id"
-            type="text"
-            placeholder="아이디를 입력해주세요"
-            autoComplete="off"
-            onChange={onChange}
-            // onClick={resetInput}
-            required
-          />
-          {/* <label>비밀번호</label> */}
-          <Input
-            ref={pwdRef}
-            id="password"
-            name="password"
+        <div className="form-floating my-2">
+          <input type="id" className="form-control" id="floatingId" placeholder="id" />
+          <label htmlFor="floatingId">아이디</label>
+        </div>
+        <div className="form-floating my-2">
+          <input
             type="password"
-            placeholder="비밀번호를 입력해주세요"
-            onChange={onChange}
-            // onClick={resetInput}
-            required
+            className="form-control"
+            id="floatingPassword"
+            placeholder="password"
           />
-          {/* <LinkWrapper>
-          <StyledLink to="/">아이디 찾기</StyledLink>
-          <StyledLink to="/">비밀번호 찾기</StyledLink>
-        </LinkWrapper> */}
-          <LinkWrapper>
-            <StyledLink to="/signupPage">회원가입하기</StyledLink>
-          </LinkWrapper>
-        </InputWrapper>
-        <Button onClick={handleSubmit} text="로그인하기" />
-      </Wrapper>
-      {/* {toast === true ? (
-        <ToastNotification
-          text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
-          props={setToast}
-        />
-      ) : null} */}
-    </>
+          <label htmlFor="floatingPassword">비밀번호</label>
+        </div>
+        {/* 토스트 알림으로 교체 */}
+        <button className="btn btn-primary w-100 my-3 py-2" type="submit" onClick={handleSubmit}>
+          로그인
+        </button>
+        <div className="d-flex w-100 justify-content-center">
+          <a
+            className="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+            href="/signupPage"
+          >
+            회원가입
+          </a>
+        </div>
+      </form>
+    </container>
+    // <Wrapper>
+    //   <Title>로그인</Title>
+    //   <InputWrapper>
+    //     {/* <label>아이디</label> */}
+    //     <Input
+    //       ref={idRef}
+    //       id="id"
+    //       name="id"
+    //       type="text"
+    //       placeholder="아이디를 입력해주세요"
+    //       autoComplete="off"
+    //       onChange={onChange}
+    //       // onClick={resetInput}
+    //       required
+    //     />
+    //     {/* <label>비밀번호</label> */}
+    //     <Input
+    //       ref={pwdRef}
+    //       id="password"
+    //       name="password"
+    //       type="password"
+    //       placeholder="비밀번호를 입력해주세요"
+    //       onChange={onChange}
+    //       // onClick={resetInput}
+    //       required
+    //     />
+    //     {/* <LinkWrapper>
+    //     <StyledLink to="/">아이디 찾기</StyledLink>
+    //     <StyledLink to="/">비밀번호 찾기</StyledLink>
+    //   </LinkWrapper> */}
+    //     <LinkWrapper>
+    //       <StyledLink to="/signupPage">회원가입하기</StyledLink>
+    //     </LinkWrapper>
+    //   </InputWrapper>
+    //   <Button onClick={handleSubmit} text="로그인하기" />
+    // </Wrapper>
+    // {toast === true ? (
+    //   <ToastNotification
+    //     text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."
+    //     props={setToast}
+    //   />
+    // ) : null}
   );
 }
 
