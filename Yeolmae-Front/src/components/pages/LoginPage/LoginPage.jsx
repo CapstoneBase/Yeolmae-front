@@ -121,12 +121,16 @@ function Login() {
   };
 
   return (
-    <container className="container g-3 align-items-center">
-      {/* 고정 크기로 설정하기 */}
-      <form className="form-signin w-50 p-3 m-auto">
+    <container className="container g-3">
+      <form className="form-signin p-3 m-auto" style={{ width: '400px' }}>
         <h1 className="h2 mb-3 fw-500">로그인</h1>
         <div className="form-floating my-2">
-          <input type="id" className="form-control" id="floatingId" placeholder="id" />
+          <input
+            type="id" 
+            className="form-control" 
+            id="floatingId" 
+            placeholder="id" 
+          />
           <label htmlFor="floatingId">아이디</label>
         </div>
         <div className="form-floating my-2">
