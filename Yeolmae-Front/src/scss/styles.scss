@@ -1,2 +1,15 @@
 // Import all of Bootstrap's CSS
 @import "bootstrap/scss/bootstrap";
+
+// btn-primary
+
+.btn-primary {
+    color: $purple-400;
+    background-color: $gray-100;
+    border-width: 2px;
+    border-color: $purple-400;
+}
+.btn-primary:hover {
+    border-color: $purple-400;
+    background-color: $purple-400;
+}

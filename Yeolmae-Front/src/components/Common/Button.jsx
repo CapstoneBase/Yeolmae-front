@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Button({ text, type, onClick }) {
+function Button({ text, onClick }) {
   return (
     // 클래스 이름 - 색상 변경
-    <button type="button" className="btn btn-outline-primary" onClick={onClick}>
+    <button className="btn btn-primary w-100 my-3 py-2" type="submit" onClick={onClick}>
       {text}
     </button>
   );

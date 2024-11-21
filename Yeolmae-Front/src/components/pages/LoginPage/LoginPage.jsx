@@ -125,12 +125,7 @@ function Login() {
       <form className="form-signin p-3 m-auto" style={{ width: '400px' }}>
         <h1 className="h2 mb-3 fw-500">로그인</h1>
         <div className="form-floating my-2">
-          <input
-            type="id" 
-            className="form-control" 
-            id="floatingId" 
-            placeholder="id" 
-          />
+          <input type="id" className="form-control" id="floatingId" placeholder="id" />
           <label htmlFor="floatingId">아이디</label>
         </div>
         <div className="form-floating my-2">
@@ -143,9 +138,7 @@ function Login() {
           <label htmlFor="floatingPassword">비밀번호</label>
         </div>
         {/* 토스트 알림으로 교체 */}
-        <button className="btn btn-primary w-100 my-3 py-2" type="submit" onClick={handleSubmit}>
-          로그인
-        </button>
+        <Button text="로그인" onClick={handleSubmit} />
         <div className="d-flex w-100 justify-content-center">
           <a
             className="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
