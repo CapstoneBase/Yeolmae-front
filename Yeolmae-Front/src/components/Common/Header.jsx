@@ -12,6 +12,8 @@ const StyledLink = styled(Link)`
 
 const StyledHeader = styled.header`
   display: flex;
+  // 240728 헤더 높이 수정
+  height: 40px;
   align-items: center;
   padding: 5px 15px;
   background-color: rgba(108, 108, 108, 1);
