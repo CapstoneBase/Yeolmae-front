@@ -5,8 +5,7 @@ export const authSlice = createSlice({
   name: 'auth',
   // 초기 상태(인가 여부, access token, refresh token, error)
   initialState: {
-    // user: null,
-    authenticated: false,
+    authenticated: !!localStorage.getItem('accessToken'),
     accessToken: localStorage.getItem('accessToken') || null,
     refreshToken: localStorage.getItem('refreshToken') || null,
     error: null
@@ -14,7 +13,7 @@ export const authSlice = createSlice({
   // 리듀서
   reducers: {
     SET_TOKEN: (state, action) => {
-      state.authenticated = !!action.payload;
+      state.authenticated = true;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
     },
