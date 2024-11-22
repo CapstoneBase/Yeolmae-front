@@ -3,7 +3,7 @@ import axios from 'axios';
 import { reissueTokenThunk } from '../redux/modules/reissueTokenThunk';
 
 const axiosAuthInstance = axios.create({
-  baseURL: 'api/v1',
+  baseURL: 'api/v1/members',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -15,7 +15,7 @@ axiosAuthInstance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     // 토큰 재발급이 필요한 경우
-    if (config.url === '/api/v1/login/reissue') {
+    if (config.url === '/api/refreshAccessToken') {
       config.headers.Authorization = `Bearer ${refreshToken}`;
       console.log('refresh token 요청 : ', config.headers.Authorization);
     } else {
