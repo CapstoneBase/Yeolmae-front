@@ -1,41 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_TOKEN } from '../../redux/modules/authSlice';
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledHeader = styled.header`
-  display: flex;
-  // 240728 헤더 높이 수정
-  height: 40px;
-  align-items: center;
-  padding: 5px 15px;
-  background-color: rgba(108, 108, 108, 1);
-  font-family: NotoSans Regular;
-  color: white;
-`;
-
-const StyledHeaderCenter = styled.div`
-  width: 80%;
-`;
-
-const StyledHeaderLeft = styled.div`
-  display: flex;
-  width: 10%;
-  justify-content: left;
-`;
-
-const StyledHeaderRight = styled.div`
-  display: flex;
-  width: 10%;
-  justify-content: right;
-`;
 
 function Header() {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -59,25 +24,63 @@ function Header() {
     }
   };
   return (
-    <StyledHeader className="Header">
-      <StyledHeaderLeft>
-        <StyledLink to="/">
-          <img src="/IMG_4276.PNG" width={60} alt="로고이미지" />
-        </StyledLink>
-      </StyledHeaderLeft>
-      <StyledHeaderCenter />
-      <StyledHeaderRight>
-        {authenticated ? (
-          <StyledLink to="/" onClick={handleClick}>
-            로그아웃
-          </StyledLink>
-        ) : (
-          <StyledLink to="/loginpage" onClick={handleClick}>
-            로그인
-          </StyledLink>
-        )}
-      </StyledHeaderRight>
-    </StyledHeader>
+    // 클래스이름 수정 필요
+    <header className="p-3 bg-light bg-opacity-75 border-bottom">
+      <div className="container">
+        <div className="row">
+          <div className="d-flex align-items-center justify-content-between">
+            <a
+              href="/"
+              className="d-flex mb-2 mb-lg-0 align-items-center text-dark text-decoration-none"
+            >
+              <img src="/main_logo.PNG" alt="Logo" width="60" height="32" />
+            </a>
+
+            <ul className="nav col-auto me-lg-auto mb-2 mb-md-0 justify-content-start">
+              <li>
+                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                  졸업 작품
+                </a>
+              </li>
+              <li>
+                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                  개인 프로젝트
+                </a>
+              </li>
+              <li>
+                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                  대회 및 공모전
+                </a>
+              </li>
+              <li>
+                <a href="/portfolioPage" className="nav-link px-2 text-dark">
+                  포트폴리오
+                </a>
+              </li>
+            </ul>
+
+            <ul className="nav col-auto ms-lg-auto mb-2 mb-md-0 justify-content-end">
+              <li>
+                <a href="/myPage" className="nav-link px-2 text-dark">
+                  마이페이지
+                </a>
+              </li>
+              <li>
+                {authenticated ? (
+                  <a href="/" className="nav-link px-2 text-dark" onClick={handleClick}>
+                    로그아웃
+                  </a>
+                ) : (
+                  <a href="/loginPage" className="nav-link px-2 text-dark" onClick={handleClick}>
+                    로그인
+                  </a>
+                )}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
 
