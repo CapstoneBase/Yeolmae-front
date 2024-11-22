@@ -1,45 +1,60 @@
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa6';
 
 const PaginationCol = styled.div`
   display: flex;
   justify-content: center;
-  margin: 0;
-  padding: 0;
 
+  // 페이지수 리스트
   ul {
     list-style: none;
     display: flex;
+    align-items: center;
+  }
+
+  // 각 페이지 요소
+  li {
+    padding: 6px 12px;
     list-style: none;
-    padding: 0;
+    align-self: center;
+  }
+
+  // 각 페이지 이동
+  a {
+    display: flex;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 3px;
     align-items: center;
 
-    li {
-      padding: 2px;
-      margin: 4px;
-      list-style: none;
-      display: inline;
-      align-items: center;
+    &:hover {
+      background-color: #ddd;
+    }
+  }
 
-      a.pagination {
-        border: 3px 2px solid #F5F5F5;
-        padding: 2px;
-        margin: 4px;
-        color: #6558f5;
-        cursor: pointer;
+  .active a {
+    background-color: #6558f5;
+    border-radius: 3px;
+    color: white;
+  }
 
-        &:hover {
-          background-color: #6558F5;
-          border: 3px 2px solid #6558F5;
-          border-radius: 100px;
-          color: white;
-        }
+  // 이전, 이후 선택 불가능시 스타일
+  .previous.disabled a {
+    cursor: default;
+    color: #ddd;
 
-        &.selected {
-          background-color: #6558f5;
-          color: white;
-        }
-      }
+    &:hover {
+      background-color: initial;
+    }
+  }
+
+  .next.disabled a {
+    cursor: default;
+    color: #ddd;
+
+    &:hover {
+      background-color: initial;
     }
   }
 `;
@@ -48,12 +63,13 @@ function Paginate({ pageCount, onPageChange, currentPage }) {
   return (
     <PaginationCol>
       <ReactPaginate
-        previousLabel="<"
-        nextLabel=">"
+        previousLabel={<FaArrowLeft />}
+        nextLabel={<FaArrowRight />}
         pageCount={pageCount}
         onPageChange={onPageChange}
+        forcePage={currentPage}
         pageLinkClassName="pagination"
-        activeClassName="selected"
+        activeClassName="active"
       />
     </PaginationCol>
   );
