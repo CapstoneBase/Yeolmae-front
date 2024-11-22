@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API = '/api/v1/login';
+const API = '/api/v1/members';
 
 export const reissueToken = async (refreshToken) => {
   try {
     const response = await axios.post(
-      `${API}/reissue`,
+      `${API}/refreshAccessToken`,
       {},
       {
         headers: { Authorization: `Bearer ${refreshToken}` }
