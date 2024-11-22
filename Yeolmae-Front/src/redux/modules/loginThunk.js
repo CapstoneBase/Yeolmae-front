@@ -10,10 +10,12 @@ export const loginThunk = (id, password) => async (dispatch) => {
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     console.log('토큰 저장');
+    console.log('로컬 스토리지에 저장된 access Token: ', data.accessToken);
     console.log('로컬 스토리지에 저장된 refresh Token: ', data.refreshToken);
   } catch (error) {
+    console.log(error);
     dispatch(SET_ERROR(error.message));
     dispatch(DELETE_TOKEN());
-    console.log('로그인 api 컴포넌트 에러');
+    console.log(error.message, '로그인 api 컴포넌트 에러');
   }
 };
