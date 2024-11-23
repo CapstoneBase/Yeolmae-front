@@ -13,14 +13,19 @@ export const authSlice = createSlice({
   // 리듀서
   reducers: {
     SET_TOKEN: (state, action) => {
+      const { accessToken, refreshToken } = action.payload;
       state.authenticated = true;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
     },
     DELETE_TOKEN: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
       state.authenticated = false;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
     SET_ERROR: (state, action) => {
       state.error = action.payload;

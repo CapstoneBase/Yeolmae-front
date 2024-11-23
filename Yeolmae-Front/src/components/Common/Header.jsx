@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { DELETE_TOKEN } from '../../redux/modules/authSlice';
+import { useAuth } from '../hooks/useAuth';
 
 function Header() {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -13,11 +14,11 @@ function Header() {
   //   dispatch(DELETE_TOKEN());
   // };
 
+  const { logout } = useAuth();
   const handleClick = () => {
     console.log(authenticated);
     if (authenticated) {
-      dispatch(DELETE_TOKEN());
-      navigate('/');
+      logout();
       console.log(authenticated);
     } else {
       navigate('/loginPage');
@@ -66,7 +67,10 @@ function Header() {
                 </a>
               </li>
               <li>
-                {authenticated ? (
+                <a href="#" className="nav-link px-2 text-dark" onClick={handleClick}>
+                  {authenticated ? '로그아웃' : '로그인'}
+                </a>
+                {/* {authenticated ? (
                   <a href="/" className="nav-link px-2 text-dark" onClick={handleClick}>
                     로그아웃
                   </a>
@@ -74,7 +78,7 @@ function Header() {
                   <a href="/loginPage" className="nav-link px-2 text-dark" onClick={handleClick}>
                     로그인
                   </a>
-                )}
+                )} */}
               </li>
             </ul>
           </div>
