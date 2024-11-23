@@ -15,7 +15,7 @@ import './createPostStyle.css';
 const imageServer = 'http://54.180.77.251:8080'; // 이미지 서버 URL
 
 function CreatePost() {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const quillRef = useRef();
@@ -77,22 +77,28 @@ function CreatePost() {
       return alert('내용을 입력해주세요.');
     }
 
-    const body = {
+    const body = JSON.stringify({
       title: input.title,
       description: input.description,
-      content: JSON.stringify(input.content), // content를 문자열로 변환
+      content: input.content,
       school: input.school,
       department: input.department,
-      startDate: startDate.toISOString().slice(0, 7), // MM/YYYY 형식으로 변환
-      endDate: endDate.toISOString().slice(0, 7), // MM/YYYY 형식으로 변환
+      startDate: startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
+      endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       goalAndUtilization: input.goalAndUtilization,
       files: input.fileUrlList // 파일 URL 리스트 추가
-    };
+    });
+    console.log('요청 데이터의 body:', body);
 
     try {
+      if (!accessToken) {
+        alert('로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.');
+        navigate('/api/v1/members/login');
+        return;
+      }
       const response = await axios.post('/api/v1/graduation-project-posts', body, {
         headers: {
-          Authorization: `Bearer ${refreshToken}`, // Authorization 헤더 추가
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
           'Content-Type': 'application/json'
         }
       });
@@ -101,8 +107,16 @@ function CreatePost() {
         navigate(`/postlistPage`);
       }
     } catch (err) {
-      console.error(err);
-      alert('게시글 업로드에 실패하였습니다.');
+      if (err.response) {
+        console.error('서버 에러 응답:', err.response.data);
+        alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
+      } else if (err.request) {
+        console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
+        alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
+      } else {
+        console.error('요청 설정 중 에러 발생:', err.message);
+        alert('요청 처리 중 문제가 발생했습니다.');
+      }
     }
   };
 
@@ -162,8 +176,7 @@ function CreatePost() {
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
-              dateFormat="yyyy/MM"
-              showMonthYearPicker
+              dateFormat="yyyy-MM-dd"
               className="form-control"
             />
           </Col>
@@ -171,8 +184,7 @@ function CreatePost() {
             <DatePicker
               selected={endDate}
               onChange={(date) => setEndDate(date)}
-              dateFormat="yyyy/MM"
-              showMonthYearPicker
+              dateFormat="yyyy-MM-dd"
               className="form-control"
             />
           </Col>
