@@ -1,55 +1,34 @@
-import React, { ReactChild, useEffect, useRef, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import styled from 'styled-components';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import QuillEditor from './QuillEditor';
 import { uploadImage } from '../../../api/uploadImage';
-// import axios from '../hooks/useAxios';
-// import SelectBox from '../../Common/SelectBox';
-import Thumbnail from '../../Common/Thumbnail';
 import FilesLabel from '../../Common/FilesLabel';
 import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
-import Button from '../../Common/Button';
 import './createPostStyle.css';
 
-const formats = [
-  'font',
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'align',
-  'color',
-  'background',
-  'size',
-  'h1'
-];
-
-const imageServer = 'http://13.124.45.191:8080'; // 이미지 서버 URL
+// const imageServer = 'http://54.180.77.251:8080'; // 이미지 서버 URL
 
 function CreatePost() {
-  const refreshToken = localStorage.getItem('refreshToken');
-  const [range, setRange] = useState();
-  const [lastChange, setLastChange] = useState();
-  const [readOnly, setReadOnly] = useState(false);
-
-  // Use a ref to access the quill instance directly
+  const accessToken = localStorage.getItem('accessToken');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const quillRef = useRef();
-
   const [input, setInput] = useState({
-    category: '000101', // Default. 인문학일반(000101)
-    parentCategory: '0001', // Default. 인문학(0001)
+    // category: '000101', // Default. 인문학일반(000101)
+    // parentCategory: '0001', // Default. 인문학(0001)
     title: '',
+    description: '',
     content: '',
-    imageUrl: '',
-    fileUrlList: []
+    fileUrlList: [],
+    school: '',
+    department: '',
+    goalAndUtilization: ''
   });
 
   const onChange = (e) => {
@@ -60,165 +39,202 @@ function CreatePost() {
     });
   };
 
-  /* const { resetBoard } = useState();
-  // effect : 마운트 시 실행할 함수
-  useEffect(() => {
-    resetBoard();
-  }, []); */
-
   const navigate = useNavigate();
-
-  const handleImage = async (e) => {
-    const file = e.target.files[0];
-
-    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
-    formData.append('multipartFile', file);
-
-    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
-    const res = await uploadImage(formData);
-    if (res.length === 0 || !res[0].fileUrl) {
-      alert('이미지 업로드에 실패하였습니다.');
-    }
-
-    const imageUrl = `${imageServer}${res[0].fileUrl}`;
-    setInput({
-      ...input,
-      content: quillRef.current.editor.root.innerHTML,
-      imageUrl
-    });
-  };
 
   const handleAttach = async (e) => {
     const file = e.target.files[0];
-
-    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
+    const formData = new FormData(); // 파일을 URL로 바꾸기 위해 서버로 전달할 폼데이터 만들기
     formData.append('multipartFile', file);
 
-    // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
-    const res = await uploadImage(formData);
-    if (res.length === 0 || !res[0].fileUrl) {
-      alert('파일 업로드에 실패하였습니다.');
-    }
+    try {
+      const res = await axios.post('YOUR_UPLOAD_URL', formData);
+      if (res.data.length === 0 || !res.data[0].fileUrl) {
+        alert('파일 업로드에 실패하였습니다.');
+        return;
+      }
 
-    const fileUrl = `${res[0].fileUrl}`;
-    setInput({
-      ...input,
-      content: quillRef.current.editor.root.innerHTML,
-      fileUrlList: [...input.fileUrlList, fileUrl]
-    });
-    e.target.value = '';
+      const fileUrl = `${res.data[0].fileUrl}`;
+      setInput({
+        ...input,
+        content: quillRef.current.editor.root.innerHTML,
+        fileUrlList: [...input.fileUrlList, fileUrl]
+      });
+      e.target.value = '';
+    } catch (err) {
+      console.error('파일 업로드 중 오류가 발생하였습니다.', err);
+    }
   };
 
-  const submitPost = (e) => {
+  const submitPost = async (e) => {
     e.preventDefault();
 
     if (!input.title) {
       return alert('제목을 입력해주세요.');
     }
 
-    input.content = quillRef.current.getEditor().getText(); // 태그를 제외한 순수 text만을 받아온다. 검색기능을 구현하지 않을 거라면 굳이 text만 따로 저장할 필요는 없다.
+    input.content = quillRef.current.getEditor().getContents(); // Delta 포맷으로 저장
     if (!input.content) {
       return alert('내용을 입력해주세요.');
     }
 
     const body = {
-      category: input.category,
-      parentCategory: input.parentCategory,
       title: input.title,
+      description: input.description,
       content: input.content,
-      imageUrl: input.imageUrl,
-      fileUrlList: input.fileUrlList
+      school: input.school,
+      department: input.department,
+      startDate: startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
+      endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
+      goalAndUtilization: input.goalAndUtilization,
+      files: input.fileUrlList // 파일 URL 리스트 추가
     };
+    console.log('요청 데이터의 body:', body);
+    console.log('요청 데이터의 body title:', body.title);
+    console.log('요청 데이터의 body content:', body.content);
 
-    // 현재 페이지 url의 파라미터 가져와 postID 저장하기
-    // const postId = document.location.href.split('?');
-    // body.append('postId', postId);
-
-    axios
-      .post('/api/v1/posts', body, { headers: { Authorization: `Bearer ${refreshToken}` } })
-      .then((res) => {
-        console.log(input);
-        console.log(res.data);
-        // console.log(res);
-        if (res.status === 200) {
-          console.log('게시글 작성 성공');
-          const postsid = res.data.data;
-          navigate(`/postlistPage`);
-        }
-      })
-      .catch((err) => {
-        console.log(input);
-        console.error(err);
-        if (!err.response || err.response.status === 403) {
-          alert('게시글 업로드에 실패하였습니다.');
+    try {
+      if (!accessToken) {
+        alert('로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.');
+        navigate('/loginPage'); // 로그인 라우터 주소
+        return;
+      }
+      const response = await axios.post('/api/v1/graduation-project-posts', body, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
+          'Content-Type': 'application/json'
         }
       });
-    return null;
+      console.log(response.data);
+      if (response.status === 200) {
+        console.log('게시글 작성 성공');
+        navigate(`/postlistPage`);
+      }
+    } catch (err) {
+      if (err.response) {
+        console.error('서버 에러 응답:', err.response.data);
+        alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
+      } else if (err.request) {
+        console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
+        alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
+      } else {
+        console.error('요청 설정 중 에러 발생:', err.message);
+        alert('요청 처리 중 문제가 발생했습니다.');
+      }
+    }
   };
 
   return (
-    <form className="Wrapper">
-      <div className="SelectboxContainer">
-        <Select
-          key="selParentCategory"
-          name="parentCategory"
-          onChange={onChange}
-          value={input.parentCategory}
-        >
-          {Categories.map((item) =>
-            item.parntCateId === '00' ? (
-              <option key={`selParentCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
-              </option>
-            ) : null
-          )}
-        </Select>
-        <Select key="selCategory" name="category" onChange={onChange} value={input.category}>
-          {Categories.map((item) =>
-            item.parntCateId === input.parentCategory ? (
-              <option key={`selCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
-              </option>
-            ) : null
-          )}
-        </Select>
-      </div>
-      <div className="CreateBoardTitleBox">
-        <input
-          className="InputBoardTitle"
-          id="title"
-          name="title"
+    <Form className="container mt-5" onSubmit={submitPost}>
+      <Form.Group className="form-group" controlId="formTitle">
+        <Form.Label>제목</Form.Label>
+        <Form.Control
           type="text"
           placeholder="제목"
+          name="title"
+          value={input.title}
           onChange={onChange}
+          className="form-control"
         />
-      </div>
-      <div className="CreateBoardContentBox">
+      </Form.Group>
+      <Form.Group className="form-group" controlId="formDescription">
+        <Form.Label>설명</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="설명"
+          name="description"
+          value={input.description}
+          onChange={onChange}
+          className="form-control"
+        />
+      </Form.Group>
+      <Form.Group className="form-group" controlId="formSchool">
+        <Form.Label>학교</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="학교"
+          name="school"
+          value={input.school}
+          onChange={onChange}
+          className="form-control"
+        />
+      </Form.Group>
+      <Form.Group className="form-group" controlId="formDepartment">
+        <Form.Label>전공</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="전공"
+          name="department"
+          value={input.department}
+          onChange={onChange}
+          className="form-control"
+        />
+      </Form.Group>
+
+      {/* 프로젝트 기간 */}
+      <Form.Group className="form-group">
+        <Form.Label>프로젝트 기간</Form.Label>
+        <Row className="align-items-center">
+          <Col>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              dateFormat="yyyy-MM-dd"
+              className="form-control"
+            />
+          </Col>
+          <Col>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              dateFormat="yyyy-MM-dd"
+              className="form-control"
+            />
+          </Col>
+        </Row>
+      </Form.Group>
+
+      <Form.Group className="form-group" controlId="formGoalAndUtilization">
+        <Form.Label className="multiline-label">
+          프로젝트 목표와
+          <br />
+          활용 방안
+        </Form.Label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="프로젝트 목표와 활용 방안"
+          name="goalAndUtilization"
+          value={input.goalAndUtilization}
+          onChange={onChange}
+          className="form-control"
+        />
+      </Form.Group>
+
+      <Form.Group className="form-group" controlId="formContent">
+        <Form.Label>내용</Form.Label>
         <QuillEditor
           quillRef={quillRef}
-          className="InputBoardQuill"
-          id="content"
-          name="content"
-          type="text"
-          placeholder="내용"
+          value={input.content}
           onChange={onChange}
-          htmlContent={input.content}
+          className="form-control quill-editor"
         />
-      </div>
-      <div className="FilesWrap">
-        <FilesLabel>Thumbnail</FilesLabel>
-        <Thumbnail src={input.imageUrl} />
-        <input type="file" accept="image/*" onChange={handleImage} />
-      </div>
-      <div className="FilesWrap">
-        <FilesLabel>Attach</FilesLabel>
-        <input type="file" onChange={handleAttach} />
-        {input.fileUrlList.map((item) => (
-          <a href={`attach${item.index}`}>{item}</a> // eslint 문법에 맞게 수정 필요
+      </Form.Group>
+      <Form.Group className="form-group" controlId="formAttachments">
+        <Form.Label>첨부 파일</Form.Label>
+        <Form.Control type="file" onChange={handleAttach} className="form-control" />
+        {input.fileUrlList.map((item, index) => (
+          <a key={index} href={item}>
+            첨부 파일 {index + 1}
+          </a>
         ))}
-      </div>
-      <Button onClick={submitPost} text="작성완료" />
-    </form>
+      </Form.Group>
+      <Form.Group className="form-group text-center">
+        <Button type="submit" className="btn btn-primary">
+          작성완료
+        </Button>
+      </Form.Group>
+    </Form>
   );
 }
 export default CreatePost;
