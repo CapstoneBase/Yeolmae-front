@@ -1,16 +1,11 @@
-import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
 import Categories from '../../Common/Categories';
-import AuthButton from './AuthButton';
+import Button from '../../Common/Button';
+import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
-import Paginate from './Pagination';
-
-const SelectBoxCol = styled.div`
-  display: flex;
-  margin: 0 30px;
-`;
+import Paginate from '../../Common/Pagination';
 
 function PostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
@@ -58,43 +53,71 @@ function PostList() {
 
   return (
     <>
-      <SelectBoxCol>
-        <Select
-          key="selParentCategory"
-          name="parentCategory"
-          onChange={handleCatChange}
-          value={input.parentCategory}
-        >
-          {Categories.map((item) =>
-            item.parntCateId === '00' ? (
-              <option key={`selParentCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
-              </option>
-            ) : null
-          )}
-        </Select>
-        <Select key="selCategory" name="category" onChange={handleCatChange} value={input.category}>
-          {Categories.map((item) =>
-            item.parntCateId === input.parentCategory ? (
-              <option key={`selCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
-              </option>
-            ) : null
-          )}
-        </Select>
-      </SelectBoxCol>
+      <div className="row mx-5 my-4 px-4">
+        <h2>졸업작품</h2>
+      </div>
+      <div className="row m-5 px-4 justify-content-between">
+        <div className="d-flex gap-3 col-lg-4 col-md-8 col-sm-8">
+          <select
+            className="form-select"
+            key="selParentCategory"
+            name="parentCategory"
+            onChange={handleCatChange}
+            value={input.parentCategory}
+          >
+            {Categories.map((item) =>
+              item.parntCateId === '00' ? (
+                <option key={`selParentCategory${item.cateId}`} value={item.cateId}>
+                  {item.cateName}
+                </option>
+              ) : null
+            )}
+          </select>
+          <select
+            className="form-select"
+            key="selCategory"
+            name="category"
+            onChange={handleCatChange}
+            value={input.category}
+          >
+            {Categories.map((item) =>
+              item.parntCateId === input.parentCategory ? (
+                <option key={`selCategory${item.cateId}`} value={item.cateId}>
+                  {item.cateName}
+                </option>
+              ) : null
+            )}
+          </select>
+        </div>
+        <div className="col-lg-3 col-md-4 col-sm-4">
+          <div className="input-group">
+            <input type="text" className="form-control" placeholder="검색 키워드를 입력해주세요" />
+            <button type="submit" className="btn btn-primary">
+              검색
+            </button>
+          </div>
+        </div>
+      </div>
+
       <PageGrid
-        parCategory={input.parentCategory}
-        category={input.category}
+        // parCategory={input.parentCategory}
+        // category={input.category}
         page={curPage}
         size={pageSize}
       />
-      <Paginate
-        pageCount={Math.ceil(totalItems / pageSize)}
-        onPageChange={handlePageClick}
-        currentPage={curPage}
-      />
-      <AuthButton />
+      <div className="row align-items-center">
+        <div className="col-3" />
+        <div className="col-6 d-flex justify-content-center align-items-center">
+          <Paginate
+            pageCount={Math.ceil(totalItems / pageSize)}
+            onPageChange={handlePageClick}
+            currentPage={curPage}
+          />
+        </div>
+        <div className="col-2 d-flex justify-content-end px-5">
+          <AuthButton />
+        </div>
+      </div>
     </>
   );
 }
