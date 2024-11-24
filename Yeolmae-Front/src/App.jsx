@@ -24,22 +24,24 @@ const App = memo(() => {
       <Header />
       {/* <GlobalStyle />
       <ThemeProvider theme={theme}> */}
-      <main>
-        <Suspense>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/signupPage" element={<Signup />} />
-            <Route path="/loginPage" element={<Login />} />
-            <Route path="/postlistPage" element={<PostList />} />
-            <Route
-              path="/posts/create"
-              element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
-            />
-            <Route path="/posts/:id" element={<ViewPost />} />
-            <Route path="*" element={<Notfound />} />
-          </Routes>
-        </Suspense>
-      </main>
+      <div className="container-xl bd-gutter bd-layout">
+        <main>
+          <Suspense>
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/signupPage" element={<Signup />} />
+              <Route path="/loginPage" element={<Login />} />
+              <Route path="/postlistPage" element={<PostList />} />
+              <Route
+                path="/posts/create"
+                element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
+              />
+              <Route path="/posts/:id" element={<ViewPost />} />
+              <Route path="*" element={<Notfound />} />
+            </Routes>
+          </Suspense>
+        </main>
+      </div>
       {/* </ThemeProvider> */}
     </>
   );
