@@ -12,6 +12,7 @@ const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
 const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
+const CommentList = lazy(() => import('./components/pages/Comment/CommentList'));
 // const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
 // <Link to="/posts/update/:id">게시글 수정</Link>
 // <Route path="/posts/update/:id" element={<UpdatePost />} />
@@ -36,6 +37,7 @@ const App = memo(() => {
               element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
             />
             <Route path="/posts/:id" element={<ViewPost />} />
+            <Route path="/posts/:id/comments" element={<CommentList />} />
             <Route path="*" element={<Notfound />} />
           </Routes>
         </Suspense>
