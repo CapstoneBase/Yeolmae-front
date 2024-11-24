@@ -39,33 +39,50 @@ function Header() {
 
             <ul className="nav col-auto me-lg-auto mb-2 mb-md-0 justify-content-start">
               <li>
-                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                <a href="/gradPostlistPage" className="nav-link px-2 text-dark">
                   졸업 작품
                 </a>
               </li>
               <li>
-                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                <a href="/otherPostlistPage" className="nav-link px-2 text-dark">
                   개인 프로젝트
                 </a>
               </li>
               <li>
-                <a href="/postlistPage" className="nav-link px-2 text-dark">
+                <a href="/contPostlistPage" className="nav-link px-2 text-dark">
                   대회 및 공모전
-                </a>
-              </li>
-              <li>
-                <a href="/portfolioPage" className="nav-link px-2 text-dark">
-                  포트폴리오
                 </a>
               </li>
             </ul>
 
             <ul className="nav col-auto ms-lg-auto mb-2 mb-md-0 justify-content-end">
-              <li>
-                <a href="/myPage" className="nav-link px-2 text-dark">
-                  마이페이지
+              {/* <li>
+                <a href="/portfolioPage" className="nav-link px-2 text-dark">
+                  포트폴리오
                 </a>
               </li>
+              <li>
+                <a href="/profilePage" className="nav-link px-2 text-dark">
+                  {authenticated ? '마이프로필' : ''}
+                </a>
+              </li> */}
+
+              {authenticated ? (
+                <>
+                  <li>
+                    <a href="/portfolioPage" className="nav-link px-2 text-dark">
+                      포트폴리오
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/profilePage" className="nav-link px-2 text-dark">
+                      마이프로필
+                    </a>
+                  </li>
+                </>
+              ) : (
+                ''
+              )}
               <li>
                 <a href="#" className="nav-link px-2 text-dark" onClick={handleClick}>
                   {authenticated ? '로그아웃' : '로그인'}

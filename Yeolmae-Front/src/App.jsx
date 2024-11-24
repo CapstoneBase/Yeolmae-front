@@ -9,8 +9,12 @@ import Header from './components/Common/Header';
 const Main = lazy(() => import('./components/pages/MainPage/MainPage'));
 const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
+const ProfilePage = lazy(() => import('./components/pages/ProfilePage/ProfilePage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
+const GradPostList = lazy(() => import('./components/pages/PostListPage/GradPostListPage'));
+const OtherPostList = lazy(() => import('./components/pages/PostListPage/OtherPostListPage'));
+const ContPostList = lazy(() => import('./components/pages/PostListPage/ContPostListPage'));
 const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
 // const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
 // <Link to="/posts/update/:id">게시글 수정</Link>
@@ -31,7 +35,11 @@ const App = memo(() => {
               <Route path="/" element={<Main />} />
               <Route path="/signupPage" element={<Signup />} />
               <Route path="/loginPage" element={<Login />} />
+              <Route path="/profilePage" element={<ProfilePage />} />
               <Route path="/postlistPage" element={<PostList />} />
+              <Route path="/gradPostlistPage" element={<GradPostList />} />
+              <Route path="/otherPostlistPage" element={<OtherPostList />} />
+              <Route path="/contPostlistPage" element={<ContPostList />} />
               <Route
                 path="/posts/create"
                 element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
