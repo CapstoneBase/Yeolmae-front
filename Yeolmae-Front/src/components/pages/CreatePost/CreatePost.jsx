@@ -12,7 +12,7 @@ import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import './createPostStyle.css';
 
-const imageServer = 'http://54.180.77.251:8080'; // 이미지 서버 URL
+// const imageServer = 'http://54.180.77.251:8080'; // 이미지 서버 URL
 
 function CreatePost() {
   const accessToken = localStorage.getItem('accessToken');
@@ -77,7 +77,7 @@ function CreatePost() {
       return alert('내용을 입력해주세요.');
     }
 
-    const body = JSON.stringify({
+    const body = {
       title: input.title,
       description: input.description,
       content: input.content,
@@ -87,13 +87,15 @@ function CreatePost() {
       endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       goalAndUtilization: input.goalAndUtilization,
       files: input.fileUrlList // 파일 URL 리스트 추가
-    });
+    };
     console.log('요청 데이터의 body:', body);
+    console.log('요청 데이터의 body title:', body.title);
+    console.log('요청 데이터의 body content:', body.content);
 
     try {
       if (!accessToken) {
         alert('로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.');
-        navigate('/api/v1/members/login');
+        navigate('/loginPage'); // 로그인 라우터 주소
         return;
       }
       const response = await axios.post('/api/v1/graduation-project-posts', body, {
@@ -102,6 +104,7 @@ function CreatePost() {
           'Content-Type': 'application/json'
         }
       });
+      console.log(response.data);
       if (response.status === 200) {
         console.log('게시글 작성 성공');
         navigate(`/postlistPage`);
