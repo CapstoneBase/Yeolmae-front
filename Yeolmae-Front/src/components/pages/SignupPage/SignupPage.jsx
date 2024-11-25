@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Wrapper from '../../Common/Wrapper';
-import Title from '../../Common/Title';
 import InputWrapper from '../../Common/InputWrapper';
 import AuthInputField from '../../Common/AuthInputField';
 import Button from '../../Common/Button';
+import usePageTitle from '../../../hooks/usePageTitle';
 
 const Label = styled.label`
   text-align: left;
@@ -23,7 +23,7 @@ const Hint = styled.span`
   font-size: 15px;
   color: red;
   margin-bottom: 10px;
-`
+`;
 const baseAPI = axios.create({
   baseURL: 'api/v1',
   headers: {
@@ -39,10 +39,9 @@ function SignupPage() {
     password: '',
     name: ''
   });
-
-  const [toast, setToast] = useState(false);
-
   const navigate = useNavigate();
+  usePageTitle('회원가입');
+  const [toast, setToast] = useState(false);
 
   const onChange = (e) => {
     if (e.target.name === 'id') {
@@ -53,9 +52,9 @@ function SignupPage() {
       [e.target.name]: e.target.value
     });
   };
-  
+
   const actDupCheck = async (id) => {
-    const API = '/users/check';
+    const API = '/members';
     const body = { id };
 
     // console.log('request body: ', body);
@@ -106,7 +105,7 @@ function SignupPage() {
     return null;
   };
 
-  const actSighup = async (body) => {
+  const actSignup = async (body) => {
     const API = '/users';
     // console.log('request body: ', body);
     try {
@@ -128,10 +127,10 @@ function SignupPage() {
     }
   };
 
-  const doSighup = (param) => async () => {
+  const doSignup = (param) => async () => {
     try {
       console.log('dosignup try');
-      const data = await actSighup(param);
+      const data = await actSignup(param);
       if (data) {
         alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
         navigate('/loginPage');
@@ -186,7 +185,7 @@ function SignupPage() {
     // 로그인 후 비밀번호 입력값 제거
     // setInput(input.password, '');
 
-    dispatch(doSighup(body));
+    dispatch(doSignup(body));
     return null;
   };
 
@@ -195,7 +194,6 @@ function SignupPage() {
   // #####################################################################
   return (
     <Wrapper>
-      <Title>회원가입하기</Title>
       <InputWrapper>
         <Label>아이디</Label>
         <AuthInputField
