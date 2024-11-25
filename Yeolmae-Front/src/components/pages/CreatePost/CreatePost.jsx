@@ -112,7 +112,8 @@ function CreatePost() {
       console.log(response.data);
       if (response.status === 200) {
         console.log('게시글 작성 성공');
-        navigate(`/postlistPage`);
+        const postId = response.data.id; // 서버가 반환한 게시글 ID를 추출
+        navigate(`/posts/${postId}`); // 해당 게시글 페이지로 이동
       }
     } catch (err) {
       if (err.response) {
