@@ -20,15 +20,15 @@ function CreatePost() {
   const [endDate, setEndDate] = useState(new Date());
   const quillRef = useRef();
   const [input, setInput] = useState({
-    // category: '000101', // Default. 인문학일반(000101)
-    // parentCategory: '0001', // Default. 인문학(0001)
     title: '',
     description: '',
     content: '',
-    fileUrlList: [],
     school: '',
     department: '',
-    goalAndUtilization: ''
+    mainCategory: '0001', // Default. 인문학(0001)
+    subCategory: '000101', // Default. 인문학일반(000101)
+    goalAndUtilization: '',
+    fileUrlList: []
   });
 
   const onChange = (e) => {
@@ -83,6 +83,8 @@ function CreatePost() {
       content: input.content,
       school: input.school,
       department: input.department,
+      mainCategory: input.mainCategory,
+      subCategory: input.subCategory,
       startDate: startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       goalAndUtilization: input.goalAndUtilization,
@@ -125,8 +127,8 @@ function CreatePost() {
 
   return (
     <Form className="container mt-5" onSubmit={submitPost}>
-      <Form.Group className="form-group" controlId="formTitle">
-        <Form.Label>제목</Form.Label>
+      <Form.Group className="form-group" controlId="formCategories">
+        <Form.Label>카테고리</Form.Label>
         <Form.Control
           type="text"
           placeholder="제목"
@@ -135,6 +137,36 @@ function CreatePost() {
           onChange={onChange}
           className="form-control"
         />
+      </Form.Group>
+      <Form.Group className="form-group" controlId="formTitle">
+        <Select
+          key="selMainCategory"
+          name="MainCategory"
+          onChange={onChange}
+          value={input.mainCategory}
+        >
+          {Categories.map((item) =>
+            item.parntCateId === '00' ? (
+              <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
+                {item.cateName}
+              </option>
+            ) : null
+          )}
+        </Select>
+        <Select
+          key="selSubCategory"
+          name="SubCategory"
+          onChange={onChange}
+          value={input.subcategory}
+        >
+          {Categories.map((item) =>
+            item.parntCateId === input.mainCategory ? (
+              <option key={`selSubCategory${item.cateId}`} value={item.cateId}>
+                {item.cateName}
+              </option>
+            ) : null
+          )}
+        </Select>
       </Form.Group>
       <Form.Group className="form-group" controlId="formDescription">
         <Form.Label>설명</Form.Label>
