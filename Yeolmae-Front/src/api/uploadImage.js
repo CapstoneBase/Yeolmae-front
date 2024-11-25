@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = '/api/v1/files';
+const API = '/api/v1/graduation-project-posts';
 
 export const uploadImage = async (formData) => {
   try {

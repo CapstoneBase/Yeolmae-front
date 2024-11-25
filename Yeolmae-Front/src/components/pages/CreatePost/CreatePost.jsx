@@ -12,8 +12,6 @@ import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import './createPostStyle.css';
 
-// const imageServer = 'http://54.180.77.251:8080'; // 이미지 서버 URL
-
 function CreatePost() {
   const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
@@ -47,7 +45,7 @@ function CreatePost() {
     formData.append('multipartFile', file);
 
     try {
-      const res = await axios.post('YOUR_UPLOAD_URL', formData);
+      const res = await axios.post('/api/v1/upload', formData);
       if (res.data.length === 0 || !res.data[0].fileUrl) {
         alert('파일 업로드에 실패하였습니다.');
         return;
@@ -60,6 +58,7 @@ function CreatePost() {
         fileUrlList: [...input.fileUrlList, fileUrl]
       });
       e.target.value = '';
+      console.log('fileUrl: ', fileUrl);
     } catch (err) {
       console.error('파일 업로드 중 오류가 발생하였습니다.', err);
     }
@@ -80,19 +79,23 @@ function CreatePost() {
     const body = {
       title: input.title,
       description: input.description,
-      content: input.content,
+      content: input.content, // JSON 형식의 데이터
       school: input.school,
       department: input.department,
       mainCategory: input.mainCategory,
       subCategory: input.subCategory,
       startDate: startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
-      goalAndUtilization: input.goalAndUtilization,
-      files: input.fileUrlList // 파일 URL 리스트 추가
+      goalAndUtilization: input.goalAndUtilization
     };
-    console.log('요청 데이터의 body:', body);
-    console.log('요청 데이터의 body title:', body.title);
-    console.log('요청 데이터의 body content:', body.content);
+
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(body)); // JSON 데이터를 문자열로 변환하여 추가
+    input.fileUrlList.forEach((fileUrl, index) => {
+      formData.append(`files[${index}]`, fileUrl); // 파일 URL 리스트를 form-data로 추가
+    });
+
+    console.log('Request FormData:', formData); // 전송할 formData를 콘솔에 출력하여 확인
 
     try {
       if (!accessToken) {
@@ -100,10 +103,10 @@ function CreatePost() {
         navigate('/loginPage'); // 로그인 라우터 주소
         return;
       }
-      const response = await axios.post('/api/v1/graduation-project-posts', body, {
+      const response = await axios.post('/api/v1/graduation-project-posts', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       });
       console.log(response.data);
@@ -128,20 +131,9 @@ function CreatePost() {
   return (
     <Form className="container mt-5" onSubmit={submitPost}>
       <Form.Group className="form-group" controlId="formCategories">
-        <Form.Label>카테고리</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="제목"
-          name="title"
-          value={input.title}
-          onChange={onChange}
-          className="form-control"
-        />
-      </Form.Group>
-      <Form.Group className="form-group" controlId="formTitle">
         <Select
           key="selMainCategory"
-          name="MainCategory"
+          name="mainCategory"
           onChange={onChange}
           value={input.mainCategory}
         >
@@ -155,9 +147,9 @@ function CreatePost() {
         </Select>
         <Select
           key="selSubCategory"
-          name="SubCategory"
+          name="subCategory"
           onChange={onChange}
-          value={input.subcategory}
+          value={input.subCategory}
         >
           {Categories.map((item) =>
             item.parntCateId === input.mainCategory ? (
@@ -168,11 +160,20 @@ function CreatePost() {
           )}
         </Select>
       </Form.Group>
+      <Form.Group className="form-group" controlId="formTitle">
+        <Form.Control
+          type="text"
+          placeholder="제목"
+          name="title"
+          value={input.title}
+          onChange={onChange}
+          className="form-control"
+        />
+      </Form.Group>
       <Form.Group className="form-group" controlId="formDescription">
-        <Form.Label>설명</Form.Label>
         <Form.Control
           as="textarea"
-          rows={3}
+          rows={2}
           placeholder="설명"
           name="description"
           value={input.description}
@@ -181,7 +182,6 @@ function CreatePost() {
         />
       </Form.Group>
       <Form.Group className="form-group" controlId="formSchool">
-        <Form.Label>학교</Form.Label>
         <Form.Control
           type="text"
           placeholder="학교"
@@ -192,7 +192,6 @@ function CreatePost() {
         />
       </Form.Group>
       <Form.Group className="form-group" controlId="formDepartment">
-        <Form.Label>전공</Form.Label>
         <Form.Control
           type="text"
           placeholder="전공"
@@ -202,8 +201,6 @@ function CreatePost() {
           className="form-control"
         />
       </Form.Group>
-
-      {/* 프로젝트 기간 */}
       <Form.Group className="form-group">
         <Form.Label>프로젝트 기간</Form.Label>
         <Row className="align-items-center">
@@ -227,14 +224,9 @@ function CreatePost() {
       </Form.Group>
 
       <Form.Group className="form-group" controlId="formGoalAndUtilization">
-        <Form.Label className="multiline-label">
-          프로젝트 목표와
-          <br />
-          활용 방안
-        </Form.Label>
         <Form.Control
           as="textarea"
-          rows={3}
+          rows={2}
           placeholder="프로젝트 목표와 활용 방안"
           name="goalAndUtilization"
           value={input.goalAndUtilization}
@@ -244,7 +236,6 @@ function CreatePost() {
       </Form.Group>
 
       <Form.Group className="form-group" controlId="formContent">
-        <Form.Label>내용</Form.Label>
         <QuillEditor
           quillRef={quillRef}
           value={input.content}
