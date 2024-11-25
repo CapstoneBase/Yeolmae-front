@@ -1,5 +1,4 @@
 /* eslint-disable no-alert */
-import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,20 +9,6 @@ import AuthInputField from '../../Common/AuthInputField';
 import Button from '../../Common/Button';
 import usePageTitle from '../../../hooks/usePageTitle';
 
-const Label = styled.label`
-  text-align: left;
-  flex-basis: 20%;
-`;
-const Hint = styled.span`
-  display: block;
-  flex-basis: 20%;
-  line-height: 15px;
-  margin: 0px;
-  padding: 0px;
-  font-size: 15px;
-  color: red;
-  margin-bottom: 10px;
-`;
 const baseAPI = axios.create({
   baseURL: 'api/v1',
   headers: {
@@ -193,51 +178,60 @@ function SignupPage() {
   // 출력
   // #####################################################################
   return (
-    <Wrapper>
-      <InputWrapper>
-        <Label>아이디</Label>
-        <AuthInputField
-          id="id"
-          name="id"
-          type="text"
-          placeholder="아이디를 입력해주세요"
-          autoComplete="off"
-          onChange={onChange}
-          // onClick={resetInput}
-          required
-        />
-        <Button onClick={handleDuplicate} text="중복확인" />
-      </InputWrapper>
-      {input.id !== '' && !validId && <Hint>아이디는 2~16자 이내의 영문,숫자만 가능합니다.</Hint>}
-      <InputWrapper>
-        <Label>비밀번호</Label>
-        <AuthInputField
-          id="password"
-          name="password"
-          type="password"
-          placeholder="비밀번호를 입력해주세요"
-          onChange={onChange}
-          // onClick={resetInput}
-          required
-        />
-      </InputWrapper>
-      {input.password !== '' && !validPw && (
-        <Hint>비밀번호는 10자 이상의 영문(대소문자), 숫자만 가능합니다.</Hint>
-      )}
-      <InputWrapper>
-        <Label>이름</Label>
-        <AuthInputField
-          id="name"
-          name="name"
-          type="text"
-          placeholder="이름을 입력해주세요"
-          onChange={onChange}
-          // onClick={resetInput}
-          required
-        />
-      </InputWrapper>
-      <Button onClick={handleSubmit} text="가입하기" />
-    </Wrapper>
+    <container className="container g-3">
+      <h1 className="h2 mb-3 fw-500">회원가입</h1>
+      <form className="form-signin p-3 m-auto" style={{ maxWidth: '400px' }}>
+        <div className="form-floating my-2">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingId"
+            name="id"
+            placeholder="아이디를 입력해주세요"
+            autoComplete="off"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingId">아이디</label>
+          <Button onClick={handleDuplicate} text="중복확인" />
+        </div>
+        {input.id !== '' && !validId && (
+          <div className="form-text text-danger">
+            아이디는 2~16자 이내의 영문, 숫자만 가능합니다.
+          </div>
+        )}
+        <div className="form-floating my-2">
+          <input
+            type="password"
+            className="form-control"
+            id="floatingPassword"
+            name="password"
+            placeholder="비밀번호를 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingPassword">비밀번호</label>
+        </div>
+        {input.password !== '' && !validPw && (
+          <div className="form-text text-danger">
+            비밀번호는 10자 이상의 영문(대소문자), 숫자만 가능합니다.
+          </div>
+        )}
+        <div className="form-floating my-2">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingName"
+            name="name"
+            placeholder="이름을 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingName">이름</label>
+        </div>
+        <Button text="가입하기" onClick={handleSubmit} />
+      </form>
+    </container>
   );
 }
 
