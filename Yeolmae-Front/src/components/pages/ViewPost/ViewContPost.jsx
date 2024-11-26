@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import PostDetail from './PostDetail';
+import PostDetail from './ContPostDetail';
 import './viewPostStyle.css';
 
-function ViewPost() {
-  const { id } = useParams(); // /board/:id와 동일한 변수명으로 데이터를 꺼낼 수 있다
+function ViewContPost() {
+  const { postId } = useParams(); // /board/:id와 동일한 변수명으로 데이터를 꺼낼 수 있다
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
 
-  const getBoard = async () => {
+  const getBoard = async (id) => {
     try {
-      const response = await axios.get(`/api/v1/graduation-project-posts/${id}`);
+      const response = await axios.get(`/api/v1/contest-posts/${id}`);
       setBoard(response.data);
       setLoading(false);
     } catch (error) {
@@ -20,8 +20,10 @@ function ViewPost() {
   };
 
   useEffect(() => {
-    getBoard();
-  }, []);
+    if(postId) {
+      getBoard(postId);
+    }
+  }, [postId]);
 
   return (
     <div>
@@ -33,15 +35,14 @@ function ViewPost() {
           authorName={board.authorName}
           title={board.title}
           mainCategory={board.mainCategory}
-          subCategory={board.subCategory}
           description={board.description}
           content={board.content}
-          school={board.school}
-          department={board.department}
+          hostingOrganization={board.hostingOrganization}
+          sponsorOrganization={board.sponsorOrganization}
+          relatedWebsite={board.relatedWebsite}
           startDate={board.startDate}
           endDate={board.endDate}
-          goalAndUtilization={board.goalAndUtilization}
-          files={board.fileUrls}
+          fileUrls={board.fileUrls}
           createdAt={board.createdAt}
         />
       )}
@@ -49,4 +50,4 @@ function ViewPost() {
   );
 }
 
-export default ViewPost;
+export default ViewContPost;

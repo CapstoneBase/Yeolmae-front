@@ -12,7 +12,7 @@ import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import './createPostStyle.css';
 
-function CreatePost() {
+function CreateGradPost() {
   const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -114,7 +114,7 @@ function CreatePost() {
         if (res.status === 200) {
           console.log('게시글 작성 성공');
           const postId = res.data.id; // 서버가 반환한 게시글 ID 추출
-          navigate(`/posts/${postId}`); // 해당 게시글 페이지로 이동
+          navigate(`/posts/grad/${postId}`); // 해당 게시글 페이지로 이동
         }
       })
       .catch((err) => {
@@ -269,4 +269,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default CreateGradPost;

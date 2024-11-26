@@ -15,12 +15,13 @@ const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage
 const GradPostList = lazy(() => import('./components/pages/PostListPage/GradPostListPage'));
 const OtherPostList = lazy(() => import('./components/pages/PostListPage/OtherPostListPage'));
 const ContPostList = lazy(() => import('./components/pages/PostListPage/ContPostListPage'));
-const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
+const ViewContPost = lazy(() => import('./components/pages/ViewPost/ViewContPost'));
 const CommentList = lazy(() => import('./components/pages/Comment/CommentList'));
 // const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
 // <Link to="/posts/update/:id">게시글 수정</Link>
 // <Route path="/posts/update/:id" element={<UpdatePost />} />
-const CreatePost = lazy(() => import('./components/pages/CreatePost/CreatePost'));
+const CreateGradPost = lazy(() => import('./components/pages/CreatePost/CreateGradPost'));
+const CreateContPost = lazy(() => import('./components/pages/CreatePost/CreateContPost'));
 
 const App = memo(() => {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -45,9 +46,9 @@ const App = memo(() => {
                 path="/posts/create"
                 element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
               /> */}
-              <Route path="/posts/create" element={<CreatePost />} />
-              <Route path="/posts/:id" element={<ViewPost />} />
-              <Route path="/posts/:id/comments" element={<CommentList />} />
+              <Route path="/posts/cont/create" element={<CreateContPost />} />
+              <Route path="/posts/cont/:id" element={<ViewContPost />} />
+              <Route path="/posts/cont/:id/comments" element={<CommentList />} />
               <Route path="*" element={<Notfound />} />
             </Routes>
           </Suspense>

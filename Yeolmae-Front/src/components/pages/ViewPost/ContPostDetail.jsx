@@ -4,27 +4,26 @@ import axios from 'axios';
 import Button from '../../Common/Button';
 import './viewPostStyle.css';
 
-function PostDetail({
+function ContPostDetail({
   id,
   authorName,
   title,
   mainCategory,
-  subCategory,
   description,
   content,
-  school,
-  department,
+  hostingOrganization,
+  sponsorOrganization,
+  relatedWebsite,
   startDate,
   endDate,
-  goalAndUtilization,
-  files,
+  fileUrls,
   createdAt
 }) {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken'); // 로그인한 사용자의 액세스 토큰을 로컬저장소에서 가져오기
 
   const movetoPostList = () => {
-    navigate('/gradPostListPage');
+    navigate('/contPostListPage');
   };
 
   const updatePost = () => {
@@ -34,7 +33,7 @@ function PostDetail({
   const deletePost = async () => {
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
       try {
-        const response = await axios.delete(`/api/v1/graduation-project-posts`, {
+        const response = await axios.delete(`/api/v1/contest-posts`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json'
@@ -43,7 +42,7 @@ function PostDetail({
         });
         if (Response.status === 200) {
           alert('삭제되었습니다.');
-          navigate('/gradPostListPage');
+          navigate('/contPostListPage');
         } else {
           alert('삭제 실패하였습니다.');
         }
@@ -58,8 +57,6 @@ function PostDetail({
     <div className="container mt-5">
       <div className="CategoryLinkContainer mb-3">
         <Link to="/posts/parentCategory">{mainCategory}</Link>
-        <p>{'>'}</p>
-        <Link to="/posts/parentCategory/category">{subCategory}</Link>
       </div>
       <h2 className="ReadBoardTitle mb-3">{title}</h2>
       <h5 className="ReadBoardDetails mb-3">{startDate}</h5>
@@ -68,7 +65,6 @@ function PostDetail({
       <h5 className="ReadBoardDetails mb-3">{createdAt}</h5>
       <hr />
       <div className="ReadBoardDetails mb-3">{description}</div>
-      <div className="ReadBoardDetails mb-3">{goalAndUtilization}</div>
       <div className="ReadBoardContent mb-3">{content}</div>
       <Button onClick={movetoPostList} text="목록으로 돌아가기" />
       {accessToken && ( // 액세스 토큰이 있는 경우에만 버튼 표시
@@ -81,4 +77,4 @@ function PostDetail({
   );
 }
 
-export default PostDetail;
+export default ContPostDetail;
