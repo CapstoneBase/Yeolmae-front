@@ -32,6 +32,8 @@ function ViewPost() {
           id={board.id}
           authorName={board.authorName}
           title={board.title}
+          mainCategory={board.mainCategory}
+          subCategory={board.subCategory}
           description={board.description}
           content={board.content}
           school={board.school}
