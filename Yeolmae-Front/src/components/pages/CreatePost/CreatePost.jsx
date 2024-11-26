@@ -39,7 +39,7 @@ function CreatePost() {
 
   const navigate = useNavigate();
 
-  const handleAttach = async (e) => {
+  /* const handleAttach = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData(); // 파일을 URL로 바꾸기 위해 서버로 전달할 폼데이터 만들기
     formData.append('multipartFile', file);
@@ -62,6 +62,19 @@ function CreatePost() {
     } catch (err) {
       console.error('파일 업로드 중 오류가 발생하였습니다.', err);
     }
+  };
+  */
+  const handleAttach = (e) => {
+    // 단순히 파일을 상태에 추가
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setInput((prevInput) => ({
+      ...prevInput,
+      fileUrlList: [...(prevInput.fileUrlList || []), file] // 파일 자체 추가
+    }));
+
+    e.target.value = ''; // 파일 선택 초기화
   };
 
   const submitPost = async (e) => {
@@ -88,14 +101,22 @@ function CreatePost() {
       endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       goalAndUtilization: input.goalAndUtilization
     };
+    console.log('request body : ', body);
 
     const formData = new FormData();
-    formData.append('data', JSON.stringify(body)); // JSON 데이터를 문자열로 변환하여 추가
-    input.fileUrlList.forEach((fileUrl, index) => {
-      formData.append(`files[${index}]`, fileUrl); // 파일 URL 리스트를 form-data로 추가
-    });
+    formData.append('jsonData', JSON.stringify(body)); // JSON 데이터를 문자열로 변환하여 추가
+    console.log('formData.entries: ', [...formData.entries()]);
 
-    console.log('Request FormData:', formData); // 전송할 formData를 콘솔에 출력하여 확인
+    /* input.fileUrlList.forEach((fileUrl, index) => {
+      formData.append(`files[${index}]`, fileUrl); // 파일 URL 리스트를 form-data로 추가
+    }); */
+
+    if (input.fileUrlList && input.fileUrlList.length > 0) {
+      // 파일 자체를 FormData에 추가
+      input.fileUrlList.forEach((fileUrl, index) => {
+        formData.append(`files[${index}]`, fileUrl); // 파일 리스트를 form-data로 추가
+      });
+    }
 
     try {
       if (!accessToken) {
@@ -103,6 +124,7 @@ function CreatePost() {
         navigate('/loginPage'); // 로그인 라우터 주소
         return;
       }
+      console.log('formData: ', formData);
       const response = await axios.post('/api/v1/graduation-project-posts', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
@@ -261,4 +283,5 @@ function CreatePost() {
     </Form>
   );
 }
+
 export default CreatePost;
