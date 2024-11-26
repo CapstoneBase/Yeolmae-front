@@ -13,14 +13,15 @@ function ViewContPost() {
     try {
       const response = await axios.get(`/api/v1/contest-posts/${id}`);
       setBoard(response.data);
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching the post:', error);
+    } finally {
+      setLoading(false); // 성공 여부와 상관없이 로딩 상태를 종료
     }
   };
 
   useEffect(() => {
-    if(postId) {
+    if (postId) {
       getBoard(postId);
     }
   }, [postId]);

@@ -40,14 +40,14 @@ function ContPostDetail({
           },
           data: { postId: id }
         });
-        if (Response.status === 200) {
+        if (response.status === 200) {
           alert('삭제되었습니다.');
           navigate('/contPostListPage');
         } else {
           alert('삭제 실패하였습니다.');
         }
       } catch (error) {
-        console.error('게시글 삭제 중 오류가 발생하였습니다:', err);
+        console.error('게시글 삭제 중 오류가 발생하였습니다:', error);
         alert('게시글 삭제 중 오류가 발생하였습니다.');
       }
     }
