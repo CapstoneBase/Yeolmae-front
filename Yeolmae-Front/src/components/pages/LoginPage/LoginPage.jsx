@@ -62,7 +62,7 @@ function Login() {
   };
 
   return (
-    <container className="container g-3">
+    <div className="container-md">
       <form className="form-signin p-3 m-auto" style={{ width: '400px' }}>
         <h1 className="h2 mb-3 fw-500">로그인</h1>
         <div className="form-floating my-2">
@@ -90,7 +90,7 @@ function Login() {
           </a>
         </div>
       </form>
-    </container>
+    </div>
     // {toast === true ? (
     //   <ToastNotification
     //     text="존재하지 않는 아이디이거나 잘못된 비밀번호입니다."

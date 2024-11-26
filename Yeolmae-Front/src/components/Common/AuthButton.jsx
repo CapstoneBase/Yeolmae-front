@@ -1,13 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import Button from '../../Common/Button';
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: right;
-  margin: 50px;
-`;
+import Button from './Button';
 
 function AuthButton() {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -29,11 +22,7 @@ function AuthButton() {
       navigate('/loginPage');
     }
   };
-  return (
-    <ButtonBox>
-      <Button type="button" text="글 작성하기" onClick={handleClick} />
-    </ButtonBox>
-  );
+  return <Button type="button" text="글 작성하기" onClick={handleClick} />;
 }
 
 export default AuthButton;

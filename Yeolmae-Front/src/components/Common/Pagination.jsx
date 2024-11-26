@@ -5,28 +5,37 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa6';
 const PaginationCol = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 
   // 페이지수 리스트
   ul {
     list-style: none;
     display: flex;
     align-items: center;
+    margin: auto;
+    padding: 0px;
   }
 
   // 각 페이지 요소
   li {
-    padding: 6px 12px;
     list-style: none;
     align-self: center;
   }
 
   // 각 페이지 이동
   a {
+    width: 40px;
+    height: 40px;
     display: flex;
-    padding: 6px 12px;
-    cursor: pointer;
-    border-radius: 3px;
+    justify-content: center;
     align-items: center;
+    // padding: 3px 10px;
+    margin: 0px -1px;
+    cursor: pointer;
+    border: 2px solid #dee2e6;
+    align-items: center;
+    color: #9266cc;
+    background-color: white;
 
     &:hover {
       background-color: #ddd;
@@ -34,9 +43,13 @@ const PaginationCol = styled.div`
   }
 
   .active a {
-    background-color: #6558f5;
-    border-radius: 3px;
     color: white;
+    background-color: #9266cc;
+    border: 2px solid #9266cc;
+  }
+
+  .previous a {
+    border-radius: 7px 0px 0px 7px;
   }
 
   // 이전, 이후 선택 불가능시 스타일
@@ -47,6 +60,10 @@ const PaginationCol = styled.div`
     &:hover {
       background-color: initial;
     }
+  }
+
+  .next a {
+    border-radius: 0px 7px 7px 0px;
   }
 
   .next.disabled a {
