@@ -41,10 +41,11 @@ const App = memo(() => {
               <Route path="/gradPostlistPage" element={<GradPostList />} />
               <Route path="/otherPostlistPage" element={<OtherPostList />} />
               <Route path="/contPostlistPage" element={<ContPostList />} />
-              <Route
+              {/* <Route
                 path="/posts/create"
                 element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
-              />
+              /> */}
+              <Route path="/posts/create" element={<CreatePost />} />
               <Route path="/posts/:id" element={<ViewPost />} />
               <Route path="/posts/:id/comments" element={<CommentList />} />
               <Route path="*" element={<Notfound />} />
