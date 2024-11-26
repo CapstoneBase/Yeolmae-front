@@ -103,47 +103,32 @@ function CreatePost() {
       goalAndUtilization: input.goalAndUtilization
     };
     console.log('request body : ', body);
-
-    const formData = new FormData();
-    formData.append('jsonData', JSON.stringify(body)); // JSON 데이터를 문자열로 변환하여 추가
-    console.log('formData.entries: ', [...formData.entries()]);
-
-    /* input.fileUrlList.forEach((fileUrl, index) => {
-      formData.append(`files[${index}]`, fileUrl); // 파일 URL 리스트를 form-data로 추가
-    }); */
-
-    if (input.fileUrlList && input.fileUrlList.length > 0) {
-      input.fileUrlList.forEach((file) => {
-        formData.append('files', file); // 파일 추가
-      });
-    }
-
-    try {
-      console.log('formData: ', formData);
-      const response = await axios.post('/api/v1/graduation-project-posts', formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
-          'Content-Type': 'multipart/form-data'
+    const queryString = new URLSearchParams(body).toString();
+    axios
+      .post(`/api/v1/graduation-project-posts?${queryString}`, null, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+      .then((res) => {
+        console.log(input);
+        console.log(res.data);
+        if (res.status === 200) {
+          console.log('게시글 작성 성공');
+          const postId = res.data.id; // 서버가 반환한 게시글 ID 추출
+          navigate(`/posts/${postId}`); // 해당 게시글 페이지로 이동
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.error('서버 에러 응답:', err.response.data);
+          alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
+        } else if (err.request) {
+          console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
+          alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
+        } else {
+          console.error('요청 설정 중 에러 발생:', err.message);
+          alert('요청 처리 중 문제가 발생했습니다.');
         }
       });
-      console.log(response.data);
-      if (response.status === 200) {
-        console.log('게시글 작성 성공');
-        const postId = response.data.id; // 서버가 반환한 게시글 ID를 추출
-        navigate(`/posts/${postId}`); // 해당 게시글 페이지로 이동
-      }
-    } catch (err) {
-      if (err.response) {
-        console.error('서버 에러 응답:', err.response.data);
-        alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
-      } else if (err.request) {
-        console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
-        alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
-      } else {
-        console.error('요청 설정 중 에러 발생:', err.message);
-        alert('요청 처리 중 문제가 발생했습니다.');
-      }
-    }
   };
 
   return (
