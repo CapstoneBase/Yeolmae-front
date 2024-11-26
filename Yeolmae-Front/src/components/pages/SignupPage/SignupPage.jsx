@@ -19,12 +19,19 @@ function SignupPage() {
   const [input, setInput] = useState({
     id: '',
     password: '',
-    name: ''
+    confirmPassword: '',
+    email: '',
+    name: '',
+    school: '',
+    major: '',
+    verificationcode: ''
   });
   const navigate = useNavigate();
-  usePageTitle('회원가입');
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [toast, setToast] = useState(false);
 
+  usePageTitle('회원가입');
   const onChange = (e) => {
     if (e.target.name === 'id') {
       setChkDup(false);
@@ -88,6 +95,33 @@ function SignupPage() {
     return null;
   };
 
+  const sendVerificationCode = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await baseAPI.post('/members/send-code', { email: input.email });
+      alert('이메일로 인증 코드가 발송되었습니다.');
+      setIsEmailSent(true);
+    } catch (error) {
+      console.error(error);
+      alert('이메일 인증 코드 발송 중 오류가 발생했습니다.');
+    }
+  };
+
+  const verifyCode = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await baseAPI.post('/members/verify-code', {
+        email: input.email,
+        code: input.code
+      });
+      alert('이메일 인증이 완료되었습니다.');
+      setIsEmailVerified(true);
+    } catch (error) {
+      console.error(error);
+      alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
+    }
+  };
+
   const actSignup = async (body) => {
     const API = '/members';
     // console.log('request body: ', body);
@@ -149,20 +183,33 @@ function SignupPage() {
     if (!chkDup) {
       return alert('아이디 중복확인을 해주세요.');
     }
-
     if (!input.password) {
       return alert('비밀번호를 입력해주세요.');
     }
     if (!validPw) {
       return alert('유효하지 않은 비밀번호입니다.');
     }
+    if (input.password !== input.confirmPassword) {
+      return alert('비밀번호가 일치하지 않습니다.');
+    }
     if (!input.name) {
       return alert('이름을 입력해주세요.');
     }
+    if (!input.email) {
+      return alert('이메일을 입력해주세요.');
+    }
+    if (!isEmailVerified) {
+      return alert('이메일 인증을 완료해주세요.');
+    }
+
     const body = {
       id: input.id,
       password: input.password,
-      name: input.name
+      name: input.name,
+      email: input.email,
+      school: input.school,
+      major: input.major,
+      verificationCode: input.code
     };
 
     // 로그인 후 비밀번호 입력값 제거
@@ -217,6 +264,49 @@ function SignupPage() {
         )}
         <div className="form-floating my-2">
           <input
+            type="password"
+            className="form-control"
+            id="floatingConfirmPassword"
+            name="confirmPassword"
+            placeholder="비밀번호를 한 번 더 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingConfirmPassword">비밀번호 확인</label>
+        </div>
+        {input.confirmPassword !== '' && input.password !== input.confirmPassword && (
+          <div className="form-text text-danger">비밀번호가 일치하지 않습니다.</div>
+        )}
+        <div className="form-floating my-2">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingEmail"
+            name="email"
+            placeholder="이메일을 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingName">이메일</label>
+          <Button onClick={sendVerificationCode} text="이메일인증" />
+        </div>
+        {isEmailSent && (
+          <div className="form-floating my-2">
+            <input
+              type="text"
+              className="form-control"
+              id="floatingCode"
+              name="code"
+              placeholder="이메일로 받은 인증코드를 입력해주세요"
+              onChange={onChange}
+              required
+            />
+            <label htmlFor="floatingCode">인증코드</label>
+            <Button onClick={verifyCode} text="인증완료" />
+          </div>
+        )}
+        <div className="form-floating my-2">
+          <input
             type="text"
             className="form-control"
             id="floatingName"
@@ -226,6 +316,30 @@ function SignupPage() {
             required
           />
           <label htmlFor="floatingName">이름</label>
+        </div>
+        <div className="form-floating my-2">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingSchool"
+            name="school"
+            placeholder="학교를 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingSchool">학교</label>
+        </div>
+        <div className="form-floating my-2">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingMajor"
+            name="major"
+            placeholder="전공을 입력해주세요"
+            onChange={onChange}
+            required
+          />
+          <label htmlFor="floatingMajor">전공</label>
         </div>
         <Button text="가입하기" onClick={handleSubmit} />
       </form>
