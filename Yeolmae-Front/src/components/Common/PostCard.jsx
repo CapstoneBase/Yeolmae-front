@@ -1,52 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Thumbnail from './Thumbnail';
-// import Tag from './Tag';
-
-const Card = styled.div`
-  background-color: white;
-  max-width: 300px;
-  margin: 5px;
-  border: 2px solid rgb(227, 232, 237);
-  border-radius: 5px;
-  box-shadow: rgba(100, 100, 100, 0.1) 0px 0px 29px 0px;
-  display: flex;
-  flex-direction: column;
-`;
-const ThumbnailBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10%;
-  width: 80%;
-  height: 150px;
-`;
-
-const CardContents = styled.div`
-  padding: 7px;
-  background-color: white;
-`;
-
-const PostTitle = styled.h4`
-  margin: 10px;
-`;
-
-const PostAuthor = styled.div`
-  margin: 10px;
-  font-size: 14px;
-`;
-
-// PostAuthor 컴포넌트 상속하여 스타일 적용하기
-const PostDate = styled(PostAuthor)``;
-
-// [240520] 태그 기능 보류
-// const TagWrapper = styled.div`
-//   display: flex;
-//   justify-content: flex-start;
-//   margin: 0 10px 0 10px;
-//   overflow: hidden;
-//   align-items: center;
-// `;
 
 function PostCard({ post }) {
   const navigate = useNavigate();
@@ -54,22 +6,26 @@ function PostCard({ post }) {
   const createdDate = new Date(post.createdAt).toLocaleDateString('ko-KR');
 
   const handleClick = () => {
-    navigate(`/posts/${post.id}?includeDeleted=false`);
+    // 게시글 유형에 따라 url 변경
+    navigate(`/posts/${post.postId}`);
   };
 
   return (
-    // 온클릭으로 페이지 이동 구현 후 Card 태그 교체
-    // <Card onClick="{/* 게시글 본문 호출 API */}">
-    <Card onClick={handleClick}>
-      <ThumbnailBox>
-        {!post.imageUrl ? <Thumbnail src="..\main_logo.PNG" /> : <Thumbnail src={post.imageUrl} />}
-      </ThumbnailBox>
-      <CardContents>
-        <PostTitle>{post.title}</PostTitle>
-        <PostAuthor>{post.writerName}</PostAuthor>
-        <PostDate>{createdDate}</PostDate>
-      </CardContents>
-    </Card>
+    <div className="col">
+      {/* 게시글 유형에 따라 url 변경 */}
+      <div className="card m-3 rounded-3" href={`/posts/${post.postId}`}>
+        {!post.thumbnail ? (
+          <img src="../main_logo.PNG" className="card-img-top" alt="..." />
+        ) : (
+          <img src={post.thumbnail} className="card-img-top" alt="..." />
+        )}
+        <div className="card-body">
+          <h5 className="card-title pb-1">{post.title}</h5>
+          {/* <h6 className="card-subtitle pb-3 text-body-secondary">{createdDate}</h6> */}
+          <h6 className="card-subtitle mb-2 text-body-secondary">{post.authorName}</h6>
+        </div>
+      </div>
+    </div>
   );
 }
 

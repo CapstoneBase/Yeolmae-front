@@ -6,8 +6,9 @@ import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
 import Paginate from '../../Common/Pagination';
+import { endpoints } from '../../../api/getPostList';
 
-function PostList() {
+function ContPostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
   const location = useLocation();
   const cateInit = { ...location.state };
@@ -19,7 +20,7 @@ function PostList() {
   });
 
   const [curPage, setCurPage] = useState(0);
-  const [pageSize] = useState(8);
+  const [pageSize] = useState(12);
   // totalItems 실제 데이터에 따라 변경 필요
   const totalItems = 30;
   // console.log(input);
@@ -43,8 +44,8 @@ function PostList() {
   };
 
   console.log(
-    '소분류: ',
-    input.category,
+    // '소분류: ',
+    // input.category,
     '대분류: ',
     input.parentCategory,
     '현재 페이지: ',
@@ -54,10 +55,10 @@ function PostList() {
   return (
     <>
       <div className="row mx-5 my-4 px-4">
-        <h2>졸업작품</h2>
+        <h2>대회 및 공모전</h2>
       </div>
       <div className="row m-5 px-4 justify-content-between">
-        <div className="d-flex gap-3 col-lg-4 col-md-8 col-sm-8">
+        <div className="d-flex gap-3 col-lg-2 col-md-4 col-sm-4">
           <select
             className="form-select"
             key="selParentCategory"
@@ -68,21 +69,6 @@ function PostList() {
             {Categories.map((item) =>
               item.parntCateId === '00' ? (
                 <option key={`selParentCategory${item.cateId}`} value={item.cateId}>
-                  {item.cateName}
-                </option>
-              ) : null
-            )}
-          </select>
-          <select
-            className="form-select"
-            key="selCategory"
-            name="category"
-            onChange={handleCatChange}
-            value={input.category}
-          >
-            {Categories.map((item) =>
-              item.parntCateId === input.parentCategory ? (
-                <option key={`selCategory${item.cateId}`} value={item.cateId}>
                   {item.cateName}
                 </option>
               ) : null
@@ -100,6 +86,7 @@ function PostList() {
       </div>
 
       <PageGrid
+        endpoint={endpoints.CONTEST}
         // parCategory={input.parentCategory}
         // category={input.category}
         page={curPage}
@@ -122,4 +109,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default ContPostList;

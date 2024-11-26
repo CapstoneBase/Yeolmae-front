@@ -6,8 +6,9 @@ import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
 import Paginate from '../../Common/Pagination';
+import { endpoints } from '../../../api/getPostList';
 
-function PostList() {
+function GradPostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
   const location = useLocation();
   const cateInit = { ...location.state };
@@ -19,7 +20,7 @@ function PostList() {
   });
 
   const [curPage, setCurPage] = useState(0);
-  const [pageSize] = useState(8);
+  const [pageSize] = useState(12);
   // totalItems 실제 데이터에 따라 변경 필요
   const totalItems = 30;
   // console.log(input);
@@ -100,6 +101,7 @@ function PostList() {
       </div>
 
       <PageGrid
+        endpoint={endpoints.GRADUATION}
         // parCategory={input.parentCategory}
         // category={input.category}
         page={curPage}
@@ -122,4 +124,4 @@ function PostList() {
   );
 }
 
-export default PostList;
+export default GradPostList;
