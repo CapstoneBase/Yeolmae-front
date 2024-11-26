@@ -6,14 +6,16 @@ import './viewPostStyle.css';
 
 function PostDetail({
   id,
-  writerName,
-  category,
-  parentCategory,
+  authorName,
   title,
+  description,
   content,
-  imageUrl,
+  school,
+  department,
+  startDate,
+  endDate,
+  goalAndUtilization,
   files,
-  comments,
   createdAt
 }) {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ function PostDetail({
   };
 
   const updatePost = () => {
-    navigate('/board');
+    navigate(`/update/${id}`);
   };
 
   const deletePost = async () => {
@@ -36,22 +38,22 @@ function PostDetail({
   };
 
   return (
-    <div className="Wrapper">
-      <div className="CategoryLinkContainer">
+    <div className="container mt-5">
+      <div className="CategoryLinkContainer mb-3">
         <Link to="/posts/parentCategory">{parentCategory}</Link>
         <p>{'>'}</p>
         <Link to="/posts/parentCategory/category">{category}</Link>
       </div>
-      <h2 className="ReadBoardTitle">{title}</h2>
-      <h5 className="ReadBoardDetails">{writerName}</h5>
-      <h5 className="ReadBoardDetails">{createdAt}</h5>
+      <h2 className="ReadBoardTitle mb-3">{title}</h2>
+      <h5 className="ReadBoardDetails mb-3">{authorName}</h5>
+      <h5 className="ReadBoardDetails mb-3">{createdAt}</h5>
       <hr />
-      <div className="ReadBoardContent">{content}</div>
-      <div className="ReadBoardThumbnail">
-        <img src={imageUrl} alt="썸네일" />
+      <div className="ReadBoardContent mb-3">{content}</div>
+      <div className="ReadBoardThumbnail mb-3">
+        <img src={imageUrl} alt="썸네일" className="img-fluid" />
       </div>
       <Button onClick={movetoPostList} text="목록으로 돌아가기" />
-      <div className="editingButtonsContainer">
+      <div className="editingButtonsContainer mt-3">
         <Button onClick={updatePost} text="수정하기" />
         <Button onClick={deletePost} text="삭제하기" />
       </div>

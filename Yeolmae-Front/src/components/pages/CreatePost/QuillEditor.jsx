@@ -1,45 +1,54 @@
 import React, { useMemo, memo, useCallback } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { uploadImage } from '../../../api/uploadImage';
 
-const imageServer = 'http://13.124.45.191:8080'; // 이미지 서버 URL
-
-// QuillEditor is an uncontrolled React component
-const QuillEditor = memo(({ quillRef, api, htmlContent, setHtmlContent }) => {
-  const imageHandler = useCallback(async () => {
-    const formData = new FormData(); // 이미지를 url로 바꾸기위해 서버로 전달할 폼데이터 만들기
-
+const QuillEditor = memo(({ quillRef, htmlContent, setHtmlContent }) => {
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*'); // 이미지 파일만 선택가능하도록 제한
-    input.setAttribute('name', 'image');
-    input.style.display = 'none';
+    input.setAttribute('accept', 'image/*');
     input.click();
 
-    // 파일 선택창에서 이미지를 선택하면 실행될 콜백 함수 등록
     input.onchange = async () => {
-      const file = input.files[0];
-      formData.append('multipartFile', file);
+      try {
+        const file = input.files[0];
+        if (!file) return;
 
-      // 폼데이터를 서버에 넘겨 multer로 이미지 URL 받아오기
-      const res = await uploadImage(formData);
-      if (res.length === 0 || !res[0].fileUrl) {
-        alert('이미지 업로드에 실패하였습니다.');
+        // 이미지 크기 및 타입 체크 (선택사항)
+        if (file.size > 5 * 1024 * 1024) {
+          // 5MB 제한
+          alert('파일 크기는 5MB 이하여야 합니다.');
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('multipartFile', file);
+
+        // 업로드 시작을 사용자에게 알림
+        console.log('이미지 업로드 중...');
+
+        const response = await uploadImage(formData);
+
+        // 응답에서 S3 URL 추출
+        if (!response || !response[0]?.fileUrl) {
+          throw new Error('이미지 URL을 받지 못했습니다.');
+        }
+
+        const s3Url = response[0].fileUrl; // S3 URL 사용
+
+        // 에디터에 이미지 삽입
+        const quill = quillRef.current.getEditor();
+        const range = quill.getSelection()?.index || 0;
+
+        quill.insertEmbed(range, 'image', s3Url);
+        quill.setSelection(range + 1);
+      } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+        alert('이미지 업로드에 실패했습니다.');
       }
-      const url = `${imageServer}${res[0].fileUrl}`;
-      const quill = quillRef.current.getEditor();
-      const range = quill.getSelection()?.index;
-
-      if (typeof range !== 'number') return;
-
-      quill.setSelection(range, 1);
-      /* 사용자 선택을 지정된 범위로 설정하여 에디터에 포커싱할 수 있다. 
-               위치 인덱스와 길이를 넣어주면 된다. */
-
-      quill.clipboard.dangerouslyPasteHTML(range, `<img src=${url} alt="image" />`);
-    }; // 주어진 인덱스에 HTML로 작성된 내용물을 에디터에 삽입한다.
-  }, [api, quillRef]);
+    };
+  }, [quillRef]);
 
   const modules = useMemo(
     () => ({
@@ -63,6 +72,7 @@ const QuillEditor = memo(({ quillRef, api, htmlContent, setHtmlContent }) => {
     }),
     [imageHandler]
   );
+
   return (
     <ReactQuill
       ref={quillRef}
@@ -70,6 +80,7 @@ const QuillEditor = memo(({ quillRef, api, htmlContent, setHtmlContent }) => {
       onChange={setHtmlContent}
       modules={modules}
       theme="snow"
+      placeholder="내용을 입력하세요..."
     />
   );
 });
