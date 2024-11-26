@@ -3,9 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import Wrapper from '../../Common/Wrapper';
-import InputWrapper from '../../Common/InputWrapper';
-import AuthInputField from '../../Common/AuthInputField';
 import Button from '../../Common/Button';
 import usePageTitle from '../../../hooks/usePageTitle';
 
@@ -39,13 +36,11 @@ function SignupPage() {
   };
 
   const actDupCheck = async (id) => {
-    const API = '/members';
-    const body = { id };
-
+    const API = `/members/check-id?id=${id}`;
     // console.log('request body: ', body);
     try {
       console.log('id duplicate check try');
-      const response = await baseAPI.post(`${API}`, body);
+      const response = await baseAPI.get(API);
       return response.data.data;
     } catch (error) {
       if (error.response) {
@@ -85,13 +80,16 @@ function SignupPage() {
     }
     // 로그인 후 비밀번호 입력값 제거
     // setInput(input.password, '');
-
-    dispatch(idDupCheck(input.id));
+    try {
+      await dispatch(idDupCheck(input.id));
+    } catch (error) {
+      console.error(error);
+    }
     return null;
   };
 
   const actSignup = async (body) => {
-    const API = '/users';
+    const API = '/members';
     // console.log('request body: ', body);
     try {
       console.log('actsignup try');

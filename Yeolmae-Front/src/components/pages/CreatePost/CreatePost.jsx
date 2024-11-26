@@ -75,6 +75,7 @@ function CreatePost() {
     }));
 
     e.target.value = ''; // 파일 선택 초기화
+    console.log('파일 추가됨:', file.name);
   };
 
   const submitPost = async (e) => {
@@ -112,18 +113,12 @@ function CreatePost() {
     }); */
 
     if (input.fileUrlList && input.fileUrlList.length > 0) {
-      // 파일 자체를 FormData에 추가
-      input.fileUrlList.forEach((fileUrl, index) => {
-        formData.append(`files[${index}]`, fileUrl); // 파일 리스트를 form-data로 추가
+      input.fileUrlList.forEach((file) => {
+        formData.append('files', file); // 파일 추가
       });
     }
 
     try {
-      if (!accessToken) {
-        alert('로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.');
-        navigate('/loginPage'); // 로그인 라우터 주소
-        return;
-      }
       console.log('formData: ', formData);
       const response = await axios.post('/api/v1/graduation-project-posts', formData, {
         headers: {
@@ -269,9 +264,14 @@ function CreatePost() {
       <Form.Group className="form-group" controlId="formAttachments">
         <Form.Label>첨부 파일</Form.Label>
         <Form.Control type="file" onChange={handleAttach} className="form-control" />
-        {input.fileUrlList.map((item, index) => (
-          <a key={index} href={item}>
-            첨부 파일 {index + 1}
+        {input.fileUrlList?.map((file, index) => (
+          <a
+            key={index}
+            href={URL.createObjectURL(file)} // 파일 객체를 Blob URL로 변환. 사용하지 않을 때 해제 필요
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            첨부 파일 {index + 1}: {file.name} {/* 파일 이름 표시 */}
           </a>
         ))}
       </Form.Group>
