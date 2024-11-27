@@ -84,10 +84,10 @@ function Header() {
                 ''
               )}
               <li>
-                <a href="#" className="nav-link px-2 text-dark" onClick={handleClick}>
+                {/* <a className="nav-link px-2 text-dark" onClick={handleClick}>
                   {authenticated ? '로그아웃' : '로그인'}
-                </a>
-                {/* {authenticated ? (
+                </a> */}
+                {authenticated ? (
                   <a href="/" className="nav-link px-2 text-dark" onClick={handleClick}>
                     로그아웃
                   </a>
@@ -95,7 +95,7 @@ function Header() {
                   <a href="/loginPage" className="nav-link px-2 text-dark" onClick={handleClick}>
                     로그인
                   </a>
-                )} */}
+                )}
               </li>
             </ul>
           </div>
