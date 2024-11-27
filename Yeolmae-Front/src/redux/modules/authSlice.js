@@ -26,6 +26,7 @@ export const authSlice = createSlice({
       state.authenticated = false;
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('id');
     },
     SET_ERROR: (state, action) => {
       state.error = action.payload;
