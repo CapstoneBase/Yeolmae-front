@@ -6,7 +6,7 @@ import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
 import Paginate from '../../Common/Pagination';
-import { endpoints } from '../../../api/getPostList';
+import { endpoints } from '../../../api/queryStrReq';
 
 function ContPostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
@@ -15,14 +15,15 @@ function ContPostList() {
 
   // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [input, setInput] = useState({
-    category: `${cateInit.cateId}`,
-    parentCategory: `${cateInit.parntCateId}`
+    mainCategory: `${cateInit.parntCateId}`
   });
-
   const [curPage, setCurPage] = useState(0);
   const [pageSize] = useState(12);
   // totalItems 실제 데이터에 따라 변경 필요
-  const totalItems = 30;
+  const [pageData, setPageData] = useState({
+    totalElements: 0,
+    totalPages: 0
+  });
   // console.log(input);
 
   // 페이지 이동 시 스크롤 위치 초기화
@@ -43,14 +44,7 @@ function ContPostList() {
     setCurPage(selected);
   };
 
-  console.log(
-    // '소분류: ',
-    // input.category,
-    '대분류: ',
-    input.parentCategory,
-    '현재 페이지: ',
-    curPage
-  );
+  console.log('메인 카테고리: ', input.mainCategory, '현재 페이지: ', curPage);
 
   return (
     <>
@@ -61,14 +55,14 @@ function ContPostList() {
         <div className="d-flex gap-3 col-lg-2 col-md-4 col-sm-4">
           <select
             className="form-select"
-            key="selParentCategory"
-            name="parentCategory"
+            key="selMainCategory"
+            name="mainCategory"
             onChange={handleCatChange}
-            value={input.parentCategory}
+            value={input.mainCategory}
           >
             {Categories.map((item) =>
               item.parntCateId === '00' ? (
-                <option key={`selParentCategory${item.cateId}`} value={item.cateId}>
+                <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
                   {item.cateName}
                 </option>
               ) : null
@@ -87,8 +81,7 @@ function ContPostList() {
 
       <PageGrid
         endpoint={endpoints.CONTEST}
-        // parCategory={input.parentCategory}
-        // category={input.category}
+        mainCategory={input.mainCategory}
         page={curPage}
         size={pageSize}
       />
@@ -96,13 +89,13 @@ function ContPostList() {
         <div className="col-3" />
         <div className="col-6 d-flex justify-content-center align-items-center">
           <Paginate
-            pageCount={Math.ceil(totalItems / pageSize)}
+            pageCount={pageData.totalPages}
             onPageChange={handlePageClick}
             currentPage={curPage}
           />
         </div>
         <div className="col-2 d-flex justify-content-end px-5">
-          <AuthButton />
+          <AuthButton text="글 작성하기" destination="/posts/create" curstate={input} />
         </div>
       </div>
     </>
