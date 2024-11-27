@@ -1,21 +1,20 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import ReactQuill from 'react-quill'; // ReactQuill import
-import 'react-quill/dist/quill.snow.css';
 import { DeltaToHtmlConverter } from 'quill-delta-to-html';
 import Button from '../../../Common/Button';
 import '../../../../scss/viewPostStyle.scss';
 
-// Delta를 HTML로 변환하는 함수
 const convertDeltaToHtml = (delta) => {
   try {
+    // Delta 데이터가 ops 배열로 이루어졌는지 확인
     if (!delta || !Array.isArray(delta.ops)) {
       console.error('유효하지 않은 Delta 데이터입니다:', delta);
       return '<p>내용 없음</p>';
     }
 
     const converter = new DeltaToHtmlConverter(delta.ops, {
+      // 필요에 따라 Delta 변환 옵션을 추가
       inlineStyles: true
     });
     return converter.convert();

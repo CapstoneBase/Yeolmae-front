@@ -6,7 +6,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import QuillEditor from '../../../Common/QuillEditor';
-import Categories from '../../../Common/Categories';
+import ContCategories from '../../../Common/Categories/ContCategories';
 import Select from '../../../Common/Select';
 import '../../../../scss/viewPostStyle.scss';
 
@@ -37,6 +37,13 @@ function CreateContPost() {
   };
 
   const navigate = useNavigate();
+
+  const handleCatChange = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleAttach = (e) => {
     const file = e.target.files[0];
@@ -122,20 +129,22 @@ function CreateContPost() {
   return (
     <Form className="container mt-5" onSubmit={submitPost}>
       <Form.Group className="form-group" controlId="formCategories">
-        <Select
+        <select
+          className="form-select"
           key="selMainCategory"
           name="mainCategory"
-          onChange={onChange}
+          onChange={handleCatChange}
           value={input.mainCategory}
         >
-          {Categories.map((item) =>
-            item.parntCateId === '00' ? (
-              <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
-              </option>
-            ) : null
-          )}
-        </Select>
+          {ContCategories.type === '03'
+            ? // type이 게시글 타입과 일치하는지 확인
+              ContCategories.categories.map((item) => (
+                <option key={`selMainCategory${item.id}`} value={item.id}>
+                  {item.name}
+                </option>
+              ))
+            : null}
+        </select>
       </Form.Group>
       <Form.Group className="form-group" controlId="formTitle">
         <Form.Control
