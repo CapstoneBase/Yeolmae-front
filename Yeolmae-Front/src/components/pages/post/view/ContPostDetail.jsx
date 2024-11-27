@@ -1,8 +1,29 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import ReactQuill from 'react-quill'; // ReactQuill import
+import 'react-quill/dist/quill.snow.css';
+import { DeltaToHtmlConverter } from 'quill-delta-to-html';
 import Button from '../../../Common/Button';
 import '../../../../scss/viewPostStyle.scss';
+
+// Delta를 HTML로 변환하는 함수
+const convertDeltaToHtml = (delta) => {
+  try {
+    if (!delta || !Array.isArray(delta.ops)) {
+      console.error('유효하지 않은 Delta 데이터입니다:', delta);
+      return '<p>내용 없음</p>';
+    }
+
+    const converter = new DeltaToHtmlConverter(delta.ops, {
+      inlineStyles: true
+    });
+    return converter.convert();
+  } catch (error) {
+    console.error('Delta 변환 오류:', error);
+    return '<p>내용 변환 중 오류 발생</p>';
+  }
+};
 
 function ContPostDetail({
   id,
@@ -10,6 +31,7 @@ function ContPostDetail({
   title,
   mainCategory,
   description,
+  thumbnail,
   content,
   hostingOrganization,
   sponsoringOrganization,
@@ -20,16 +42,9 @@ function ContPostDetail({
   createdAt
 }) {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken'); // 로그인한 사용자의 액세스 토큰을 로컬저장소에서 가져오기
+  const accessToken = localStorage.getItem('accessToken'); // 로그인한 사용자의 액세스 토큰
 
-  const movetoPostList = () => {
-    navigate('/contPostListPage');
-  };
-
-  const updatePost = () => {
-    navigate(`/update/${id}`);
-  };
-
+  // 게시글 삭제 처리
   const deletePost = async () => {
     if (window.confirm('게시글을 삭제하시겠습니까?')) {
       try {
@@ -40,6 +55,7 @@ function ContPostDetail({
           },
           data: { postId: id }
         });
+
         if (response.status === 200) {
           alert('삭제되었습니다.');
           navigate('/contPostListPage');
@@ -53,12 +69,31 @@ function ContPostDetail({
     }
   };
 
+  // 게시글 수정 화면 이동
+  const updatePost = () => {
+    navigate(`/update/${id}`);
+  };
+
+  // 게시글 내용 렌더링
+  const renderContent = () => {
+    if (!content) return '내용 없음';
+
+    // Delta 형식 확인
+    if (content.ops) {
+      const htmlContent = convertDeltaToHtml(content);
+      return <div className="ql-editor" dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+    }
+
+    // HTML 또는 일반 텍스트로 처리
+    return <div>{content}</div>;
+  };
+
   return (
     <div className="board-detail-container container mt-5">
       {/* 게시글 유형 */}
       <div className="row mb-3">
         <div className="col-12">
-          <Link to="/contPostlistPage" className="listpage-link">
+          <Link to="/contPostListPage" className="listpage-link">
             대회 및 공모전
           </Link>
         </div>
@@ -67,7 +102,7 @@ function ContPostDetail({
       {/* Main Category */}
       <div className="row mb-3">
         <div className="col-12">
-          <Link to="/contPostlistPage/parentCategory" className="category-link">
+          <Link to="/contPostListPage/parentCategory" className="category-link">
             {mainCategory || '카테고리 없음'}
           </Link>
         </div>
@@ -121,10 +156,22 @@ function ContPostDetail({
       <hr />
 
       {/* Description */}
-      <div className="board-content">
-        <div className="board-content-description">{description || '설명 없음'}</div>
-        <div className="board-content-text">{content || '내용 없음'}</div>
-      </div>
+      <div className="board-content-description">{description || '설명 없음'}</div>
+
+      {/* Thumbnail Image */}
+      {thumbnail && (
+        <div className="board-thumbnail-container">
+          <img
+            src={thumbnail}
+            alt="게시글 썸네일"
+            className="img-fluid mb-3"
+            style={{ maxHeight: '400px', objectFit: 'cover', width: '100%' }}
+          />
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="board-content">{renderContent()}</div>
 
       {/* Attached Files */}
       {fileUrls && fileUrls.length > 0 && (
@@ -144,26 +191,15 @@ function ContPostDetail({
 
       <hr />
 
-      {/* Comment Section */}
-      <div className="comments-section">
-        <h5>댓글</h5>
-        {/* 댓글 데이터가 있을 경우 보여주는 영역 */}
-        <div>
-          {/* 여기에 댓글 데이터를 순회하며 표시 */}
-          {/* 예: */}
-          <p>댓글 1 내용</p>
-        </div>
-      </div>
-
       {/* Buttons */}
-      <div className="row mt-3">
-        {accessToken && (
+      {accessToken && (
+        <div className="row mt-3">
           <div className="col-6 text-end">
             <Button onClick={updatePost} text="수정하기" />
             <Button onClick={deletePost} text="삭제하기" />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

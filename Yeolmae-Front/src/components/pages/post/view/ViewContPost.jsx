@@ -38,6 +38,7 @@ function ViewContPost() {
         title={board.title}
         mainCategory={board.mainCategory}
         description={board.description}
+        thumbnail={board.thumbnail}
         content={board.content}
         hostingOrganization={board.hostingOrganization}
         sponsoringOrganization={board.sponsoringOrganization}

@@ -57,15 +57,20 @@ function CreateContPost() {
     if (!input.title) {
       return alert('제목을 입력해주세요.');
     }
+    // Quill content를 Delta로 가져오기
+    const delta = quillRef.current.getEditor().getContents();
 
-    if (!htmlContent) {
+    // Delta를 JSON으로 직렬화
+    const serializedContent = JSON.stringify(delta);
+
+    if (!serializedContent) {
       return alert('내용을 입력해주세요.');
     }
 
     const body = {
       title: input.title,
       description: input.description,
-      content: input.content,
+      content: input.serializedContent,
       mainCategory: input.mainCategory,
       hostingOrganization: input.hostingOrganization,
       sponsoringOrganization: input.sponsoringOrganization,
@@ -82,10 +87,12 @@ function CreateContPost() {
     });
 
     try {
-      const res = await axios.post(`${API_ENDPOINT}?${queryString}`, formData, {
+      const res = await axios.post(`${API_ENDPOINT}`, formData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        params: body // Axios에서는 URL 파라미터로 직렬화된 데이터를 추가할 수 있음
       });
 
       if (res.status === 200) {

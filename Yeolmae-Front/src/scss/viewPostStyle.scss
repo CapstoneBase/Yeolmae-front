@@ -42,19 +42,29 @@
     }
   }
 
+  .board-content-description {
+    background-color: $light;
+    padding: 1rem;
+    border-radius: $border-radius;
+    color: $gray-700;
+    margin-bottom: 1rem;
+  }
+
   .board-content {
     background-color: $light;
     padding: 1rem;
     border-radius: $border-radius;
+    color: $gray-800;
     margin-bottom: 1rem;
+  }
 
-    .board-content-description {
-      color: $gray-800;
-      margin-bottom: 1rem;
-    }
-
-    .board-content-text {
-      color: $gray-700;
-    }
+  .board-content p {
+    margin: 0 0 1em;
+    line-height: 1.6;
+  }
+  
+  .board-content img {
+    max-width: 100%;
+    height: auto;
   }
 }
