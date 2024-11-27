@@ -10,11 +10,14 @@ import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import './createPostStyle.css';
 
+const API_ENDPOINT = '/api/v1/contest-posts';
+
 function CreateContPost() {
   const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const quillRef = useRef();
+  const [htmlContent, setHtmlContent] = useState('');
   const [input, setInput] = useState({
     title: '',
     description: '',
@@ -29,7 +32,6 @@ function CreateContPost() {
   const onChange = (e) => {
     setInput({
       ...input,
-      content: quillRef.current.editor.root.innerHTML,
       [e.target.name]: e.target.value
     });
   };
@@ -56,8 +58,7 @@ function CreateContPost() {
       return alert('제목을 입력해주세요.');
     }
 
-    input.content = quillRef.current.getEditor().getContents(); // Delta 포맷으로 저장
-    if (!input.content) {
+    if (!htmlContent) {
       return alert('내용을 입력해주세요.');
     }
 
@@ -81,7 +82,7 @@ function CreateContPost() {
     });
 
     try {
-      const res = await axios.post(`/api/v1/contest-posts?${queryString}`, formData, {
+      const res = await axios.post(`${API_ENDPOINT}?${queryString}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data'
@@ -206,8 +207,10 @@ function CreateContPost() {
       <Form.Group className="form-group" controlId="formContent">
         <QuillEditor
           quillRef={quillRef}
-          value={input.content}
-          onChange={onChange}
+          htmlContent={htmlContent}
+          setHtmlContent={setHtmlContent}
+          endpoint={API_ENDPOINT}
+          queryParams={input.content}
           className="form-control quill-editor"
         />
       </Form.Group>
