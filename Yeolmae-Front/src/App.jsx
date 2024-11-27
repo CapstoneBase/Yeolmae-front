@@ -11,18 +11,18 @@ const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const ProfilePage = lazy(() => import('./components/pages/ProfilePage/ProfilePage'));
 const EditProfilePage = lazy(() => import('./components/pages/ProfilePage/EditProfilePage'));
+const PortfolioPage = lazy(() => import('./components/pages/Portfolio/PortfolioPage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
 const GradPostList = lazy(() => import('./components/pages/PostListPage/GradPostListPage'));
 const OtherPostList = lazy(() => import('./components/pages/PostListPage/OtherPostListPage'));
 const ContPostList = lazy(() => import('./components/pages/PostListPage/ContPostListPage'));
-const ViewContPost = lazy(() => import('./components/pages/ViewPost/ViewContPost'));
+const ViewContPost = lazy(() => import('./components/pages/post/view/ViewContPost'));
 const CommentList = lazy(() => import('./components/pages/Comment/CommentList'));
 // const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
 // <Link to="/posts/update/:id">게시글 수정</Link>
 // <Route path="/posts/update/:id" element={<UpdatePost />} />
-const CreateGradPost = lazy(() => import('./components/pages/CreatePost/CreateGradPost'));
-const CreateContPost = lazy(() => import('./components/pages/CreatePost/CreateContPost'));
+const CreateContPost = lazy(() => import('./components/pages/post/create/CreateContPost'));
 
 const App = memo(() => {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -40,6 +40,7 @@ const App = memo(() => {
               <Route path="/loginPage" element={<Login />} />
               <Route path="/profilePage" element={<ProfilePage />} />
               <Route path="/editprofilePage" element={<EditProfilePage />} />
+              <Route path="/portfolioPage" element={<PortfolioPage />} />
               <Route path="/postlistPage" element={<PostList />} />
               <Route path="/gradPostlistPage" element={<GradPostList />} />
               <Route path="/otherPostlistPage" element={<OtherPostList />} />
