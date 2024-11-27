@@ -1,0 +1,60 @@
+@import 'bootstrap/scss/bootstrap';
+
+.board-detail-container {
+  margin-top: 2rem;
+
+  .list-link {
+    font-size: 1rem;
+    color: $dark;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: darken($primary, 10%);
+    }
+  }
+
+  .category-link {
+    font-size: 1rem;
+    color: $primary;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: darken($primary, 10%);
+    }
+  }
+
+  .board-title {
+    font-weight: bold;
+    color: $dark;
+    margin-bottom: 1rem;
+  }
+
+  .board-details {
+    color: $gray-600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+
+    .board-details-label {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .board-content {
+    background-color: $light;
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+
+    .board-content-description {
+      color: $gray-800;
+      margin-bottom: 1rem;
+    }
+
+    .board-content-text {
+      color: $gray-700;
+    }
+  }
+}

@@ -12,7 +12,7 @@ import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
 import './createPostStyle.css';
 
-function CreatePost() {
+function CreateGradPost() {
   const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -39,7 +39,7 @@ function CreatePost() {
 
   const navigate = useNavigate();
 
-  const handleAttach = async (e) => {
+  /* const handleAttach = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData(); // 파일을 URL로 바꾸기 위해 서버로 전달할 폼데이터 만들기
     formData.append('multipartFile', file);
@@ -62,6 +62,20 @@ function CreatePost() {
     } catch (err) {
       console.error('파일 업로드 중 오류가 발생하였습니다.', err);
     }
+  };
+  */
+  const handleAttach = (e) => {
+    // 단순히 파일을 상태에 추가
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setInput((prevInput) => ({
+      ...prevInput,
+      fileUrlList: [...(prevInput.fileUrlList || []), file] // 파일 자체 추가
+    }));
+
+    e.target.value = ''; // 파일 선택 초기화
+    console.log('파일 추가됨:', file.name);
   };
 
   const submitPost = async (e) => {
@@ -88,45 +102,33 @@ function CreatePost() {
       endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 변환
       goalAndUtilization: input.goalAndUtilization
     };
-
-    const formData = new FormData();
-    formData.append('data', JSON.stringify(body)); // JSON 데이터를 문자열로 변환하여 추가
-    input.fileUrlList.forEach((fileUrl, index) => {
-      formData.append(`files[${index}]`, fileUrl); // 파일 URL 리스트를 form-data로 추가
-    });
-
-    console.log('Request FormData:', formData); // 전송할 formData를 콘솔에 출력하여 확인
-
-    try {
-      if (!accessToken) {
-        alert('로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.');
-        navigate('/loginPage'); // 로그인 라우터 주소
-        return;
-      }
-      const response = await axios.post('/api/v1/graduation-project-posts', formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
-          'Content-Type': 'multipart/form-data'
+    console.log('request body : ', body);
+    const queryString = new URLSearchParams(body).toString();
+    axios
+      .post(`/api/v1/graduation-project-posts?${queryString}`, null, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+      .then((res) => {
+        console.log(input);
+        console.log(res.data);
+        if (res.status === 200) {
+          console.log('게시글 작성 성공');
+          const postId = res.data.id; // 서버가 반환한 게시글 ID 추출
+          navigate(`/posts/grad/${postId}`); // 해당 게시글 페이지로 이동
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.error('서버 에러 응답:', err.response.data);
+          alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
+        } else if (err.request) {
+          console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
+          alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
+        } else {
+          console.error('요청 설정 중 에러 발생:', err.message);
+          alert('요청 처리 중 문제가 발생했습니다.');
         }
       });
-      console.log(response.data);
-      if (response.status === 200) {
-        console.log('게시글 작성 성공');
-        const postId = response.data.id; // 서버가 반환한 게시글 ID를 추출
-        navigate(`/posts/${postId}`); // 해당 게시글 페이지로 이동
-      }
-    } catch (err) {
-      if (err.response) {
-        console.error('서버 에러 응답:', err.response.data);
-        alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
-      } else if (err.request) {
-        console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
-        alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
-      } else {
-        console.error('요청 설정 중 에러 발생:', err.message);
-        alert('요청 처리 중 문제가 발생했습니다.');
-      }
-    }
   };
 
   return (
@@ -247,9 +249,14 @@ function CreatePost() {
       <Form.Group className="form-group" controlId="formAttachments">
         <Form.Label>첨부 파일</Form.Label>
         <Form.Control type="file" onChange={handleAttach} className="form-control" />
-        {input.fileUrlList.map((item, index) => (
-          <a key={index} href={item}>
-            첨부 파일 {index + 1}
+        {input.fileUrlList?.map((file, index) => (
+          <a
+            key={index}
+            href={URL.createObjectURL(file)} // 파일 객체를 Blob URL로 변환. 사용하지 않을 때 해제 필요
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            첨부 파일 {index + 1}: {file.name} {/* 파일 이름 표시 */}
           </a>
         ))}
       </Form.Group>
@@ -261,4 +268,5 @@ function CreatePost() {
     </Form>
   );
 }
-export default CreatePost;
+
+export default CreateGradPost;
