@@ -81,6 +81,7 @@ function ContPostList() {
 
       <PageGrid
         endpoint={endpoints.CONTEST}
+        postType="cont"
         mainCategory={input.mainCategory}
         page={curPage}
         size={pageSize}
@@ -95,7 +96,7 @@ function ContPostList() {
           />
         </div>
         <div className="col-2 d-flex justify-content-end px-5">
-          <AuthButton text="글 작성하기" destination="/posts/create" curstate={input} />
+          <AuthButton text="글 작성하기" destination="/posts/cont/create" curstate={input} />
         </div>
       </div>
     </>
