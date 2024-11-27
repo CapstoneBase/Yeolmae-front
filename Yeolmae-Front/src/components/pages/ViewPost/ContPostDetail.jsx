@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../../Common/Button';
-import './viewPostStyle.css';
+import './viewPostStyle.scss';
 
 function ContPostDetail({
   id,
@@ -12,7 +12,7 @@ function ContPostDetail({
   description,
   content,
   hostingOrganization,
-  sponsorOrganization,
+  sponsoringOrganization,
   relatedWebsite,
   startDate,
   endDate,
@@ -54,25 +54,119 @@ function ContPostDetail({
   };
 
   return (
-    <div className="container mt-5">
-      <div className="CategoryLinkContainer mb-3">
-        <Link to="/posts/parentCategory">{mainCategory}</Link>
+    <div className="board-detail-container container mt-5">
+      {/* 게시글 유형 */}
+      <div className="row mb-3">
+        <div className="col-12">
+          <Link to="/contPostlistPage" className="listpage-link">
+            대회 및 공모전
+          </Link>
+        </div>
       </div>
-      <h2 className="ReadBoardTitle mb-3">{title}</h2>
-      <h5 className="ReadBoardDetails mb-3">{startDate}</h5>
-      <h5 className="ReadBoardDetails mb-3">{endDate}</h5>
-      <h5 className="ReadBoardDetails mb-3">{authorName}</h5>
-      <h5 className="ReadBoardDetails mb-3">{createdAt}</h5>
+
+      {/* Main Category */}
+      <div className="row mb-3">
+        <div className="col-12">
+          <Link to="/contPostlistPage/parentCategory" className="category-link">
+            {mainCategory || '카테고리 없음'}
+          </Link>
+        </div>
+      </div>
+
+      {/* Title */}
+      <h2 className="board-title">{title || '제목 없음'}</h2>
+
+      {/* Author and Date */}
+      <div className="row mb-3 board-details">
+        <div className="col-6">
+          <span className="board-details-label">작성자:</span> {authorName || '없음'}
+        </div>
+        <div className="col-6">
+          <span className="board-details-label">작성일:</span> {createdAt || '없음'}
+        </div>
+      </div>
+
+      {/* Event Period */}
+      <div className="row mb-3 board-details">
+        <div className="col-6">
+          <span className="board-details-label">대회 기간:</span> {startDate || '없음'} ~{' '}
+          {endDate || '없음'}
+        </div>
+      </div>
+
+      {/* Hosting and Sponsor Organizations */}
+      <div className="row mb-3 board-details">
+        <div className="col-6">
+          <span className="board-details-label">주최기관:</span> {hostingOrganization || '없음'}
+        </div>
+        <div className="col-6">
+          <span className="board-details-label">주관기관:</span> {sponsoringOrganization || '없음'}
+        </div>
+      </div>
+
+      {/* Related Website */}
+      <div className="row mb-3 board-details">
+        <div className="col-12">
+          <span className="board-details-label">관련 페이지:</span>{' '}
+          {relatedWebsite ? (
+            <a href={relatedWebsite} target="_blank" rel="noopener noreferrer">
+              {relatedWebsite}
+            </a>
+          ) : (
+            '없음'
+          )}
+        </div>
+      </div>
+
       <hr />
-      <div className="ReadBoardDetails mb-3">{description}</div>
-      <div className="ReadBoardContent mb-3">{content}</div>
-      <Button onClick={movetoPostList} text="목록으로 돌아가기" />
-      {accessToken && ( // 액세스 토큰이 있는 경우에만 버튼 표시
-        <div className="editingButtonsContainer mt-3">
-          <Button onClick={updatePost} text="수정하기" />
-          <Button onClick={deletePost} text="삭제하기" />
+
+      {/* Description */}
+      <div className="board-content">
+        <div className="board-content-description">{description || '설명 없음'}</div>
+        <div className="board-content-text">{content || '내용 없음'}</div>
+      </div>
+
+      {/* Attached Files */}
+      {fileUrls && fileUrls.length > 0 && (
+        <div className="row mb-3 board-details">
+          <div className="col-12">
+            <span className="board-details-label">첨부 파일:</span>
+            {fileUrls.map((file, index) => (
+              <div key={index}>
+                <a href={file} target="_blank" rel="noopener noreferrer">
+                  파일 {index + 1}
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
       )}
+
+      <hr />
+
+      {/* Comment Section */}
+      <div className="comments-section">
+        <h5>댓글</h5>
+        {/* 댓글 데이터가 있을 경우 보여주는 영역 */}
+        <div>
+          {/* 여기에 댓글 데이터를 순회하며 표시 */}
+          {/* 예: */}
+          <p>댓글 1 내용</p>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="row mt-3">
+        <div className="col-6">
+          <Button onClick={movetoPostList} text="목록으로 돌아가기" />
+        </div>
+        {accessToken && (
+          <div className="col-6 text-end">
+            <Button onClick={updatePost} text="수정하기" />
+            <Button onClick={deletePost} text="삭제하기" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
