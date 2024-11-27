@@ -1,19 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 
-function PostCard({ post }) {
+function PostCard({ endpoint, post }) {
   const navigate = useNavigate();
 
   const createdDate = new Date(post.createdAt).toLocaleDateString('ko-KR');
 
   const handleClick = () => {
     // 게시글 유형에 따라 url 변경
-    navigate(`/posts/${post.postId}`);
+    navigate(`/${endpoint}/${post.postId}`);
   };
 
   return (
     <div className="col">
       {/* 게시글 유형에 따라 url 변경 */}
-      <div className="card m-3 rounded-3" href={`/posts/${post.postId}`}>
+      <div className="card m-3 rounded-3" href={`/${endpoint}/${post.postId}`}>
         {!post.thumbnail ? (
           <img src="../main_logo.PNG" className="card-img-top" alt="..." />
         ) : (
