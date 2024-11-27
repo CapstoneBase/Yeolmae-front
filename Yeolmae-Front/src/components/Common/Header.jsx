@@ -40,7 +40,7 @@ function Header() {
             <ul className="nav col-auto me-lg-auto mb-2 mb-md-0 justify-content-start">
               <li>
                 <a href="/gradPostlistPage" className="nav-link px-2 text-dark">
-                  졸업 작품
+                  졸업작품
                 </a>
               </li>
               <li>
