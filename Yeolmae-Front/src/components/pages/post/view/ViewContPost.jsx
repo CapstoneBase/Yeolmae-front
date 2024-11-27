@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import PostDetail from './ContPostDetail';
-import './viewPostStyle.scss';
+import '../../../../scss/viewPostStyle.scss';
 
 function ViewContPost() {
   const { id } = useParams(); // useParams의 key를 라우트와 일치시킴

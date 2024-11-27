@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import Button from '../../Common/Button';
-import './viewPostStyle.scss';
+import Button from '../../../Common/Button';
+import '../../../../scss/viewPostStyle.scss';
 
 function ContPostDetail({
   id,
@@ -157,9 +157,6 @@ function ContPostDetail({
 
       {/* Buttons */}
       <div className="row mt-3">
-        <div className="col-6">
-          <Button onClick={movetoPostList} text="목록으로 돌아가기" />
-        </div>
         {accessToken && (
           <div className="col-6 text-end">
             <Button onClick={updatePost} text="수정하기" />
