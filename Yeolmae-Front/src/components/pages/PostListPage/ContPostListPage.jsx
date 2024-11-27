@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
-import Categories from '../../Common/Categories';
+import ContCategories from '../../Common/ContCategories';
 import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
@@ -15,7 +15,7 @@ function ContPostList() {
 
   // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [input, setInput] = useState({
-    mainCategory: `${cateInit.parntCateId}`
+    mainCategory: ContCategories.categories[0].id
   });
   const [curPage, setCurPage] = useState(0);
   const [pageSize] = useState(12);
@@ -60,13 +60,14 @@ function ContPostList() {
             onChange={handleCatChange}
             value={input.mainCategory}
           >
-            {Categories.map((item) =>
-              item.parntCateId === '00' ? (
-                <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
-                  {item.cateName}
-                </option>
-              ) : null
-            )}
+            {ContCategories.type === '03'
+              ? // type이 게시글 타입과 일치하는지 확인
+                ContCategories.categories.map((item) => (
+                  <option key={`selMainCategory${item.id}`} value={item.id}>
+                    {item.name}
+                  </option>
+                ))
+              : null}
           </select>
         </div>
         <div className="col-lg-3 col-md-4 col-sm-4">
@@ -82,6 +83,7 @@ function ContPostList() {
       <PageGrid
         endpoint={endpoints.CONTEST}
         postType="cont"
+        setPageData={setPageData}
         mainCategory={input.mainCategory}
         page={curPage}
         size={pageSize}

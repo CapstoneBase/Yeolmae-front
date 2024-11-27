@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
-import Categories from '../../Common/Categories';
+import GradCategories from '../../Common/GradCategories';
 import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';
@@ -9,19 +9,20 @@ import Paginate from '../../Common/Pagination';
 import { endpoints } from '../../../api/queryStrReq';
 
 function GradPostList() {
-  // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
   const location = useLocation();
-  const cateInit = { ...location.state };
 
-  // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [input, setInput] = useState({
-    subCategory: `${cateInit.cateId}`,
-    mainCategory: `${cateInit.parntCateId}`
+    mainCategory: GradCategories.categories[0].id,
+    subCategory: GradCategories.categories[0].subCategories[0].id
   });
+
+  // const [cat, setCat] = useState({
+  //   mainCategory: '',
+  //   subCategory: ''
+  // });
 
   const [curPage, setCurPage] = useState(0);
   const [pageSize] = useState(12);
-  // totalItems 실제 데이터에 따라 변경 필요
   const [pageData, setPageData] = useState({
     totalElements: 0,
     totalPages: 0
@@ -34,11 +35,23 @@ function GradPostList() {
   }, [curPage]);
 
   const handleCatChange = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
+    const { name, value } = e.target;
+    setInput((prev) => {
+      if (name === 'mainCategory') {
+        // 메인 카테고리가 변경되면 해당 카테고리의 첫 번째 서브 카테고리로 설정
+        const firstSubCategory = GradCategories.categories.find((cat) => cat.id === value)
+          ?.subCategories[0].id;
+        return {
+          ...prev,
+          [name]: value,
+          subCategory: firstSubCategory
+        };
+      }
+      return {
+        ...prev,
+        [name]: value
+      };
     });
-    // 카테고리 변경시 첫번째 페이지로 이동
     setCurPage(0);
   };
 
@@ -47,11 +60,11 @@ function GradPostList() {
   };
 
   console.log(
-    '서브 카테고리: ',
-    input.subCategory,
     '메인 카테고리: ',
     input.mainCategory,
-    '현재 페이지: ',
+    '\n서브 카테고리: ',
+    input.subCategory,
+    '\n현재 페이지: ',
     curPage
   );
 
@@ -61,6 +74,7 @@ function GradPostList() {
         <h2>졸업작품</h2>
       </div>
       <div className="row m-5 px-4 justify-content-between">
+        {/* <Select type="01" category={GradCategories} setCat={setCat} /> */}
         <div className="d-flex gap-3 col-lg-4 col-md-8 col-sm-8">
           <select
             className="form-select"
@@ -69,13 +83,14 @@ function GradPostList() {
             onChange={handleCatChange}
             value={input.mainCategory}
           >
-            {Categories.map((item) =>
-              item.parntCateId === '00' ? (
-                <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
-                  {item.cateName}
-                </option>
-              ) : null
-            )}
+            {GradCategories.type === '01'
+              ? // type이 게시글 타입과 일치하는지 확인
+                GradCategories.categories.map((item) => (
+                  <option key={`selMainCategory${item.id}`} value={item.id}>
+                    {item.name}
+                  </option>
+                ))
+              : null}
           </select>
           <select
             className="form-select"
@@ -84,13 +99,15 @@ function GradPostList() {
             onChange={handleCatChange}
             value={input.subCategory}
           >
-            {Categories.map((item) =>
-              item.parntCateId === input.mainCategory ? (
-                <option key={`selSubCategory${item.cateId}`} value={item.cateId}>
-                  {item.cateName}
-                </option>
-              ) : null
-            )}
+            {input.mainCategory
+              ? GradCategories.categories
+                  .find((cat) => cat.id === input.mainCategory)
+                  ?.subCategories.map((item) => (
+                    <option key={`selSubCategory${item.id}`} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))
+              : null}
           </select>
         </div>
         <div className="col-lg-3 col-md-4 col-sm-4">
@@ -105,6 +122,7 @@ function GradPostList() {
 
       <PageGrid
         endpoint={endpoints.GRADUATION}
+        setPageData={setPageData}
         mainCategory={input.mainCategory}
         subCategory={input.subCategory}
         page={curPage}
