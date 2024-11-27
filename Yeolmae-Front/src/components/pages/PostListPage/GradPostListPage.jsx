@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PageGrid from '../../Common/PageGrid';
-import GradCategories from '../../Common/GradCategories';
+import GradCategories from '../../Common/Categories/GradCategories';
 import Button from '../../Common/Button';
 import AuthButton from '../../Common/AuthButton';
 import Select from '../../Common/Select';

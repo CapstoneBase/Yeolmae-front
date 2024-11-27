@@ -3,7 +3,16 @@ import PostCard from './PostCard';
 import createApiRequest from '../../api/queryStrReq';
 
 // function PageGrid({ parCategory, category, page, size }) {
-function PageGrid({ endpoint, postType, memberId, pData, page, size, mainCategory, subCategory }) {
+function PageGrid({
+  endpoint,
+  postType,
+  memberId,
+  setPageData,
+  page,
+  size,
+  mainCategory,
+  subCategory
+}) {
   const [posts, setPosts] = useState([]);
   const [numOfElements, setNumOfElements] = useState([]);
   const [numOfTotalElements, setTotalElements] = useState([]);
@@ -34,7 +43,7 @@ function PageGrid({ endpoint, postType, memberId, pData, page, size, mainCategor
         setPosts(content);
         setNumOfElements(numberOfElements);
         setTotalElements(totalElements);
-        pData.setPageData({
+        setPageData({
           totalElements,
           totalPages
         });
@@ -46,7 +55,7 @@ function PageGrid({ endpoint, postType, memberId, pData, page, size, mainCategor
       }
     };
     getData();
-  }, [endpoint, postType, memberId, pData, mainCategory, subCategory, page, size]);
+  }, [endpoint, postType, memberId, setPageData, mainCategory, subCategory, page, size]);
 
   // console.log(posts);
   return (
