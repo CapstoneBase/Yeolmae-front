@@ -10,11 +10,13 @@ const Main = lazy(() => import('./components/pages/MainPage/MainPage'));
 const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const ProfilePage = lazy(() => import('./components/pages/ProfilePage/ProfilePage'));
+const EditProfilePage = lazy(() => import('./components/pages/ProfilePage/EditProfilePage'));
 const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
 const GradPostList = lazy(() => import('./components/pages/PostListPage/GradPostListPage'));
 const OtherPostList = lazy(() => import('./components/pages/PostListPage/OtherPostListPage'));
 const ContPostList = lazy(() => import('./components/pages/PostListPage/ContPostListPage'));
+// const ViewContPost = lazy(() => import('./components/pages/ViewPost/ViewContPost'));
 const ViewPost = lazy(() => import('./components/pages/ViewPost/ViewPost'));
 const CommentList = lazy(() => import('./components/pages/Comment/CommentList'));
 // const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
@@ -37,6 +39,7 @@ const App = memo(() => {
               <Route path="/signupPage" element={<Signup />} />
               <Route path="/loginPage" element={<Login />} />
               <Route path="/profilePage" element={<ProfilePage />} />
+              <Route path="/editprofilePage" element={<EditProfilePage />} />
               <Route path="/postlistPage" element={<PostList />} />
               <Route path="/gradPostlistPage" element={<GradPostList />} />
               <Route path="/otherPostlistPage" element={<OtherPostList />} />
@@ -45,6 +48,7 @@ const App = memo(() => {
                 path="/posts/create"
                 element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
               />
+              {/* <Route path="/posts/cont/:id" element={<ViewContPost />} /> */}
               <Route path="/posts/:id" element={<ViewPost />} />
               <Route path="/posts/:id/comments" element={<CommentList />} />
               <Route path="*" element={<Notfound />} />
