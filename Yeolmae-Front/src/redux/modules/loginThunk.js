@@ -5,13 +5,16 @@ export const loginThunk = (id, password) => async (dispatch) => {
   try {
     const data = await loginUser(id, password);
     // dispatch(SET_USER(data.user));
+    console.log(id);
     dispatch(SET_TOKEN({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
     console.log('SET_TOKEN dispatch');
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
+    localStorage.setItem('id', id);
     console.log('토큰 저장');
     console.log('로컬 스토리지에 저장된 access Token: ', data.accessToken);
     console.log('로컬 스토리지에 저장된 refresh Token: ', data.refreshToken);
+    console.log('로컬 스토리지에 저장된 id: ', id);
   } catch (error) {
     console.log(error);
     dispatch(SET_ERROR(error.message));
