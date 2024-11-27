@@ -57,5 +57,7 @@ export default createApiRequest;
 export const endpoints = {
   GRADUATION: '/graduation-project-posts',
   OTHER: '/other-project-posts',
-  CONTEST: '/contest-posts'
+  CONTEST: '/contest-posts',
+  POSTS: '/members/posts',
+  INFO: '/members/info'
 };
