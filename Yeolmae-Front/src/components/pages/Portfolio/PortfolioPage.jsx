@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import PorfolioInfo from './PortfolioInfo';
+// import PorfolioInfo from './PortfolioInfo';
 
 const API_INFO = '/api/v1/portfolio';
 const API_CONTEST_POSTS = '/api/v1/portfolio/contest-posts';
@@ -125,7 +125,9 @@ function PortfolioPage() {
           <InfoRow label="학교" value={info.school} />
           <InfoRow label="학과" value={info.major} />
           <InfoRow label="자기소개" value={info.selfIntroduction} />
-
+          <div className="col-6 d-flex justify-content-start align-items-center">
+            <h4>경력</h4>
+          </div>
           {info.experiences.map((index) => (
             <InfoCard
               key={index.id}
@@ -135,6 +137,9 @@ function PortfolioPage() {
               description={index.description}
             />
           ))}
+          <div className="col-6 d-flex justify-content-start align-items-center">
+            <h4>학력</h4>
+          </div>
           {info.education.map((index) => (
             <InfoCard
               key={index.id}
@@ -144,6 +149,9 @@ function PortfolioPage() {
               description={index.description}
             />
           ))}
+          <div className="col-6 d-flex justify-content-start align-items-center">
+            <h4>수상</h4>
+          </div>
           {info.awards.map((index) => (
             <InfoCard
               key={index.id}
