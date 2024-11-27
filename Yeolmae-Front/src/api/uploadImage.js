@@ -11,8 +11,7 @@ export const uploadImage = async (formData, endpoint) => {
 
     const response = await axios.post(endpoint, formData, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'multipart/form-data'
+        Authorization: `Bearer ${accessToken}`
       }
     });
 

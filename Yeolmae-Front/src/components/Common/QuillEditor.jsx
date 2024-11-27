@@ -1,7 +1,7 @@
 import React, { useMemo, memo, useCallback } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { uploadImage } from '../../../api/uploadImage';
+import { uploadImage } from '../../api/uploadImage';
 
 const QuillEditor = memo(({ quillRef, htmlContent, setHtmlContent, queryParams, endpoint }) => {
   // QuillEditor.js 수정

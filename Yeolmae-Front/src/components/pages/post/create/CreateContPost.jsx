@@ -5,10 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import QuillEditor from './QuillEditor';
-import Categories from '../../Common/Categories';
-import Select from '../../Common/Select';
-import './createPostStyle.css';
+import QuillEditor from '../../../Common/QuillEditor';
+import Categories from '../../../Common/Categories';
+import Select from '../../../Common/Select';
+import '../../../../scss/viewPostStyle.scss';
 
 const API_ENDPOINT = '/api/v1/contest-posts';
 
@@ -84,8 +84,7 @@ function CreateContPost() {
     try {
       const res = await axios.post(`${API_ENDPOINT}?${queryString}`, formData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Bearer ${accessToken}`
         }
       });
 
