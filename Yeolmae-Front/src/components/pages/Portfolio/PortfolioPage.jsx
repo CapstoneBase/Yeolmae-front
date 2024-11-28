@@ -117,7 +117,7 @@ function PortfolioPage() {
       </div>
       <div className="row mx-5 px-4 justify-content-between">
         <div className="col-4 d-flex justify-content-start align-items-center">
-          <h4>나의 정보</h4>
+          <h4>{info.name}</h4>
         </div>
         <div className="col-10 mx-2 my-4 p-2 justify-items-center">
           <InfoRow label="생년월일" value={info.birthDate} />
