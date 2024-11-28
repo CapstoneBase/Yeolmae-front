@@ -7,12 +7,13 @@ function PostCard({ postType, post }) {
 
   const handleClick = () => {
     // 게시글 유형에 따라 url 변경
+    console.log(postType);
     navigate(`/posts/${postType}/${post.postId}`);
   };
 
   return (
     <div className="col">
-      <div className="card m-3 rounded-3" href={`/${postType}/${post.postId}`}>
+      <div className="card m-3 rounded-3" onClick={handleClick}>
         {!post.thumbnail ? (
           <img src="../main_logo.PNG" className="card-img-top" alt="..." />
         ) : (

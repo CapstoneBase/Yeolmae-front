@@ -54,6 +54,7 @@ function PageGrid({
         // throw error;
       }
     };
+    console.log('postType:', postType);
     getData();
   }, [endpoint, postType, memberId, setPageData, mainCategory, subCategory, page, size]);
 
