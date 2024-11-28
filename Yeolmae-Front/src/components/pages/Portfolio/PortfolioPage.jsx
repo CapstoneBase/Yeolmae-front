@@ -14,7 +14,7 @@ function InfoRow({ label, value }) {
       <div className="col-2 mx-2">
         <h6>{label}</h6>
       </div>
-      <div className="col-4">
+      <div className="col-6">
         <div>{value}</div>
       </div>
     </div>
@@ -35,7 +35,7 @@ function ExRow({ label, value }) {
 
 function InfoCard({ title, startDate, endDate, description }) {
   return (
-    <div className="card m-3">
+    <div className="card m-3 border-0 bg-body-tertiary bg-opacity-50">
       <div className="card-body">
         <div className="row">
           <div className="col-4">
@@ -116,16 +116,14 @@ function PortfolioPage() {
         <h2>나의 포트폴리오</h2>
       </div>
       <div className="row mx-5 px-4 justify-content-between">
-        <div className="col-6 d-flex justify-content-start align-items-center">
+        <div className="col-4 d-flex justify-content-start align-items-center">
           <h4>나의 정보</h4>
         </div>
         <div className="col-10 mx-2 my-4 p-2 justify-items-center">
           <InfoRow label="생년월일" value={info.birthDate} />
           <InfoRow label={info.contact[0].type} value={info.contact[0].value} />
-          <InfoRow label="학교" value={info.school} />
-          <InfoRow label="학과" value={info.major} />
           <InfoRow label="자기소개" value={info.selfIntroduction} />
-          <div className="col-6 d-flex justify-content-start align-items-center">
+          <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
             <h4>경력</h4>
           </div>
           {info.experiences.map((index) => (
@@ -137,7 +135,7 @@ function PortfolioPage() {
               description={index.description}
             />
           ))}
-          <div className="col-6 d-flex justify-content-start align-items-center">
+          <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
             <h4>학력</h4>
           </div>
           {info.education.map((index) => (
@@ -149,8 +147,8 @@ function PortfolioPage() {
               description={index.description}
             />
           ))}
-          <div className="col-6 d-flex justify-content-start align-items-center">
-            <h4>수상</h4>
+          <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
+            <h4>수상 내역</h4>
           </div>
           {info.awards.map((index) => (
             <InfoCard
@@ -161,21 +159,70 @@ function PortfolioPage() {
               description={index.description}
             />
           ))}
+          <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
+            <h4>자격증</h4>
+          </div>
+          <div className="row m-1 justify-items-center">
+            <div className="col-2 mx-2">
+              <h6> </h6>
+            </div>
+            <div className="row">
+              <div className="col-6 m-1">
+                <h6>{info.certifications[0]}</h6>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-6 m-1">
+                <h6>{info.certifications[1]}</h6>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-6 m-1">
+                <h6>{info.certifications[2]}</h6>
+              </div>
+            </div>
+          </div>
+
+          <div className="row py-3 border-bottom">
+            <div className="col-2 d-flex justify-content-start align-items-center">
+              <h4>스킬</h4>
+            </div>
+            <div className="col-8 d-flex justify-content-start align-items-center">
+              <span className="badge text-bg-secondary mx-2">Javascript</span>
+              <span className="badge text-bg-secondary mx-2">React</span>
+              <span className="badge text-bg-secondary mx-2">Redux</span>
+            </div>
+          </div>
         </div>
       </div>
-      <section className="mb-4">
-        <h2>공모전 게시물</h2>
-        <div className="row">
+      <section className="section">
+        <div className="row mx-5 px-4 justify-content-between">
+          <h2 className="pb-2">공모전 게시물</h2>
           {contestPosts.map((post) => (
-            <div key={post.postId} className="col-md-4 mb-3">
+            <div key={post.postId} className="col-md-10 mb-3">
               <div className="card">
-                <img src={post.thumbnail} className="card-img-top" alt={`${post.title} 썸네일`} />
-                <div className="card-body">
-                  <h5 className="card-title">{post.title}</h5>
-                  <p className="card-text">{post.description}</p>
-                  <p className="card-text">
-                    {post.startDate} - {post.endDate}
-                  </p>
+                <div className="row">
+                  <div className="col-8">
+                    <div className="card-body">
+                      <h5 className="card-title">{post.title}</h5>
+                      <p className="card-text">{post.description}</p>
+                      <p className="card-text">
+                        {post.startDate} - {post.endDate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-4 justify-content-end">
+                    <img
+                      src={post.thumbnail}
+                      className="img-thumbnail justify-content-end"
+                      style={{
+                        maxWidth: '200px',
+                        maxHeight: '150px',
+                        objectFit: 'cover' // 이미지 비율 유지하면서 영역에 맞춤
+                      }}
+                      alt={`${post.title} 썸네일`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -184,18 +231,33 @@ function PortfolioPage() {
       </section>
 
       <section className="mb-4">
-        <h2>졸업 프로젝트 게시물</h2>
-        <div className="row">
+        <div className="row mx-5 px-4 justify-content-between">
+          <h2 className="pb-2">졸업 프로젝트 게시물</h2>
           {graduationProjectPosts.map((post) => (
-            <div key={post.postId} className="col-md-4 mb-3">
+            <div key={post.postId} className="col-md-10 mb-3">
               <div className="card">
-                <img src={post.thumbnail} className="card-img-top" alt={`${post.title} 썸네일`} />
-                <div className="card-body">
-                  <h5 className="card-title">{post.title}</h5>
-                  <p className="card-text">{post.description}</p>
-                  <p className="card-text">
-                    {post.startDate} - {post.endDate}
-                  </p>
+                <div className="row">
+                  <div className="col-8">
+                    <div className="card-body">
+                      <h5 className="card-title">{post.title}</h5>
+                      <p className="card-text">{post.description}</p>
+                      <p className="card-text">
+                        {post.startDate} - {post.endDate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <img
+                      src={post.thumbnail}
+                      className="card-img-top"
+                      style={{
+                        maxWidth: '200px',
+                        maxHeight: '150px',
+                        objectFit: 'cover' // 이미지 비율 유지하면서 영역에 맞춤
+                      }}
+                      alt={`${post.title} 썸네일`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -204,18 +266,33 @@ function PortfolioPage() {
       </section>
 
       <section className="mb-4">
-        <h2>기타 프로젝트 게시물</h2>
-        <div className="row">
+        <div className="row mx-5 px-4 justify-content-between">
+          <h2 className="pb-2">개인 프로젝트 게시물</h2>
           {otherProjectPosts.map((post) => (
-            <div key={post.postId} className="col-md-4 mb-3">
+            <div key={post.postId} className="col-md-10 mb-3">
               <div className="card">
-                <img src={post.thumbnail} className="card-img-top" alt={`${post.title} 썸네일`} />
-                <div className="card-body">
-                  <h5 className="card-title">{post.title}</h5>
-                  <p className="card-text">{post.description}</p>
-                  <p className="card-text">
-                    {post.startDate} - {post.endDate}
-                  </p>
+                <div className="row">
+                  <div className="col-8">
+                    <div className="card-body">
+                      <h5 className="card-title">{post.title}</h5>
+                      <p className="card-text">{post.description}</p>
+                      <p className="card-text">
+                        {post.startDate} - {post.endDate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-4 justify-content-end">
+                    <img
+                      src={post.thumbnail}
+                      className="card-img-top"
+                      style={{
+                        maxWidth: '200px',
+                        maxHeight: '150px',
+                        objectFit: 'cover' // 이미지 비율 유지하면서 영역에 맞춤
+                      }}
+                      alt={`${post.title} 썸네일`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
