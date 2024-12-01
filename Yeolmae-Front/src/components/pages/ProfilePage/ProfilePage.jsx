@@ -23,6 +23,7 @@ function ProfilePage() {
     major: [],
     introduction: []
   });
+  console.log(userInfo);
 
   return (
     <>

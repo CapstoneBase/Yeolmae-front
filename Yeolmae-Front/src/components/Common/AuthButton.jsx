@@ -7,13 +7,13 @@ function AuthButton({ text, destination, curstate }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const des = destination;
-  const state = curstate;
+  // const des = destination;
+  // const state = curstate;
   const handleClick = () => {
     console.log(authenticated);
     if (authenticated) {
-      console.log(state);
-      navigate(des, state);
+      console.log('전달 상태', curstate);
+      navigate(destination, { state: { curstate } });
     } else {
       navigate('/loginPage');
     }
