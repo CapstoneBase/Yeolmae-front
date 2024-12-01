@@ -4,6 +4,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import createApiRequest from '../../../api/queryStrReq';
 import Button from '../../Common/Button';
 
+/**
+ * 인적사항 이름을 표시하는 공통 인풋 컴포넌트
+ * @param {Object} input - 수정할 정보를 받아와 표시
+ * @param {string} input.label - 수정할 인적사항의 라벨
+ * @param {any} input.props - 수정할 인적사항 값을 받아와 표시
+ */
 function CustomInput({ label, ...props }) {
   return (
     <div className="mb-3">
@@ -13,15 +19,9 @@ function CustomInput({ label, ...props }) {
   );
 }
 
-function PortfolioEditPage(params) {
-  const initialUserInfo = {
-    name: '김열매',
-    birthDate: '2000-10-10',
-    email: 'kym@example.com',
-    phone: '010-1234-5678',
-    address: '서울시 강남구',
-    introduction: '김열매라고 합니다'
-  };
+  /**
+   * 로컬 스토리지에서 엑세스 토큰을 받아와 변수에 저장
+   */
   const accessToken = localStorage.getItem('accessToken');
 
   const [birthDate, setBirthDate] = useState(new Date());
@@ -65,6 +65,10 @@ function PortfolioEditPage(params) {
   });
 
   useEffect(() => {
+    /**
+     * 수정 반영 함수
+     * 포트폴리오 수정 api(get) 호출하여 최초 1회 userInfo의 각 필드에 정보 저장
+     */
     const fetchUserInfo = async () => {
       const response = await createApiRequest('/portfolio', null, {
         method: 'GET',
@@ -87,6 +91,10 @@ function PortfolioEditPage(params) {
     // console.log(value);
   };
 
+  /**
+   * 수정 등록 버튼,
+   * 포트폴리오 수정 api(put) 호출하여 수정된 정보 저장, 포트폴리오 조회 페이지로 이동
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     await createApiRequest('/portfolio', null, {
@@ -149,17 +157,18 @@ function PortfolioEditPage(params) {
 
       <div className="my-4">
         <label className="form-label">경력</label>
-        {/* <DatePicker
+          {/**
+           * @todo DatePicker로 시작 날짜는 설정 가능
+           */}
           className="form-control"
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           name="startDate"
           dateFormat="yyyy-MM-dd"
           value={userInfo.experiences.startDate}
-        /> */}
-        <input type="text" aria-label="First name" className="form-control mb-1" />
-        <input type="text" aria-label="First name" className="form-control mb-1" />
-        <input type="text" aria-label="Last name" className="form-control" />
+        {/**
+        @todo 자기소개 이후로 각 포트폴리오 항목 반영하도록 컴포넌트 작성 
+        */}
       </div>
       <Button onClick={handleSubmit} text="수정하기" />
     </>
