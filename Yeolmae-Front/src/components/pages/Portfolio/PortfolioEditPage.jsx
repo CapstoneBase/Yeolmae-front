@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import createApiRequest from '../../../api/queryStrReq';
@@ -19,6 +20,7 @@ function CustomInput({ label, ...props }) {
   );
 }
 
+function PortfolioEditPage() {
   /**
    * 로컬 스토리지에서 엑세스 토큰을 받아와 변수에 저장
    */
@@ -28,6 +30,7 @@ function CustomInput({ label, ...props }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [awardDate, setAwardDate] = useState(new Date());
+  const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -77,6 +80,7 @@ function CustomInput({ label, ...props }) {
         }
       });
       setUserInfo(response);
+      console.log('userInfo: ', userInfo);
     };
 
     fetchUserInfo();
@@ -105,6 +109,7 @@ function CustomInput({ label, ...props }) {
       }
     });
     console.log('Updated user info:', userInfo);
+    navigate('/portfolioPage');
   };
 
   return (
@@ -112,24 +117,25 @@ function CustomInput({ label, ...props }) {
       <div className="row mx-5 my-4 px-4">
         <h2>포트폴리오 수정하기</h2>
       </div>
-      <CustomInput
-        label="이름"
-        type="text"
-        name="name"
-        value={userInfo.name}
-        onChange={handleChange}
-      />
-      <label className="form-label me-3 mb-3">생년월일</label>
-      <DatePicker
-        label="생년월일"
-        className="form-control"
-        selected={birthDate}
-        onChange={(date) => setBirthDate(date)}
-        dateFormat="yyyy-MM-dd"
-        name="birthDate"
-        value={userInfo.birthDate}
-      />
-      {/* <label className="form-label">생년월일</label>
+      <div className="row mx-5 px-4 justify-content-between">
+        <CustomInput
+          label="이름"
+          type="text"
+          name="name"
+          value={userInfo.name}
+          onChange={handleChange}
+        />
+        <label className="form-label me-3 mb-3">생년월일</label>
+        <DatePicker
+          label="생년월일"
+          className="form-control"
+          selected={birthDate}
+          onChange={(date) => setBirthDate(date)}
+          dateFormat="yyyy-MM-dd"
+          name="birthDate"
+          value={userInfo.birthDate}
+        />
+        {/* <label className="form-label">생년월일</label>
       <DatePicker
         selected={birthDate}
         onChange={(date) => setBirthDate(date)}
@@ -137,40 +143,50 @@ function CustomInput({ label, ...props }) {
         className="form-control mb-3"
         value={userInfo.birthDate}
       /> */}
-      <div className="mb-3">
-        <label className="form-label">자기소개</label>
-        <textarea
-          className="form-control"
-          type="text"
-          name="selfIntroduction"
-          value={userInfo.selfIntroduction}
-          onChange={handleChange}
-        />
-      </div>
-      <CustomInput
-        label="연락처"
-        type="text"
-        name="phone"
-        value={userInfo.phone}
-        onChange={handleChange}
-      />
+        <div className="mb-3">
+          <label className="form-label">자기소개</label>
+          <textarea
+            className="form-control"
+            type="text"
+            name="selfIntroduction"
+            value={userInfo.selfIntroduction}
+            onChange={handleChange}
+          />
+        </div>
 
-      <div className="my-4">
-        <label className="form-label">경력</label>
+        <div className="my-4">
+          <label className="form-label">경력</label>
           {/**
            * @todo DatePicker로 시작 날짜는 설정 가능
            */}
-          className="form-control"
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          name="startDate"
-          dateFormat="yyyy-MM-dd"
-          value={userInfo.experiences.startDate}
+          <DatePicker
+            className="form-control"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            name="startDate"
+            dateFormat="yyyy-MM-dd"
+            value={userInfo.experiences.startDate}
+          />
+          <DatePicker
+            className="form-control"
+            selected={endDate}
+            onChange={(date) => setStartDate(date)}
+            name="endDate"
+            dateFormat="yyyy-MM-dd"
+            value={userInfo.experiences.endDate}
+          />
+        </div>
         {/**
         @todo 자기소개 이후로 각 포트폴리오 항목 반영하도록 컴포넌트 작성 
         */}
+        <div className="row d-flex mx-2 px-4 justify-content-center">
+          <div className="row m-1 justify-content-center">
+            <div className="col-2">
+              <Button onClick={handleSubmit} text="수정하기" />
+            </div>
+          </div>
+        </div>
       </div>
-      <Button onClick={handleSubmit} text="수정하기" />
     </>
   );
 }
