@@ -20,7 +20,7 @@ function CustomInput({ label, ...props }) {
   );
 }
 
-function PortfolioEditPage() {
+function EditPortfolioPage() {
   /**
    * 로컬 스토리지에서 엑세스 토큰을 받아와 변수에 저장
    */
@@ -191,4 +191,4 @@ function PortfolioEditPage() {
   );
 }
 
-export default PortfolioEditPage;
+export default EditPortfolioPage;

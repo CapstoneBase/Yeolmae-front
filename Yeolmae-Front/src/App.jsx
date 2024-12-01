@@ -6,24 +6,25 @@ import GlobalStyle from './style/globalStyles';
 import theme from './style/theme';
 import Header from './components/Common/Header';
 
+const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
 const Main = lazy(() => import('./components/pages/MainPage/MainPage'));
 const Signup = lazy(() => import('./components/pages/SignupPage/SignupPage'));
 const Login = lazy(() => import('./components/pages/LoginPage/LoginPage'));
 const ProfilePage = lazy(() => import('./components/pages/ProfilePage/ProfilePage'));
-const PortfolioPage = lazy(() => import('./components/pages/Portfolio/PortfolioPage'));
-const PortfolioEditPage = lazy(() => import('./components/pages/Portfolio/PortfolioEditPage'));
 const EditProfilePage = lazy(() => import('./components/pages/ProfilePage/EditProfilePage'));
-const Notfound = lazy(() => import('./components/pages/NotFound/NotFound'));
+
+const PortfolioPage = lazy(() => import('./components/pages/Portfolio/PortfolioPage'));
+const EditPortfolioPage = lazy(() => import('./components/pages/Portfolio/EditPortfolioPage'));
+
 const PostList = lazy(() => import('./components/pages/PostListPage/PostListPage'));
 const GradPostList = lazy(() => import('./components/pages/PostListPage/GradPostListPage'));
 const OtherPostList = lazy(() => import('./components/pages/PostListPage/OtherPostListPage'));
 const ContPostList = lazy(() => import('./components/pages/PostListPage/ContPostListPage'));
-const ViewContPost = lazy(() => import('./components/pages/post/view/ViewContPost'));
+
 const CommentList = lazy(() => import('./components/pages/Comment/CommentList'));
-// const UpdatePost = lazy(() => import('./components/pages/UpdatePost/UpdatePost'));
-// <Link to="/posts/update/:id">게시글 수정</Link>
-// <Route path="/posts/update/:id" element={<UpdatePost />} />
-const CreateContPost = lazy(() => import('./components/pages/post/create/CreateContPost'));
+const CreatePost = lazy(() => import('./components/pages/post/CreatePost'));
+const ViewPost = lazy(() => import('./components/pages/post/ViewPost'));
+const EditPost = lazy(() => import('./components/pages/post/EditPost'));
 
 const App = memo(() => {
   const authenticated = useSelector((state) => state.auth.authenticated);
@@ -37,23 +38,28 @@ const App = memo(() => {
           <Suspense>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="/signupPage" element={<Signup />} />
-              <Route path="/loginPage" element={<Login />} />
-              <Route path="/profilePage" element={<ProfilePage />} />
-              <Route path="/editprofilePage" element={<EditProfilePage />} />
-              <Route path="/portfolioPage" element={<PortfolioPage />} />
-              <Route path="/portfolioeditPage" element={<PortfolioEditPage />} />
-              <Route path="/postlistPage" element={<PostList />} />
-              <Route path="/gradPostlistPage" element={<GradPostList />} />
-              <Route path="/otherPostlistPage" element={<OtherPostList />} />
-              <Route path="/contPostlistPage" element={<ContPostList />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/edit" element={<EditProfilePage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/portfolio/edit" element={<EditPortfolioPage />} />
+
+              <Route path="/postlist" element={<PostList />} />
+              <Route path="/postlist/grad" element={<GradPostList />} />
+              <Route path="/postlist/cont" element={<ContPostList />} />
+              <Route path="/postlist/other" element={<OtherPostList />} />
+
+              {/* <Route path="/posts/:type" element={<PostList />} /> */}
+
               {/* <Route
-                path="/posts/create"
+                path="/posts/:type/create"
                 element={authenticated ? <CreatePost /> : <Navigate to="/loginPage" />}
               /> */}
-              <Route path="/posts/cont/create" element={<CreateContPost />} />
-              <Route path="/posts/cont/:id" element={<ViewContPost />} />
-              <Route path="/posts/cont/:id/comments" element={<CommentList />} />
+              <Route path="/posts/:type/:id" element={<ViewPost />} />
+              <Route path="/posts/:type/:id/comments" element={<CommentList />} />
+              <Route path="/posts/:type/create" element={<CreatePost />} />
+              <Route path="/posts/:type/update" element={<EditPost />} />
               <Route path="*" element={<Notfound />} />
             </Routes>
           </Suspense>

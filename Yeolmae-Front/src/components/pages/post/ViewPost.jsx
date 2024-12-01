@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import PostDetail from './ContPostDetail';
-import '../../../../scss/viewPostStyle.scss';
+import PostDetail from './PostDetail';
+import '../../../scss/viewPostStyle.scss';
 
-function ViewContPost() {
+function ViewPost() {
   const { id } = useParams(); // useParams의 key를 라우트와 일치시킴
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
@@ -51,4 +51,4 @@ function ViewContPost() {
   );
 }
 
-export default ViewContPost;
+export default ViewPost;
