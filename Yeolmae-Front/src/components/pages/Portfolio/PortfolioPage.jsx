@@ -8,6 +8,12 @@ const API_CONTEST_POSTS = '/api/v1/portfolio/contest-posts';
 const API_GRADUATION_PROJECT_POSTS = '/api/v1/portfolio/graduation-project-posts';
 const API_OTHER_PROJECT_POSTS = '/api/v1/portfolio/other-project-posts';
 
+/**
+ * 인적사항 이름을 표시하는 공통 컴포넌트
+ * @param {Object} properties - 인적사항
+ * @param {string} properties.label - 인적사항 라벨
+ * @param {any} properties.value - 인적사항 값
+ */
 function InfoRow({ label, value }) {
   return (
     <div className="row m-1 justify-items-center">
@@ -20,19 +26,15 @@ function InfoRow({ label, value }) {
     </div>
   );
 }
-function ExRow({ label, value }) {
-  return (
-    <div className="row m-1 justify-items-center">
-      <div className="col-2 mx-2">
-        <h6>{label}</h6>
-      </div>
-      <div className="col-4">
-        <div>{value}</div>
-      </div>
-    </div>
-  );
-}
 
+/**
+ * 경력, 학력, 수상 내역 등의 내역을 보여주는 공통 컴포넌트
+ * @param {Object} experiencesInfo - 내역을 구성하는 속성들
+ * @param {String} experiencesInfo.title - 내역 제목
+ * @param {any} experiencesInfo.startDate - 내역의 시작 일시
+ * @param {any} experiencesInfo.endDate - 내역의 종료 일시
+ * @param {String} experiencesInfo.description - 내역의 설명
+ */
 function InfoCard({ title, startDate, endDate, description }) {
   return (
     <div className="card m-3 border-0 bg-body-tertiary bg-opacity-50">
@@ -126,6 +128,7 @@ function PortfolioPage() {
           <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
             <h4>경력</h4>
           </div>
+          {/* 경력 배열을 index를 기준으로 map으로 나열 */}
           {info.experiences.map((index) => (
             <InfoCard
               key={index.id}
@@ -138,6 +141,7 @@ function PortfolioPage() {
           <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
             <h4>학력</h4>
           </div>
+          {/* 학력 배열을 index를 기준으로 map으로 나열 */}
           {info.education.map((index) => (
             <InfoCard
               key={index.id}
@@ -150,6 +154,7 @@ function PortfolioPage() {
           <div className="col-12 d-flex py-3 justify-content-start align-items-center border-bottom">
             <h4>수상 내역</h4>
           </div>
+          {/* 수상 내역 배열을 index를 기준으로 map으로 나열 */}
           {info.awards.map((index) => (
             <InfoCard
               key={index.id}
@@ -163,30 +168,20 @@ function PortfolioPage() {
             <h4>자격증</h4>
           </div>
           <div className="row m-1 justify-items-center">
-            <div className="col-2 mx-2">
-              <h6> </h6>
-            </div>
-            <div className="row">
-              <div className="col-6 m-1">
-                <h6>{info.certifications[0]}</h6>
+            {info.certifications.map((index) => (
+              <div className="row">
+                <div className="col-6 m-1">
+                  <h6>{index}</h6>
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-6 m-1">
-                <h6>{info.certifications[1]}</h6>
-              </div>
-            </div>
-            <div className="row mb-3">
-              <div className="col-6 m-1">
-                <h6>{info.certifications[2]}</h6>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="row py-3 border-bottom">
             <div className="col-2 d-flex justify-content-start align-items-center">
               <h4>스킬</h4>
             </div>
+            {/* 스킬 부분 응답 값으로 매핑 필요 */}
             <div className="col-8 d-flex justify-content-start align-items-center">
               <span className="badge text-bg-secondary mx-2">Javascript</span>
               <span className="badge text-bg-secondary mx-2">React</span>
