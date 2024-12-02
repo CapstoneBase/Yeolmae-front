@@ -70,12 +70,28 @@ function CreatePost() {
 
   const handleCatChange = (e) => {
     const { name, value } = e.target;
-    setInput((prev) => ({
-      ...prev,
-      [name]: value,
-      // 메인 카테고리가 변경되면 서브 카테고리 초기화
-      subCategory: name === 'mainCategory' ? '' : prev.subCategory
-    }));
+    setInput((prev) => {
+      if (name === 'mainCategory') {
+        // 게시글 유형별로 첫 번째 서브카테고리 설정
+        let firstSubCategory = '';
+        if (type === 'grad') {
+          firstSubCategory = GradCategories.categories.find((cat) => cat.id === value)
+            ?.subCategories[0].id;
+        } else if (type === 'other') {
+          firstSubCategory = OtherCategories.categories.find((cat) => cat.id === value)
+            ?.subCategories[0].id;
+        }
+        return {
+          ...prev,
+          [name]: value,
+          subCategory: type === 'cont' ? '' : firstSubCategory // 공모전은 서브카테고리 없음
+        };
+      }
+      return {
+        ...prev,
+        [name]: value
+      };
+    });
   };
 
   const handleAttach = (e) => {
@@ -160,7 +176,7 @@ function CreatePost() {
             <Form.Group className="form-group">
               <Form.Control
                 as="textarea"
-                rows={3}
+                rows={2}
                 placeholder="프로젝트 목표 및 활용방안"
                 name="goalAndUtilization"
                 value={additionalFields.goalAndUtilization}
@@ -222,62 +238,58 @@ function CreatePost() {
   return (
     <Form className="container mt-5" onSubmit={submitPost}>
       {/* 카테고리 선택 */}
-      <Form.Group className="form-group">
-        <select
-          className="form-select mb-3"
-          name="mainCategory"
-          onChange={handleCatChange}
-          value={input.mainCategory}
-        >
-          <option value="">카테고리 선택</option>
-          {type === 'cont' &&
-            ContCategories.categories.map((item) => (
-              <option key={`mainCat${item.id}`} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          {type === 'grad' &&
-            GradCategories.categories.map((item) => (
-              <option key={`mainCat${item.id}`} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          {type === 'other' &&
-            OtherCategories.categories.map((item) => (
-              <option key={`mainCat${item.id}`} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-        </select>
-
-        {/* 서브 카테고리 (졸업작품, 기타 프로젝트만) */}
-        {(type === 'grad' || type === 'other') && input.mainCategory && (
+      <div className="row my-3 pe-3 justify-content-start">
+        <div className="d-flex gap-3 col-lg-6 col-md-10 col-sm-12">
+          {/* 메인 카테고리 */}
           <select
             className="form-select"
-            name="subCategory"
+            key="selMainCategory"
+            name="mainCategory"
             onChange={handleCatChange}
-            value={input.subCategory}
+            value={input.mainCategory}
           >
-            <option value="">서브 카테고리 선택</option>
+            <option value="">메인 카테고리 선택</option>
+            {type === 'cont' &&
+              ContCategories.categories.map((item) => (
+                <option key={`selMainCategory${item.id}`} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             {type === 'grad' &&
-              GradCategories.categories
-                .find((cat) => cat.id === input.mainCategory)
-                ?.subCategories.map((subCat) => (
-                  <option key={`subCat${subCat.id}`} value={subCat.id}>
-                    {subCat.name}
-                  </option>
-                ))}
+              GradCategories.categories.map((item) => (
+                <option key={`selMainCategory${item.id}`} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             {type === 'other' &&
-              OtherCategories.categories
-                .find((cat) => cat.id === input.mainCategory)
-                ?.subCategories.map((subCat) => (
-                  <option key={`subCat${subCat.id}`} value={subCat.id}>
-                    {subCat.name}
-                  </option>
-                ))}
+              OtherCategories.categories.map((item) => (
+                <option key={`selMainCategory${item.id}`} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
           </select>
-        )}
-      </Form.Group>
+
+          {/* 서브 카테고리 (졸업작품, 기타 프로젝트만) */}
+          {(type === 'grad' || type === 'other') && (
+            <select
+              className="form-select"
+              key="selSubCategory"
+              name="subCategory"
+              onChange={handleCatChange}
+              value={input.subCategory}
+            >
+              {input.mainCategory &&
+                (type === 'grad' ? GradCategories : OtherCategories).categories
+                  .find((cat) => cat.id === input.mainCategory)
+                  ?.subCategories.map((item) => (
+                    <option key={`selSubCategory${item.id}`} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+            </select>
+          )}
+        </div>
+      </div>
 
       {/* 기본 필드 */}
       <Form.Group className="form-group">
@@ -306,22 +318,31 @@ function CreatePost() {
 
       {/* 날짜 선택 */}
       <Form.Group className="form-group">
-        <Form.Label>{type === 'cont' ? '공모전 기간' : '프로젝트 기간'}</Form.Label>
-        <Row>
-          <Col>
+        <Row className="align-items-center">
+          <Col md={2}>
+            <Form.Label className="mb-0">
+              {type === 'cont' ? '공모전 기간' : '프로젝트 기간'}
+            </Form.Label>
+          </Col>
+          <Col md={5}>
             <DatePicker
               selected={startDate}
               onChange={setStartDate}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy-MM"
+              showMonthYearPicker
               className="form-control"
+              placeholderText="시작 년월"
             />
           </Col>
-          <Col>
+          <Col md={5}>
             <DatePicker
               selected={endDate}
               onChange={setEndDate}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy-MM"
+              showMonthYearPicker
               className="form-control"
+              placeholderText="종료 년월"
+              minDate={startDate} // 시작일 이후만 선택 가능
             />
           </Col>
         </Row>
