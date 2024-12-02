@@ -1,146 +1,296 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import QuillEditor from '../../Common/QuillEditor';
-import Categories from '../../Common/Categories';
 import Select from '../../Common/Select';
-import '../../../scss/viewPostStyle.scss';
-
-const API_ENDPOINT = '/api/v1/contest-posts';
+import GradCategories from '../../Common/Categories/GradCategories';
+import ContCategories from '../../Common/Categories/ContCategories';
+import OtherCategories from '../../Common/Categories/OtherCategories';
+import { createPost } from '../../../api/index';
 
 function CreatePost() {
-  const accessToken = localStorage.getItem('accessToken');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const { type } = useParams(); // 'grad', 'cont', 'other'
+  const navigate = useNavigate();
   const quillRef = useRef();
-  const [htmlContent, setHtmlContent] = useState('');
+
+  // 게시글 유형별 카테고리 매핑
+  const CATEGORIES_MAP = {
+    grad: GradCategories,
+    cont: ContCategories,
+    other: OtherCategories
+  };
+
+  // 기본 입력 필드
   const [input, setInput] = useState({
     title: '',
     description: '',
     content: '',
-    mainCategory: '0001', // Default. 인문학(0001)
-    hostingOrganization: '',
-    sponsoringOrganization: '',
-    relatedWebsite: '',
+    mainCategory: '',
+    subCategory: '',
     fileUrlList: []
   });
 
+  // 게시글 유형별 추가 필드
+  const getInitialFields = (type) => {
+    if (type === 'grad') {
+      return {
+        school: '',
+        department: '',
+        goalAndUtilization: ''
+      };
+    }
+    if (type === 'cont') {
+      return {
+        hostingOrganization: '',
+        sponsoringOrganization: '',
+        relatedWebsite: ''
+      };
+    }
+    return {
+      goalAndUtilization: ''
+    };
+  };
+  const [additionalFields, setAdditionalFields] = useState(getInitialFields(type));
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [htmlContent, setHtmlContent] = useState('');
+
   const onChange = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    if (name in input) {
+      setInput((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setAdditionalFields((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const navigate = useNavigate();
+  const handleCatChange = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+      // 메인 카테고리가 변경되면 서브 카테고리 초기화
+      subCategory: name === 'mainCategory' ? '' : prev.subCategory
+    }));
+  };
 
   const handleAttach = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setInput((prevInput) => ({
-      ...prevInput,
-      fileUrlList: [...(prevInput.fileUrlList || []), file]
+    setInput((prev) => ({
+      ...prev,
+      fileUrlList: [...(prev.fileUrlList || []), file]
     }));
-
-    e.target.value = '';
-    console.log('파일 추가됨:', file.name);
   };
 
   const submitPost = async (e) => {
     e.preventDefault();
 
-    if (!input.title) {
-      return alert('제목을 입력해주세요.');
+    if (!input.title || !htmlContent) {
+      alert('제목과 내용을 입력해주세요.');
+      return;
     }
-
-    if (!htmlContent) {
-      return alert('내용을 입력해주세요.');
-    }
-
-    const body = {
-      title: input.title,
-      description: input.description,
-      content: input.content,
-      mainCategory: input.mainCategory,
-      hostingOrganization: input.hostingOrganization,
-      sponsoringOrganization: input.sponsoringOrganization,
-      relatedWebsite: input.relatedWebsite,
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0]
-    };
-    console.log('request body : ', body);
-    const queryString = new URLSearchParams(body).toString();
 
     const formData = new FormData();
+
+    // 기본 필드 추가
+    Object.keys(input).forEach((key) => {
+      if (key !== 'fileUrlList') {
+        formData.append(key, input[key]);
+      }
+    });
+
+    // 추가 필드 추가
+    Object.entries(additionalFields).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    // 공통 필드
+    formData.append('startDate', startDate.toISOString().split('T')[0]);
+    formData.append('endDate', endDate.toISOString().split('T')[0]);
+    formData.append('content', htmlContent);
+
+    // 파일 첨부
     input.fileUrlList.forEach((file, index) => {
       formData.append(`file${index}`, file);
     });
 
     try {
-      const res = await axios.post(`${API_ENDPOINT}?${queryString}`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
+      const response = await createPost(type, formData);
 
-      if (res.status === 200) {
-        console.log('게시글 작성 성공');
-        const postId = res.data;
-        console.log('Fetched Post ID:', postId);
-        if (postId) {
-          navigate(`/posts/cont/${postId}`); // 해당 게시글 페이지로 이동
-        } else {
-          console.error('postId is undefined', res.data);
-        }
+      if (response.status === 200) {
+        const postId = response.data;
+        navigate(`/posts/${type}/${postId}`);
       }
-    } catch (err) {
-      if (err.response) {
-        console.error('서버 에러 응답:', err.response.data);
-        alert(`업로드 실패: ${err.response.data.message || '알 수 없는 오류입니다.'}`);
-      } else if (err.request) {
-        console.error('요청이 전송되었으나 응답이 없습니다.', err.request);
-        alert('서버로부터 응답이 없습니다. 잠시 후 다시 시도해주세요.');
-      } else {
-        console.error('요청 설정 중 에러 발생:', err.message);
-        alert('요청 처리 중 문제가 발생했습니다.');
-      }
+    } catch (error) {
+      console.error('게시글 작성 실패:', error);
+      alert('게시글 작성 중 오류가 발생했습니다.');
+    }
+  };
+
+  // renderAdditionalFields 함수 - 게시글 유형별 추가 필드 렌더링
+  const renderAdditionalFields = () => {
+    switch (type) {
+      case 'grad':
+        return (
+          <>
+            <Form.Group className="form-group">
+              <Form.Control
+                type="text"
+                placeholder="학교"
+                name="school"
+                value={additionalFields.school}
+                onChange={onChange}
+              />
+            </Form.Group>
+            <Form.Group className="form-group">
+              <Form.Control
+                type="text"
+                placeholder="전공"
+                name="department"
+                value={additionalFields.department}
+                onChange={onChange}
+              />
+            </Form.Group>
+            <Form.Group className="form-group">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="프로젝트 목표 및 활용방안"
+                name="goalAndUtilization"
+                value={additionalFields.goalAndUtilization}
+                onChange={onChange}
+              />
+            </Form.Group>
+          </>
+        );
+      case 'cont':
+        return (
+          <>
+            <Form.Group className="form-group">
+              <Form.Control
+                type="text"
+                placeholder="주관기관"
+                name="hostingOrganization"
+                value={additionalFields.hostingOrganization}
+                onChange={onChange}
+              />
+            </Form.Group>
+            <Form.Group className="form-group">
+              <Form.Control
+                type="text"
+                placeholder="주최기관"
+                name="sponsoringOrganization"
+                value={additionalFields.sponsoringOrganization}
+                onChange={onChange}
+              />
+            </Form.Group>
+            <Form.Group className="form-group">
+              <Form.Control
+                type="url"
+                placeholder="관련 페이지 URL"
+                name="relatedWebsite"
+                value={additionalFields.relatedWebsite}
+                onChange={onChange}
+              />
+            </Form.Group>
+          </>
+        );
+      case 'other':
+        return (
+          <Form.Group className="form-group">
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="프로젝트 목표 및 활용방안"
+              name="goalAndUtilization"
+              value={additionalFields.goalAndUtilization}
+              onChange={onChange}
+            />
+          </Form.Group>
+        );
+      default:
+        return null;
     }
   };
 
   return (
     <Form className="container mt-5" onSubmit={submitPost}>
-      <Form.Group className="form-group" controlId="formCategories">
-        <Select
-          key="selMainCategory"
+      {/* 카테고리 선택 */}
+      <Form.Group className="form-group">
+        <select
+          className="form-select mb-3"
           name="mainCategory"
-          onChange={onChange}
+          onChange={handleCatChange}
           value={input.mainCategory}
         >
-          {Categories.map((item) =>
-            item.parntCateId === '00' ? (
-              <option key={`selMainCategory${item.cateId}`} value={item.cateId}>
-                {item.cateName}
+          <option value="">카테고리 선택</option>
+          {type === 'cont' &&
+            ContCategories.categories.map((item) => (
+              <option key={`mainCat${item.id}`} value={item.id}>
+                {item.name}
               </option>
-            ) : null
-          )}
-        </Select>
+            ))}
+          {type === 'grad' &&
+            GradCategories.categories.map((item) => (
+              <option key={`mainCat${item.id}`} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          {type === 'other' &&
+            OtherCategories.categories.map((item) => (
+              <option key={`mainCat${item.id}`} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+        </select>
+
+        {/* 서브 카테고리 (졸업작품, 기타 프로젝트만) */}
+        {(type === 'grad' || type === 'other') && input.mainCategory && (
+          <select
+            className="form-select"
+            name="subCategory"
+            onChange={handleCatChange}
+            value={input.subCategory}
+          >
+            <option value="">서브 카테고리 선택</option>
+            {type === 'grad' &&
+              GradCategories.categories
+                .find((cat) => cat.id === input.mainCategory)
+                ?.subCategories.map((subCat) => (
+                  <option key={`subCat${subCat.id}`} value={subCat.id}>
+                    {subCat.name}
+                  </option>
+                ))}
+            {type === 'other' &&
+              OtherCategories.categories
+                .find((cat) => cat.id === input.mainCategory)
+                ?.subCategories.map((subCat) => (
+                  <option key={`subCat${subCat.id}`} value={subCat.id}>
+                    {subCat.name}
+                  </option>
+                ))}
+          </select>
+        )}
       </Form.Group>
-      <Form.Group className="form-group" controlId="formTitle">
+
+      {/* 기본 필드 */}
+      <Form.Group className="form-group">
         <Form.Control
           type="text"
           placeholder="제목"
           name="title"
           value={input.title}
           onChange={onChange}
-          className="form-control"
         />
       </Form.Group>
-      <Form.Group className="form-group" controlId="formDescription">
+
+      <Form.Group className="form-group">
         <Form.Control
           as="textarea"
           rows={2}
@@ -148,46 +298,20 @@ function CreatePost() {
           name="description"
           value={input.description}
           onChange={onChange}
-          className="form-control"
         />
       </Form.Group>
-      <Form.Group className="form-group" controlId="formHostingOrganization">
-        <Form.Control
-          type="text"
-          placeholder="주관기관"
-          name="hostingOrganization"
-          value={input.hostingOrganization}
-          onChange={onChange}
-          className="form-control"
-        />
-      </Form.Group>
-      <Form.Group className="form-group" controlId="formSponsoringOrganization">
-        <Form.Control
-          type="text"
-          placeholder="주최기관"
-          name="sponsoringOrganization"
-          value={input.sponsoringOrganization}
-          onChange={onChange}
-          className="form-control"
-        />
-      </Form.Group>
-      <Form.Group className="form-group" controlId="formRelatedWebsite">
-        <Form.Control
-          type="url"
-          placeholder="관련 페이지 URL"
-          name="relatedWebsite"
-          value={input.relatedWebsite}
-          onChange={onChange}
-          className="form-control"
-        />
-      </Form.Group>
+
+      {/* 게시글 유형별 추가 필드 */}
+      {renderAdditionalFields()}
+
+      {/* 날짜 선택 */}
       <Form.Group className="form-group">
-        <Form.Label>대회 기간</Form.Label>
-        <Row className="align-items-center">
+        <Form.Label>{type === 'cont' ? '공모전 기간' : '프로젝트 기간'}</Form.Label>
+        <Row>
           <Col>
             <DatePicker
               selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={setStartDate}
               dateFormat="yyyy-MM-dd"
               className="form-control"
             />
@@ -195,7 +319,7 @@ function CreatePost() {
           <Col>
             <DatePicker
               selected={endDate}
-              onChange={(date) => setEndDate(date)}
+              onChange={setEndDate}
               dateFormat="yyyy-MM-dd"
               className="form-control"
             />
@@ -203,30 +327,30 @@ function CreatePost() {
         </Row>
       </Form.Group>
 
-      <Form.Group className="form-group" controlId="formContent">
+      {/* 에디터 */}
+      <Form.Group className="form-group">
         <QuillEditor
           quillRef={quillRef}
           htmlContent={htmlContent}
           setHtmlContent={setHtmlContent}
-          endpoint={API_ENDPOINT}
-          queryParams={input.content}
-          className="form-control quill-editor"
         />
       </Form.Group>
-      <Form.Group className="form-group" controlId="formAttachments">
+
+      {/* 파일 첨부 */}
+      <Form.Group className="form-group">
         <Form.Label>첨부 파일</Form.Label>
-        <Form.Control type="file" onChange={handleAttach} className="form-control" />
+        <Form.Control type="file" onChange={handleAttach} />
         {input.fileUrlList?.map((file, index) => (
-          <a key={index} href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
+          <div key={index}>
             첨부 파일 {index + 1}: {file.name}
-          </a>
+          </div>
         ))}
       </Form.Group>
-      <Form.Group className="form-group text-center">
-        <Button type="submit" className="btn btn-primary">
-          작성완료
-        </Button>
-      </Form.Group>
+
+      {/* 제출 버튼 */}
+      <Button type="submit" className="btn btn-primary">
+        작성완료
+      </Button>
     </Form>
   );
 }

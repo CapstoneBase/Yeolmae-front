@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import Button from '../../../Common/Button';
-import '../../../../scss/viewPostStyle.scss';
+import Button from '../../Common/Button';
+import '../../../scss/viewPostStyle.scss';
 
-function ContPostDetail({
+function PostDetail({
   id,
   authorName,
   title,
@@ -168,4 +168,4 @@ function ContPostDetail({
   );
 }
 
-export default ContPostDetail;
+export default PostDetail;

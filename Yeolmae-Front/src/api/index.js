@@ -7,7 +7,7 @@ const apiUrlMap = {
     fetch: (postId) => `/api/v1/graduation-project-posts/${postId}`,
     fetchComments: (postId) => `/api/v1/graduation-project-posts/comments/${postId}`,
     update: (postId) => `/api/v1/graduation-project-posts/${postId}`,
-    fetchAll: '/api/v1/graduation-project-posts' // 모든 게시글 조회
+    fetchAll: '/api/v1/graduation-project-posts'
   },
   contest: {
     create: '/api/v1/contest-posts',
@@ -15,7 +15,7 @@ const apiUrlMap = {
     fetch: (postId) => `/api/v1/contest-posts/${postId}`,
     fetchComments: (postId) => `/api/v1/contest-posts/comments/${postId}`,
     update: (postId) => `/api/v1/contest-posts/${postId}`,
-    fetchAll: '/api/v1/contest-posts' // 모든 게시글 조회
+    fetchAll: '/api/v1/contest-posts'
   },
   other: {
     create: '/api/v1/other-project-posts',
@@ -23,7 +23,7 @@ const apiUrlMap = {
     fetch: (postId) => `/api/v1/other-project-posts/${postId}`,
     fetchComments: (postId) => `/api/v1/other-project-posts/comments/${postId}`,
     update: (postId) => `/api/v1/other-project-posts/${postId}`,
-    fetchAll: '/api/v1/other-project-posts' // 모든 게시글 조회
+    fetchAll: '/api/v1/other-project-posts'
   }
 };
 
