@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// uploadImage.js
 export const uploadImage = async (formData, endpoint) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
@@ -9,9 +8,13 @@ export const uploadImage = async (formData, endpoint) => {
       throw new Error('로그인이 필요합니다.');
     }
 
-    const response = await axios.post(endpoint, formData, {
+    // URL이 완전한 형태인지 확인
+    const url = endpoint.startsWith('http') ? endpoint : `http://54.180.77.251:8080${endpoint}`;
+
+    const response = await axios.post(url, formData, {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
       }
     });
 

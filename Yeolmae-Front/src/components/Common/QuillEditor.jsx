@@ -22,19 +22,24 @@ const QuillEditor = memo(({ quillRef, htmlContent, setHtmlContent, queryParams, 
 
         const response = await uploadImage(formData, endpoint);
 
-        if (!response || !response[0]?.fileUrl) {
+        // response 구조 로깅
+        console.log('이미지 업로드 응답:', response);
+
+        // response 구조에 따라 URL 추출 로직 수정
+        const imageUrl = response.fileUrl || response[0]?.fileUrl;
+
+        if (!imageUrl) {
           throw new Error('이미지 URL을 받지 못했습니다.');
         }
 
-        const s3Url = response[0].fileUrl;
         const quill = quillRef.current.getEditor();
         const range = quill.getSelection()?.index || 0;
 
-        quill.insertEmbed(range, 'image', s3Url);
+        quill.insertEmbed(range, 'image', imageUrl);
         quill.setSelection(range + 1);
       } catch (error) {
         console.error('이미지 업로드 실패:', error);
-        alert('이미지 업로드에 실패했습니다.');
+        alert(error.message || '이미지 업로드에 실패했습니다.');
       }
     };
   }, [quillRef, endpoint]);

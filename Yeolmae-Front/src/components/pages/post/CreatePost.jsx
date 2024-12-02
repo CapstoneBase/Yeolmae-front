@@ -11,6 +11,8 @@ import ContCategories from '../../Common/Categories/ContCategories';
 import OtherCategories from '../../Common/Categories/OtherCategories';
 import { apiUrlMap } from '../../../api/index';
 
+const API_BASE_URL = 'http://54.180.77.251:8080';
+
 function CreatePost() {
   const { type } = useParams(); // 'grad', 'cont', 'other'
   const navigate = useNavigate();
@@ -355,6 +357,7 @@ function CreatePost() {
           quillRef={quillRef}
           htmlContent={htmlContent}
           setHtmlContent={setHtmlContent}
+          endpoint={`${API_BASE_URL}${apiUrlMap[type].create}`} // 완전한 URL 전달
         />
       </Form.Group>
 
