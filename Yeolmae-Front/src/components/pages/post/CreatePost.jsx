@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
@@ -8,7 +9,7 @@ import Select from '../../Common/Select';
 import GradCategories from '../../Common/Categories/GradCategories';
 import ContCategories from '../../Common/Categories/ContCategories';
 import OtherCategories from '../../Common/Categories/OtherCategories';
-import { createPost } from '../../../api/index';
+import { apiUrlMap } from '../../../api/index';
 
 function CreatePost() {
   const { type } = useParams(); // 'grad', 'cont', 'other'
@@ -111,33 +112,35 @@ function CreatePost() {
       alert('제목과 내용을 입력해주세요.');
       return;
     }
+    const formattedStartDate = startDate.toISOString().split('T')[0];
+    const formattedEndDate = endDate.toISOString().split('T')[0];
 
+    // URL 쿼리 파라미터 생성
+    const queryParams = new URLSearchParams({
+      title: input.title,
+      mainCategory: input.mainCategory,
+      subCategory: input.subCategory || '',
+      description: input.description,
+      content: htmlContent,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      ...additionalFields // type별 추가 필드
+    }).toString();
+
+    // 파일 데이터를 FormData에 추가
     const formData = new FormData();
-
-    // 기본 필드 추가
-    Object.keys(input).forEach((key) => {
-      if (key !== 'fileUrlList') {
-        formData.append(key, input[key]);
-      }
-    });
-
-    // 추가 필드 추가
-    Object.entries(additionalFields).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    // 공통 필드
-    formData.append('startDate', startDate.toISOString().split('T')[0]);
-    formData.append('endDate', endDate.toISOString().split('T')[0]);
-    formData.append('content', htmlContent);
-
-    // 파일 첨부
     input.fileUrlList.forEach((file, index) => {
       formData.append(`file${index}`, file);
     });
 
     try {
-      const response = await createPost(type, formData);
+      // createPost 함수 수정 또는 직접 axios 호출
+      const response = await axios.post(`${apiUrlMap[type].create}?${queryParams}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      });
 
       if (response.status === 200) {
         const postId = response.data;
@@ -222,7 +225,7 @@ function CreatePost() {
           <Form.Group className="form-group">
             <Form.Control
               as="textarea"
-              rows={3}
+              rows={2}
               placeholder="프로젝트 목표 및 활용방안"
               name="goalAndUtilization"
               value={additionalFields.goalAndUtilization}
@@ -328,20 +331,18 @@ function CreatePost() {
             <DatePicker
               selected={startDate}
               onChange={setStartDate}
-              dateFormat="yyyy-MM"
-              showMonthYearPicker
+              dateFormat="yyyy-MM-dd"
               className="form-control"
-              placeholderText="시작 년월"
+              placeholderText="시작 날짜"
             />
           </Col>
           <Col md={5}>
             <DatePicker
               selected={endDate}
               onChange={setEndDate}
-              dateFormat="yyyy-MM"
-              showMonthYearPicker
+              dateFormat="yyyy-MM-dd"
               className="form-control"
-              placeholderText="종료 년월"
+              placeholderText="종료 날짜"
               minDate={startDate} // 시작일 이후만 선택 가능
             />
           </Col>
@@ -369,9 +370,13 @@ function CreatePost() {
       </Form.Group>
 
       {/* 제출 버튼 */}
-      <Button type="submit" className="btn btn-primary">
-        작성완료
-      </Button>
+      <div className="row mt-4">
+        <div className="d-flex justify-content-center">
+          <Button type="submit" className="btn btn-primary">
+            작성완료
+          </Button>
+        </div>
+      </div>
     </Form>
   );
 }

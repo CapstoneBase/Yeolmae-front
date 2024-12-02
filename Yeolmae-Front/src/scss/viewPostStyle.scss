@@ -1,60 +1,102 @@
-@import 'bootstrap/scss/bootstrap';
-
 .board-detail-container {
   margin-top: 2rem;
+  padding: 0 2rem;
 
-  .list-link {
-    font-size: 1rem;
-    color: $dark;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: darken($primary, 10%);
-    }
-  }
-
-  .category-link {
-    font-size: 1rem;
-    color: $primary;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: darken($primary, 10%);
-    }
+  .category-badge {
+    display: inline-block;
+    color: #8A4FFF;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
   }
 
   .board-title {
-    font-weight: bold;
-    color: $dark;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #000;
     margin-bottom: 1rem;
   }
 
-  .board-details {
-    color: $gray-600;
+  .board-info {
+    color: #666;
     font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
 
-    .board-details-label {
-      font-weight: 600;
-      margin-right: 0.5rem;
+    .info-divider {
+      margin: 0 0.5rem;
+      color: #ddd;
     }
   }
 
   .board-content {
-    background-color: $light;
-    padding: 1rem;
-    border-radius: $border-radius;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
+  }
 
-    .board-content-description {
-      color: $gray-800;
+  // 댓글 섹션 스타일
+  .comments-section {
+    margin-top: 3rem;
+    
+    .comment-header {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #000;
       margin-bottom: 1rem;
     }
 
-    .board-content-text {
-      color: $gray-700;
+    .comment-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+
+      .comment-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+
+        .comment-author {
+          font-weight: 500;
+          color: #000;
+        }
+
+        .comment-date {
+          color: #666;
+          font-size: 0.875rem;
+        }
+      }
+
+      .comment-content {
+        color: #333;
+      }
+    }
+
+    .comment-form {
+      margin-top: 2rem;
+
+      textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+        margin-bottom: 1rem;
+
+        &:focus {
+          outline: none;
+          border-color: #8A4FFF;
+        }
+      }
+
+      .comment-submit {
+        float: right;
+        padding: 0.5rem 1.5rem;
+        background-color: #8A4FFF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken(#8A4FFF, 5%);
+        }
+      }
     }
   }
 }
