@@ -21,7 +21,7 @@ function Header() {
       logout();
       console.log(authenticated);
     } else {
-      navigate('/login');
+      navigate('/loginPage');
     }
   };
   return (
@@ -39,17 +39,17 @@ function Header() {
 
             <ul className="nav col-auto me-lg-auto mb-2 mb-md-0 justify-content-start">
               <li>
-                <a href="/postlist/grad" className="nav-link px-2 text-dark">
+                <a href="/gradPostlistPage" className="nav-link px-2 text-dark">
                   졸업작품
                 </a>
               </li>
               <li>
-                <a href="/postlist/other" className="nav-link px-2 text-dark">
+                <a href="/otherPostlistPage" className="nav-link px-2 text-dark">
                   개인 프로젝트
                 </a>
               </li>
               <li>
-                <a href="/postlist/cont" className="nav-link px-2 text-dark">
+                <a href="/contPostlistPage" className="nav-link px-2 text-dark">
                   대회 및 공모전
                 </a>
               </li>
@@ -70,12 +70,12 @@ function Header() {
               {authenticated ? (
                 <>
                   <li>
-                    <a href="/portfolio" className="nav-link px-2 text-dark">
+                    <a href="/portfolioPage" className="nav-link px-2 text-dark">
                       포트폴리오
                     </a>
                   </li>
                   <li>
-                    <a href="/profile" className="nav-link px-2 text-dark">
+                    <a href="/profilePage" className="nav-link px-2 text-dark">
                       마이프로필
                     </a>
                   </li>
@@ -92,7 +92,7 @@ function Header() {
                     로그아웃
                   </a>
                 ) : (
-                  <a href="/login" className="nav-link px-2 text-dark" onClick={handleClick}>
+                  <a href="/loginPage" className="nav-link px-2 text-dark" onClick={handleClick}>
                     로그인
                   </a>
                 )}

@@ -150,7 +150,7 @@ function SignupPage() {
       const data = await actSignup(param);
       if (data) {
         alert(`성공적으로 가입되었습니다. 로그인 해주세요.`);
-        navigate('/login');
+        navigate('/loginPage');
       } else {
         alert(`회원 가입 중 오류가 발생하였습니다. ${data}`);
       }
