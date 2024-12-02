@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { fetchPost, fetchComments, createComment, deletePost } from '../../../api/index';
+import GradCategories from '../../Common/Categories/GradCategories';
+import ContCategories from '../../Common/Categories/ContCategories';
+import OtherCategories from '../../Common/Categories/OtherCategories';
 import '../../../scss/viewPostStyle.scss';
 
 function ViewPost() {
@@ -75,105 +78,146 @@ function ViewPost() {
     }
   };
 
-  // 게시글 유형별 추가 정보 렌더링
-  const renderAdditionalInfo = () => {
-    if (!post) return null;
+  const getCategoryName = (categoryId, type) => {
+    if (!categoryId) return '';
 
-    switch (type) {
-      case 'grad':
-        return (
-          <>
-            <Row className="mb-3">
-              <Col md={6}>
-                <span className="info-label">학교:</span> {post.school || '없음'}
-              </Col>
-              <Col md={6}>
-                <span className="info-label">전공:</span> {post.department || '없음'}
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col md={12}>
-                <span className="info-label">프로젝트 목표 및 활용방안:</span>
-                <p>{post.goalAndUtilization || '없음'}</p>
-              </Col>
-            </Row>
-          </>
-        );
-      case 'cont':
-        return (
-          <>
-            <Row className="mb-3">
-              <Col md={6}>
-                <span className="info-label">주최기관:</span> {post.hostingOrganization || '없음'}
-              </Col>
-              <Col md={6}>
-                <span className="info-label">주관기관:</span>{' '}
-                {post.sponsoringOrganization || '없음'}
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col md={12}>
-                <span className="info-label">관련 페이지:</span>{' '}
-                {post.relatedWebsite ? (
-                  <a href={post.relatedWebsite} target="_blank" rel="noopener noreferrer">
-                    {post.relatedWebsite}
-                  </a>
-                ) : (
-                  '없음'
-                )}
-              </Col>
-            </Row>
-          </>
-        );
-      case 'other':
-        return (
-          <Row className="mb-3">
-            <Col md={12}>
-              <span className="info-label">프로젝트 목표 및 활용방안:</span>
-              <p>{post.goalAndUtilization || '없음'}</p>
-            </Col>
-          </Row>
-        );
-      default:
-        return null;
+    if (type === 'grad') {
+      // 메인 카테고리 찾기
+      const mainCategory = GradCategories.categories.find((cat) => cat.id === categoryId);
+      if (mainCategory) return mainCategory.name;
+
+      // 서브 카테고리 찾기
+      const subCategory = GradCategories.categories
+        .flatMap((cat) => cat.subCategories)
+        .find((sub) => sub.id === categoryId);
+
+      return subCategory ? subCategory.name : '';
     }
+
+    if (type === 'cont') {
+      const category = ContCategories.categories.find((cat) => cat.id === categoryId);
+      return category ? category.name : '';
+    }
+
+    if (type === 'other') {
+      const mainCategory = OtherCategories.categories.find((cat) => cat.id === categoryId);
+      if (mainCategory) return mainCategory.name;
+
+      const subCategory = OtherCategories.categories
+        .flatMap((cat) => cat.subCategories)
+        .find((sub) => sub.id === categoryId);
+
+      return subCategory ? subCategory.name : '';
+    }
+
+    return '';
   };
 
   if (!post) return <div>로딩 중...</div>;
 
   return (
     <div className="board-detail-container">
-      {/* 제목과 기본 정보 */}
-      <div className="category-badge">{POST_TYPE_TITLES[type]}</div>
-
-      <h1 className="board-title">{post.title}</h1>
-
-      <div className="board-info">
-        <span>작성자: {post.authorName}</span>
-        <span className="info-divider">|</span>
-        <span>작성일: {post.createdAt}</span>
+      {/* 카테고리 정보 */}
+      <div className="category-navigation">
+        <Link to={`/posts/${type}`} className="category-link">
+          {POST_TYPE_TITLES[type]}
+        </Link>
+        {' > '}
+        <Link to={`/posts/${type}?mainCategory=${post.mainCategory}`} className="category-link">
+          {getCategoryName(post.mainCategory, type)}
+        </Link>
+        {post.subCategory && (
+          <>
+            {' > '}
+            <Link
+              to={`/posts/${type}?mainCategory=${post.mainCategory}&subCategory=${post.subCategory}`}
+              className="category-link"
+            >
+              {getCategoryName(post.subCategory, type)}
+            </Link>
+          </>
+        )}
       </div>
 
-      {/* 대회/프로젝트 기간 */}
-      <div className="board-info">
-        <span>{type === 'cont' ? '대회 기간' : '프로젝트 기간'}:</span>
+      {/* 제목과 기본 정보 */}
+      <div className="post-header">
+        <h2 className="post-title">{post.title}</h2>
+        <div className="post-info">
+          <span>작성자: {post.authorName}</span>
+          <span className="divider">|</span>
+          <span>작성일: {post.createdAt}</span>
+        </div>
+      </div>
+
+      {/* 기간 정보 */}
+      <div className="post-info">
+        <span>{type === 'cont' ? '대회 기간' : '프로젝트 기간'}: </span>
         <span>
           {post.startDate} ~ {post.endDate}
         </span>
       </div>
 
-      {/* 게시글 유형별 추가 정보 */}
-      {renderAdditionalInfo()}
+      {/* 게시글 유형별 추가 정보 - UI 통일 */}
+      <div className="post-additional-info">
+        {type === 'grad' && (
+          <>
+            <div className="info-row">
+              <span className="info-label">학교:</span>
+              <span className="info-value">{post.school || '없음'}</span>
+              <span className="divider">|</span>
+              <span className="info-label">전공:</span>
+              <span className="info-value">{post.department || '없음'}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">프로젝트 목표 및 활용방안:</span>
+              <span className="info-value">{post.goalAndUtilization || '없음'}</span>
+            </div>
+          </>
+        )}
+        {type === 'cont' && (
+          <>
+            <div className="info-row">
+              <span className="info-label">주최기관:</span>
+              <span className="info-value">{post.hostingOrganization || '없음'}</span>
+              <span className="divider">|</span>
+              <span className="info-label">주관기관:</span>
+              <span className="info-value">{post.sponsoringOrganization || '없음'}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">관련 페이지:</span>
+              {post.relatedWebsite ? (
+                <a
+                  href={post.relatedWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-link"
+                >
+                  {post.relatedWebsite}
+                </a>
+              ) : (
+                '없음'
+              )}
+            </div>
+          </>
+        )}
+        {type === 'other' && (
+          <div className="info-row">
+            <span className="info-label">프로젝트 목표 및 활용방안:</span>
+            <span className="info-value">{post.goalAndUtilization || '없음'}</span>
+          </div>
+        )}
+      </div>
+      <hr />
 
-      {/* 게시글 본문 */}
-      <div className="board-content">
-        {post.description && <div className="board-description">{post.description}</div>}
+      {/* 본문 내용 */}
+      <div className="post-content">
+        <div className="content-description">{post.description}</div>
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
 
       {/* 첨부 파일 */}
       {post.fileUrls?.length > 0 && (
-        <div className="file-list">
+        <div className="file-section">
           <h6>첨부 파일</h6>
           {post.fileUrls.map((file, index) => (
             <div key={index} className="file-item">
@@ -199,37 +243,45 @@ function ViewPost() {
           </div>
         ))}
 
-        {/* 댓글 작성 폼 */}
-        <div className="comment-form">
-          <Form onSubmit={handleSubmitComment}>
-            <textarea
-              rows={4}
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="댓글 작성하기"
-            />
-            <Button type="submit" className="comment-submit">
-              등록하기
-            </Button>
-          </Form>
-        </div>
-      </div>
+        {/* 댓글 작성 폼 - Row로 정렬 */}
+        <Row className="comment-form-row">
+          <Col>
+            <Form onSubmit={handleSubmitComment} className="d-flex gap-2">
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="댓글 작성하기"
+              />
+              <Button type="submit" className="comment-submit">
+                등록하기
+              </Button>
+            </Form>
+          </Col>
+        </Row>
 
-      {/* 버튼 그룹 */}
-      <div className="button-group">
-        {accessToken && (
-          <>
-            <Button variant="outline-primary" onClick={() => navigate(`/posts/${type}/${id}/edit`)}>
-              수정하기
+        {/* 버튼 그룹 - 별도 Row */}
+        <Row className="mt-3">
+          <Col className="d-flex justify-content-end gap-2">
+            {accessToken && (
+              <>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => navigate(`/posts/${type}/${id}/edit`)}
+                >
+                  수정하기
+                </Button>
+                <Button variant="outline-danger" onClick={handleDelete}>
+                  삭제하기
+                </Button>
+              </>
+            )}
+            <Button variant="secondary" onClick={() => navigate(`/posts/${type}`)}>
+              목록으로
             </Button>
-            <Button variant="outline-danger" onClick={handleDelete}>
-              삭제하기
-            </Button>
-          </>
-        )}
-        <Button variant="secondary" onClick={() => navigate(`/posts/${type}`)}>
-          목록으로
-        </Button>
+          </Col>
+        </Row>
       </div>
     </div>
   );
