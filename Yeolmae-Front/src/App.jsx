@@ -59,7 +59,7 @@ const App = memo(() => {
               <Route path="/posts/:type/:id" element={<ViewPost />} />
               <Route path="/posts/:type/:id/comments" element={<CommentList />} />
               <Route path="/posts/:type/create" element={<CreatePost />} />
-              <Route path="/posts/:type/update" element={<EditPost />} />
+              <Route path="/posts/:type/edit" element={<EditPost />} />
               <Route path="*" element={<Notfound />} />
             </Routes>
           </Suspense>

@@ -92,7 +92,7 @@ function Login() {
         <div className="d-flex my-2 justify-content-center">
           <a
             className="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-            href="/signupPage"
+            href="/signupe"
           >
             회원가입
           </a>
