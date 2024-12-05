@@ -7,7 +7,7 @@ function InfoRow({ label, value }) {
       <div className="col-2 mx-2">
         <h6>{label}</h6>
       </div>
-      <div className="col-4">
+      <div className="col-8">
         <div>{value}</div>
       </div>
     </div>
