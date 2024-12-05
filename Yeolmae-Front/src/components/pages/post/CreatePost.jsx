@@ -5,14 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import QuillEditor from '../../../Common/QuillEditor';
-import Categories from '../../../Common/Categories';
-import Select from '../../../Common/Select';
-import '../../../../scss/viewPostStyle.scss';
+import QuillEditor from '../../Common/QuillEditor';
+import Categories from '../../Common/Categories';
+import Select from '../../Common/Select';
+import '../../../scss/viewPostStyle.scss';
 
 const API_ENDPOINT = '/api/v1/contest-posts';
 
-function CreateContPost() {
+function CreatePost() {
   const accessToken = localStorage.getItem('accessToken');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -231,4 +231,4 @@ function CreateContPost() {
   );
 }
 
-export default CreateContPost;
+export default CreatePost;
