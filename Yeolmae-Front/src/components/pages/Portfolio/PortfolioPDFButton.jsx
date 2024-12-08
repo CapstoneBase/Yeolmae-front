@@ -98,23 +98,62 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard',
     fontWeight: 400
   },
+  skillsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+    gap: 8
+  },
+  skillBadge: {
+    backgroundColor: '#6c757d',
+    padding: '4 8',
+    borderRadius: 4,
+    marginRight: 8
+  },
+  skillText: {
+    color: '#ffffff',
+    fontSize: 10,
+    fontFamily: 'Pretendard',
+    fontWeight: 400
+  },
   projectCard: {
     flexDirection: 'row',
     marginBottom: 15,
     padding: 10,
-    backgroundColor: '#f8f9fa'
+    backgroundColor: '#f8f9fa',
+    gap: 10
   },
   projectContent: {
-    flex: 2
+    flex: 3, // 내용 영역 비율 증가
+    marginRight: 10
   },
   imageContainer: {
-    width: 150,
-    marginLeft: 10
+    flex: 1, // 이미지 영역 비율 감소
+    alignItems: 'flex-end',
+    justifyContent: 'center'
   },
   projectImage: {
-    width: '100%',
-    height: 100,
+    width: 120, // 이미지 너비 축소
+    height: 90, // 이미지 높이 축소
     objectFit: 'cover'
+  },
+  cardTitle: {
+    fontSize: 14,
+    marginBottom: 5,
+    fontFamily: 'Pretendard',
+    fontWeight: 500
+  },
+  cardDescription: {
+    fontSize: 11,
+    marginTop: 5,
+    fontFamily: 'Pretendard',
+    fontWeight: 400
+  },
+  cardDate: {
+    fontSize: 10,
+    color: '#666',
+    fontFamily: 'Pretendard',
+    fontWeight: 200
   }
 });
 
@@ -225,12 +264,11 @@ function PortfolioPDFDocument({ info, contestPosts, graduationProjectPosts, othe
       <View style={styles.section}>
         <Text style={styles.subTitle}>스킬</Text>
         <View style={styles.skillsContainer}>
-          {info.skills &&
-            info.skills.map((skill, index) => (
-              <View key={index} style={styles.skillBadge}>
-                <Text style={styles.skillText}>{skill}</Text>
-              </View>
-            ))}
+          {info.skill.map((index) => (
+            <View key={index} style={styles.skillBadge}>
+              <Text style={styles.skillText}>{index}</Text>
+            </View>
+          ))}
         </View>
       </View>
     );
@@ -251,7 +289,7 @@ function PortfolioPDFDocument({ info, contestPosts, graduationProjectPosts, othe
                 <Text style={styles.cardDescription}>{post.description}</Text>
               </View>
               <View style={styles.imageContainer}>
-                {post.thumbnailUrl && <Image src={post.thumbnailUrl} style={styles.projectImage} />}
+                {post.thumbnail && <Image src={post.thumbnail} style={styles.projectImage} />}
               </View>
             </View>
           ))}
