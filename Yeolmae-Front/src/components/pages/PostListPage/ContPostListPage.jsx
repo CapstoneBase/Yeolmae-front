@@ -11,7 +11,6 @@ import { endpoints } from '../../../api/queryStrReq';
 function ContPostList() {
   // 메인 페이지에서 선택한 카테고리 항목 상태를 받아온다
   const location = useLocation();
-  const cateInit = { ...location.state };
 
   // 카테고리 초기 상태를 받아온 상태로 설정한다
   const [input, setInput] = useState({
