@@ -209,6 +209,24 @@ function ViewPost() {
       </div>
       <hr />
 
+      {/* 썸네일 이미지 섹션 추가 */}
+      {post.thumbnail && (
+        <div className="post-thumbnail">
+          <img
+            src={post.thumbnail}
+            alt={post.title}
+            className="img-fluid"
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+              marginBottom: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}
+          />
+        </div>
+      )}
+
       {/* 본문 내용 */}
       <div className="post-content">
         <div className="content-description">{post.description}</div>
