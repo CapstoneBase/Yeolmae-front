@@ -183,11 +183,10 @@ function PortfolioPage() {
               <div className="col-2 d-flex justify-content-start align-items-center">
                 <h4>스킬</h4>
               </div>
-              {/* 스킬 부분 응답 값으로 매핑 필요 */}
               <div className="col-8 d-flex justify-content-start align-items-center">
-                <span className="badge text-bg-secondary mx-2">Javascript</span>
-                <span className="badge text-bg-secondary mx-2">React</span>
-                <span className="badge text-bg-secondary mx-2">Redux</span>
+                {info.skill.map((index) => (
+                  <span className="badge text-bg-secondary mx-2">{index}</span>
+                ))}
               </div>
             </div>
           </div>
