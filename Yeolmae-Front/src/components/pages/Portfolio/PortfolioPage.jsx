@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import PorfolioInfo from './PortfolioInfo';
 import PortfolioPDFButton from './PortfolioPDFButton';
+import AuthButton from '../../Common/AuthButton';
 
 const API_INFO = '/api/v1/portfolio';
 const API_CONTEST_POSTS = '/api/v1/portfolio/contest-posts';
@@ -302,6 +303,25 @@ function PortfolioPage() {
         graduationProjectPosts={graduationProjectPosts}
         otherProjectPosts={otherProjectPosts}
       />
+      <div
+        // className="col-4 d-flex justify-content-end px-5"
+        style={{
+          position: 'fixed',
+          bottom: '70px',
+          right: '20px',
+          zIndex: 1000
+        }}
+      >
+        <AuthButton
+          text="포트폴리오 편집하기"
+          style={{
+            padding: '10px 20px',
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+          }}
+          destination="/portfolio/edit"
+        />
+      </div>
     </>
   );
 }
