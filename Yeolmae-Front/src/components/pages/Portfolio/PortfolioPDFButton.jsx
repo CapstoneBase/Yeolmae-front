@@ -358,9 +358,8 @@ function PortfolioPDFButton({ info, contestPosts, graduationProjectPosts, otherP
           />
         }
         fileName={`${info.name}님의 열매 포트폴리오.pdf`}
-        className="btn btn-primary"
+        className="btn btn-primary w-100"
         style={{
-          padding: '10px 20px',
           borderRadius: '5px',
           boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
         }}
